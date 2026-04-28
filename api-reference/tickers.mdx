@@ -1,0 +1,134 @@
+---
+title: "GET /tickers"
+description: "24-hour pricing and volume statistics for every active trading pair."
+api: "GET https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers"
+---
+
+## Description
+
+Returns an array of ticker objects, one per active trading pair. Pairs with zero 24-hour volume or empty order books are excluded.
+
+This endpoint is the primary feed consumed by aggregators (CoinGecko, CoinMarketCap, DefiLlama).
+
+## Parameters
+
+This endpoint takes no query parameters.
+
+## Response
+
+Array of ticker objects.
+
+<ResponseField name="ticker_id" type="string" required>
+  Pair identifier with `_` separator. Format `{base}_{target}`. See [ticker_id format](/reference/ticker-id-format).
+</ResponseField>
+
+<ResponseField name="base_currency" type="string" required>
+  Base asset symbol (e.g. `BTC`, `AAVE`, `TRX`).
+</ResponseField>
+
+<ResponseField name="target_currency" type="string" required>
+  Target (quote) asset symbol (e.g. `USDT`, `BTC`).
+</ResponseField>
+
+<ResponseField name="last_price" type="decimal" required>
+  Last traded price of one base unit, denominated in target. So for `AAVE_USDT` with `last_price=97.44`, one AAVE last traded for 97.44 USDT.
+</ResponseField>
+
+<ResponseField name="base_volume" type="decimal" required>
+  Rolling 24-hour single-sided trading volume in **base** units.
+</ResponseField>
+
+<ResponseField name="target_volume" type="decimal" required>
+  Rolling 24-hour single-sided trading volume in **target** units.
+</ResponseField>
+
+<ResponseField name="bid" type="decimal">
+  Current highest bid price.
+</ResponseField>
+
+<ResponseField name="ask" type="decimal">
+  Current lowest ask price.
+</ResponseField>
+
+<ResponseField name="high" type="decimal">
+  Rolling 24-hour highest traded price.
+</ResponseField>
+
+<ResponseField name="low" type="decimal">
+  Rolling 24-hour lowest traded price.
+</ResponseField>
+
+## Example request
+
+<CodeGroup>
+
+```bash curl
+curl https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers
+```
+
+```javascript Node
+const res = await fetch(
+  "https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers"
+);
+const tickers = await res.json();
+```
+
+```python Python
+import requests
+tickers = requests.get(
+    "https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers"
+).json()
+```
+
+</CodeGroup>
+
+## Example response
+
+```json
+[
+  {
+    "ticker_id": "AAVE_USDT",
+    "base_currency": "AAVE",
+    "target_currency": "USDT",
+    "last_price": 97.44082251,
+    "base_volume": 471.47,
+    "target_volume": 45745.01365308,
+    "bid": 95.56435644,
+    "ask": 97.4953,
+    "high": 98.7275,
+    "low": 94.56459456
+  },
+  {
+    "ticker_id": "TRX_USDT",
+    "base_currency": "TRX",
+    "target_currency": "USDT",
+    "last_price": 0.32384459,
+    "base_volume": 9900.94,
+    "target_volume": 3214.01946855,
+    "bid": 0.32041584,
+    "ask": 0.3261391,
+    "high": 0.3290000,
+    "low": 0.3180000
+  }
+]
+```
+
+## Notes
+
+<Note>
+  - Pairs are sorted alphabetically by `ticker_id`.
+  - 24-hour volumes are **single-sided** (do not double-count the same trade).
+  - `last_price = X` always means: 1 base = X target.
+  - The data is updated every few seconds; cache for at least 5 seconds on your side.
+</Note>
+
+## Related
+
+<Columns cols={2}>
+  <Card title="Order book for one pair" icon="layer-group" href="/api-reference/orderbook">
+    Detailed bid/ask depth for a specific ticker_id.
+  </Card>
+  <Card title="Recent trades" icon="clock-rotate-left" href="/api-reference/historical-trades">
+    Completed trades for a specific ticker_id.
+  </Card>
+</Columns>

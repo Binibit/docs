@@ -1,33 +1,45 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "API Reference"
+description: "Complete REST endpoint reference for the Binibit public market data API."
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Overview
 
-## Welcome
+The Binibit public API exposes four REST endpoints under the `/getcoingecko/` namespace. They follow the **CoinGecko Integration API Standards v8** for centralized spot exchanges.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | [`/tickers`](/api-reference/tickers) | 24-hour stats for every active pair |
+| `GET` | [`/orderbook`](/api-reference/orderbook) | Order book depth for one pair |
+| `GET` | [`/historical_trades`](/api-reference/historical-trades) | Recent trades for one pair |
+| `GET` | [`/asset`](/api-reference/asset) | Asset metadata |
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+## Base URL
+
+```
+https://internal-api.binibit.com/api/marketdata/getcoingecko
+```
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+None. See [Authentication](/general/authentication).
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
-```
+## Rate limits
+
+60 requests per minute per IP. See [Rate Limits](/general/rate-limits).
+
+## Conventions
+
+- All requests are `GET` with query parameters
+- All responses are JSON
+- All numeric values are decimals (prices, volumes) or integers (timestamps in milliseconds, IDs)
+- All timestamps are Unix epoch milliseconds — see [Timestamps](/general/timestamps)
+- Errors follow a unified envelope — see [Errors](/general/errors)
+
+## Try it
+
+Every endpoint page includes copy-paste curl examples that work against the live production API.
+
+<Card title="Start with /tickers" icon="chart-line" href="/api-reference/tickers">
+  The most useful endpoint for getting started — returns every active pair in one call.
+</Card>

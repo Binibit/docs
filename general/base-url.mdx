@@ -1,0 +1,38 @@
+---
+title: "Base URL"
+description: "Production endpoint hostnames for the Binibit public API."
+---
+
+## Production
+
+```
+https://internal-api.binibit.com/api/marketdata/getcoingecko
+```
+
+All public market data endpoints share this base. Append the endpoint path:
+
+```
+https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers
+https://internal-api.binibit.com/api/marketdata/getcoingecko/orderbook?ticker_id=TRX_USDT
+https://internal-api.binibit.com/api/marketdata/getcoingecko/historical_trades?ticker_id=TRX_USDT
+https://internal-api.binibit.com/api/marketdata/getcoingecko/asset
+```
+
+## Protocol
+
+- HTTPS only. HTTP requests are redirected to HTTPS.
+- TLS 1.2 or higher.
+
+## Hostname migration
+
+<Note>
+The hostname `internal-api.binibit.com` is a transitional name. The API will be migrated to `api.binibit.com` in a future release. The old hostname will remain available as an alias for at least 90 days after the migration is announced.
+</Note>
+
+## CORS
+
+CORS is enabled for all origins (`Access-Control-Allow-Origin: *`) on every public endpoint, so the API can be called directly from browser-based applications.
+
+## Caching
+
+Some endpoints set `Cache-Control: public, max-age=N` headers. Respect those — calling more frequently than the cache TTL will not return fresher data and will count against your [rate limit](/general/rate-limits).

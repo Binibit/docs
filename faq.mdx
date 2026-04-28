@@ -1,0 +1,71 @@
+---
+title: "FAQ"
+description: "Frequently asked questions about the Binibit public API."
+---
+
+<AccordionGroup>
+
+  <Accordion title="Do I need an API key?">
+    No. All endpoints documented here are public and require no authentication. The trading API (v2, planned) will require an API key — see the [roadmap](/changelog#roadmap).
+  </Accordion>
+
+  <Accordion title="How often is /tickers updated?">
+    Every few seconds. Cache for at least 5 seconds on your side; polling more frequently will not return fresher data and will count against your [rate limit](/general/rate-limits).
+  </Accordion>
+
+  <Accordion title="Why does /tickers omit some pairs visible on binibit.com?">
+    Pairs with zero 24-hour volume or empty order books are excluded from `/tickers`. They will appear on the trading interface as "inactive" but will not show up in aggregator feeds until trading resumes.
+  </Accordion>
+
+  <Accordion title="Are decimals returned as strings or numbers?">
+    Numbers. JavaScript's native `Number` type is precise for prices and volumes seen on this exchange, but for safety use a high-precision decimal library (`decimal.js`, `bignumber.js`, Python `Decimal`, Go `big.Float`) when doing arithmetic.
+  </Accordion>
+
+  <Accordion title="What does last_price mean exactly?">
+    `last_price = X` means the most recent trade for the pair was at `X` units of the **target** currency per **one unit** of the **base** currency. For `AAVE_USDT` with `last_price = 97.44`, one AAVE last traded for 97.44 USDT.
+  </Accordion>
+
+  <Accordion title="Why does the host say 'internal-api.binibit.com'?">
+    Legacy. The hostname will be migrated to `api.binibit.com` in a future release. The old hostname will remain available as an alias for at least 90 days after the migration.
+  </Accordion>
+
+  <Accordion title="Is there a WebSocket API?">
+    Not yet. WebSocket streams for tickers, order book, and trades are on the [v2 roadmap](/changelog#roadmap). Email [api-updates@binibit.com](mailto:api-updates@binibit.com) to be notified.
+  </Accordion>
+
+  <Accordion title="Can I use this API commercially?">
+    Yes. Attribution is appreciated but not required for non-commercial use. For high-volume commercial use, contact [api@binibit.com](mailto:api@binibit.com) for elevated rate limits.
+  </Accordion>
+
+  <Accordion title="Do you have an OpenAPI specification?">
+    A public OpenAPI 3.1 spec is planned for v1.1. It will be served at `/openapi.json` and consumed by Mintlify to render this documentation.
+  </Accordion>
+
+  <Accordion title="What's the buy/sell convention in /historical_trades?">
+    Following the CoinGecko convention:
+
+    - **`buy`** — taker bought (an ask was removed from the order book)
+    - **`sell`** — taker sold (a bid was removed from the order book)
+
+    This is the **taker side**. Each trade has exactly one taker, so each trade appears in exactly one of the two arrays.
+  </Accordion>
+
+  <Accordion title="Why do trade_timestamps look like very large integers?">
+    They are milliseconds since the Unix epoch, e.g. `1777397315466` ≈ `2026-04-28T22:37:55.466Z`. See [Timestamps](/general/timestamps) for conversion examples.
+  </Accordion>
+
+  <Accordion title="I'm an aggregator (CoinGecko, CMC, DefiLlama). Who do I contact?">
+    Email [api@binibit.com](mailto:api@binibit.com). We can:
+
+    - Whitelist your IP for unlimited rate limit
+    - Provide direct contact for the data engineering team
+    - Coordinate on listing review and verification
+  </Accordion>
+
+</AccordionGroup>
+
+## Didn't find your answer?
+
+<Card title="Contact support" icon="envelope" href="/support">
+  Reach out to the Binibit API team.
+</Card>

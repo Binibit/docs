@@ -1,0 +1,56 @@
+---
+title: "Supported Assets"
+description: "Cryptoassets listed on Binibit and their metadata."
+---
+
+## Live list
+
+The authoritative list is the [`/asset`](/api-reference/asset) endpoint:
+
+```bash
+curl https://internal-api.binibit.com/api/marketdata/getcoingecko/asset | jq 'keys'
+```
+
+## Snapshot
+
+| Symbol | Name | Deposit | Withdraw |
+|---|---|---|---|
+| AAVE | Aave | ✅ | ✅ |
+| ARB | Arbitrum | ✅ | ✅ |
+| ASTER | Aster | ✅ | ✅ |
+| BINI | Binibit | ✅ | ✅ |
+| BNB | BNB | ✅ | ✅ |
+| BTC | Bitcoin | ✅ | ✅ |
+| CRO | Cronos | ✅ | ✅ |
+| CRV | Curve DAO | ✅ | ✅ |
+| DAI | Dai | ✅ | ✅ |
+| ENA | Ethena | ✅ | ✅ |
+| ETH | Ethereum | ✅ | ✅ |
+| FET | Fetch.ai | ✅ | ✅ |
+| IMX | Immutable | ✅ | ✅ |
+| LDO | Lido DAO | ✅ | ✅ |
+| LINK | Chainlink | ✅ | ✅ |
+| MORPHO | Morpho | ✅ | ✅ |
+| ONDO | Ondo | ✅ | ✅ |
+| OKB | OKB | ✅ | ✅ |
+| PEPE | Pepe | ✅ | ✅ |
+| POL | Polygon Ecosystem Token | ✅ | ✅ |
+| SHIB | Shiba Inu | ✅ | ✅ |
+| SKY | Sky | ✅ | ✅ |
+| TON | Toncoin | ✅ | ✅ |
+| TRX | Tron | ✅ | ✅ |
+| TWT | Trust Wallet Token | ✅ | ✅ |
+| UNI | Uniswap | ✅ | ✅ |
+| USDT | Tether | ✅ | ✅ |
+| WLD | Worldcoin | ✅ | ✅ |
+| WLFI | World Liberty Financial | ✅ | ✅ |
+| XAUT | Tether Gold | ✅ | ✅ |
+| ZRO | LayerZero | ✅ | ✅ |
+
+<Note>
+  Deposit and withdrawal status can change in real time. Always verify with `/asset` before initiating a transfer.
+</Note>
+
+## Listing requests
+
+For new asset listings, see the [listings page on binibit.com](https://binibit.com/listings).

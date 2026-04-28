@@ -1,0 +1,63 @@
+---
+title: "Response Format"
+description: "JSON conventions used by the Binibit API."
+---
+
+## Content type
+
+All responses use:
+
+```http
+Content-Type: application/json; charset=utf-8
+```
+
+## Successful response
+
+HTTP `200 OK` with body specific to the endpoint. See [API Reference](/api-reference/introduction) for per-endpoint schemas.
+
+## Numeric values
+
+| Field type | Format | Example |
+|---|---|---|
+| Price | Decimal number, up to 8 fractional digits | `0.32384459` |
+| Volume | Decimal number, up to 8 fractional digits | `9900.94` |
+| Timestamp | Integer milliseconds since Unix epoch | `1777399660025` |
+| ID | Integer | `290334` |
+
+<Warning>
+JavaScript `Number` cannot precisely represent integers larger than 2^53. For trade IDs and timestamps in JavaScript, treat them as numbers but never perform arithmetic that requires more than 53 bits of precision. For prices and volumes use a high-precision decimal library (e.g. `decimal.js`, `bignumber.js`) to avoid floating-point error.
+</Warning>
+
+## Empty data
+
+| Endpoint | Empty response |
+|---|---|
+| `/tickers` | `[]` (empty array) |
+| `/orderbook` | `{ "ticker_id": "...", "timestamp": ..., "bids": [], "asks": [] }` |
+| `/historical_trades` | `{ "buy": [], "sell": [] }` |
+| `/asset` | `{}` |
+
+A pair with no recent trades or empty order book will simply return empty arrays — not `404`.
+
+## Pagination
+
+`/historical_trades` supports limited pagination via the `limit`, `start_time`, and `end_time` query parameters. See its [endpoint reference](/api-reference/historical-trades).
+
+`/tickers`, `/orderbook`, and `/asset` are not paginated.
+
+## Sorting
+
+| Endpoint | Default sort |
+|---|---|
+| `/tickers` | Alphabetical by `ticker_id` |
+| `/orderbook` `bids` | Price descending (best bid first) |
+| `/orderbook` `asks` | Price ascending (best ask first) |
+| `/historical_trades` | `trade_timestamp` descending (most recent first) |
+
+## Compression
+
+The API supports `gzip` and `br` (Brotli). Send `Accept-Encoding: gzip, br` for smaller responses.
+
+## Versioning
+
+The current API is **v1**. Path versioning will be added in future releases (e.g. `/v2/tickers`). v1 endpoints are stable and will receive a 30-day deprecation notice before any breaking change.

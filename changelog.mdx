@@ -1,0 +1,45 @@
+---
+title: "Changelog"
+description: "Versioned changes to the Binibit public API."
+---
+
+## v1.0 — 2026-04-28
+
+Initial public release of the CoinGecko-compatible market data API.
+
+### Endpoints
+
+- `GET /tickers` — 24-hour stats for every active pair
+- `GET /orderbook` — order book depth per pair
+- `GET /historical_trades` — recent trades per pair
+- `GET /asset` — asset metadata
+
+### Standards
+
+- Schema follows CoinGecko Integration API Standards v8 (Section A: Spot Exchanges)
+- All timestamps in milliseconds (Unix epoch)
+- All `type` values lowercase (`"buy"` / `"sell"`)
+- `historical_trades` response shape: `{ buy: [...], sell: [...] }`
+
+## Roadmap
+
+### v1.1 — planned
+
+- `GET /ping` — liveness check
+- `GET /time` — server time
+- `GET /summary` — CMC-compatible summary endpoint
+- Public OpenAPI 3.1 spec at `/openapi.json`
+
+### v1.2 — planned
+
+- `GET /klines` — OHLCV candle data with multiple intervals
+
+### v2.0 — planned
+
+- Authenticated trading API (HMAC-SHA256)
+- WebSocket streams for tickers, order book, and trades
+- IP whitelisting per API key
+
+## Subscribe
+
+Email [api-updates@binibit.com](mailto:api-updates@binibit.com) to receive change announcements 30 days before any breaking change.

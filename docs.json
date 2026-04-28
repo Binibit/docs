@@ -3,65 +3,68 @@
   "theme": "mint",
   "name": "Binibit Labs",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#0EA5E9",
+    "light": "#38BDF8",
+    "dark": "#0369A1"
   },
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
             "group": "Getting started",
             "pages": [
               "index",
-              "quickstart",
-              "development"
+              "introduction"
             ]
           },
           {
-            "group": "Customization",
+            "group": "General",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "general/base-url",
+              "general/authentication",
+              "general/rate-limits",
+              "general/response-format",
+              "general/timestamps",
+              "general/errors"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Reference",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "reference/ticker-id-format",
+              "reference/trading-pairs",
+              "reference/supported-assets"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Resources",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "verification",
+              "changelog",
+              "faq",
+              "support"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Overview",
             "pages": [
               "api-reference/introduction"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Market Data",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/tickers",
+              "api-reference/orderbook",
+              "api-reference/historical-trades",
+              "api-reference/asset"
             ]
           }
         ]
@@ -70,14 +73,19 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "Exchange",
+          "href": "https://binibit.com",
+          "icon": "arrow-up-right-from-square"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Status",
+          "href": "https://status.binibit.com",
+          "icon": "signal-bars"
+        },
+        {
+          "anchor": "GitHub",
+          "href": "https://github.com/Binibit/docs",
+          "icon": "github"
         }
       ]
     }
@@ -86,32 +94,29 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:api@binibit.com"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Trade",
+      "href": "https://binibit.com"
     }
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity"
+    ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/binibit",
+      "github": "https://github.com/Binibit",
+      "telegram": "https://t.me/binibit"
     }
   },
   "description": "Ecosystem Docs: Binibit Exchange, BiniChain (EVM L1), BaiDEX (AI-managed DEX), Bini App, and BINI Token.",

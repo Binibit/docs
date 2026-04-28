@@ -1,0 +1,79 @@
+---
+title: "Rate Limits"
+description: "Per-IP request quotas for public endpoints."
+---
+
+## Default quotas
+
+| Tier | Scope | Limit |
+|---|---|---|
+| Public | All `/getcoingecko/*` endpoints | **60 requests / minute / IP** |
+| Burst | All public | **10 requests / second / IP** |
+
+Both limits apply simultaneously. Exceeding either returns HTTP `429`.
+
+## Response headers
+
+Every successful response includes:
+
+| Header | Meaning |
+|---|---|
+| `X-RateLimit-Limit` | Quota for the current window (e.g. `60`). |
+| `X-RateLimit-Remaining` | Requests left in the current window. |
+| `X-RateLimit-Reset` | Unix timestamp (ms) when the window resets. |
+
+Example:
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 57
+X-RateLimit-Reset: 1777399720000
+```
+
+## When you exceed the limit
+
+```http
+HTTP/1.1 429 Too Many Requests
+Retry-After: 12
+Content-Type: application/json
+
+{
+  "code": "RATE_LIMIT",
+  "message": "Rate limit exceeded. Retry after 12 seconds."
+}
+```
+
+The `Retry-After` header tells you how many seconds to wait before retrying.
+
+## Best practices
+
+<Steps>
+  <Step title="Cache aggressively">
+    `/tickers` is updated every few seconds. Cache for at least 5 seconds on your side instead of polling continuously.
+  </Step>
+  <Step title="Respect Retry-After">
+    Always honor the `Retry-After` header on `429`. Do not retry immediately.
+  </Step>
+  <Step title="Use exponential backoff">
+    On repeated `429` or `5xx`, back off exponentially with jitter.
+  </Step>
+  <Step title="Batch where possible">
+    Use `/tickers` (returns all pairs) instead of polling each pair individually.
+  </Step>
+</Steps>
+
+## Elevated limits
+
+Aggregators, market makers, and high-volume consumers can request:
+
+- Higher per-IP quotas
+- Static IP whitelisting (no rate limit)
+- Dedicated read replicas
+
+Contact [api@binibit.com](mailto:api@binibit.com) with:
+
+- Use case description
+- Estimated request volume
+- Source IP range or CIDR

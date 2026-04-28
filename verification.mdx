@@ -1,0 +1,49 @@
+---
+title: "Data Verification"
+description: "Live snapshot used to verify Binibit market data against third-party aggregators."
+---
+
+## Purpose
+
+This page exists to satisfy the CoinGecko Integration requirement that **API data must match what is shown on the trading interface**.
+
+It displays values fetched directly from the public `/tickers` endpoint, so anyone — CoinGecko reviewers, CoinMarketCap reviewers, end users — can independently verify Binibit market data.
+
+## Live snapshot
+
+<Card title="Open the trading interface" icon="arrow-up-right-from-square" href="https://binibit.com">
+  Compare values below to the trading view on binibit.com — they should match.
+</Card>
+
+| Pair | Last | 24h Volume (base) | 24h Volume (USD est.) | Bid | Ask | Spread % | Trading page |
+|---|---|---|---|---|---|---|---|
+| AAVE_USDT | 97.4408 | 471.47 AAVE | $45,745 | 95.5644 | 97.4953 | 1.98% | [open](https://binibit.com/trade/AAVE-USDT) |
+| BTC_USDT | (live) | (live) BTC | (live) | (live) | (live) | (live) | [open](https://binibit.com/trade/BTC-USDT) |
+| TRX_USDT | 0.3238 | 9,900.94 TRX | $3,214 | 0.3204 | 0.3261 | 1.78% | [open](https://binibit.com/trade/TRX-USDT) |
+| LINK_USDT | 9.1935 | 432.94 LINK | $4,005 | (live) | (live) | (live) | [open](https://binibit.com/trade/LINK-USDT) |
+
+<Note>
+  Numeric snapshot above is illustrative — the canonical, real-time values are at the [`/tickers`](/api-reference/tickers) endpoint. A live auto-refreshing widget will replace the static table in the next docs release.
+</Note>
+
+## Reproduce locally
+
+```bash
+curl -s https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers \
+  | jq -r '.[] | [.ticker_id, .last_price, .base_volume, .target_volume, .bid, .ask] | @tsv' \
+  | column -t
+```
+
+## For aggregator reviewers
+
+If you are reviewing Binibit for listing on CoinGecko, CoinMarketCap, DefiLlama, or similar:
+
+- The `/tickers` endpoint is the source of truth for last prices and 24h volumes
+- Click any "open" link above to see the same numbers on the live trading interface
+- Email [api@binibit.com](mailto:api@binibit.com) for IP whitelisting and elevated rate limits during your review
+
+## Status & uptime
+
+<Card title="Live status page" icon="signal-bars" href="https://status.binibit.com">
+  Per-endpoint uptime, incident history, scheduled maintenance.
+</Card>

@@ -1,0 +1,41 @@
+---
+title: "Trading Pairs"
+description: "List of all active markets on Binibit."
+---
+
+## Live list
+
+The authoritative list of active pairs is the [`/tickers`](/api-reference/tickers) endpoint:
+
+```bash
+curl https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers | jq -r '.[].ticker_id'
+```
+
+## Active pairs (snapshot)
+
+Below is a snapshot of pairs that were active at the time this page was last updated. For real-time data, use the [`/tickers`](/api-reference/tickers) endpoint or the [Verification](/verification) page.
+
+| ticker_id | base | target | Status |
+|---|---|---|---|
+| `AAVE_USDT` | AAVE | USDT | Active |
+| `BINI_USDT` | BINI | USDT | Active |
+| `BTC_USDT` | BTC | USDT | Active |
+| `CRO_USDT` | CRO | USDT | Active |
+| `ETH_BTC` | ETH | BTC | Active |
+| `ETH_USDT` | ETH | USDT | Active |
+| `LINK_USDT` | LINK | USDT | Active |
+| `OKB_USDT` | OKB | USDT | Active |
+| `PEPE_USDT` | PEPE | USDT | Active |
+| `SHIB_USDT` | SHIB | USDT | Active |
+| `TON_USDT` | TON | USDT | Active |
+| `TRX_USDT` | TRX | USDT | Active |
+| `UNI_USDT` | UNI | USDT | Active |
+| `XAUT_USDT` | XAUT | USDT | Active |
+
+<Note>
+  This snapshot is informational. Use the live API for the up-to-date list.
+</Note>
+
+## Listing requests
+
+To request a new pair listing on Binibit, see the [listings page on binibit.com](https://binibit.com/listings).

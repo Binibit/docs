@@ -1,0 +1,52 @@
+---
+title: "Introduction"
+description: "Overview of the Binibit public market data API."
+---
+
+## What is Binibit API?
+
+Binibit is a centralized cryptocurrency spot exchange. Our public API exposes real-time market data for all listed trading pairs.
+
+The API is:
+
+- **Public** — no API key, no authentication required
+- **JSON-only** — every endpoint returns `application/json`
+- **CoinGecko-compatible** — schema follows CoinGecko Integration API Standards v8
+- **Rate-limited** — 60 requests per minute per IP by default ([details](/general/rate-limits))
+
+## Endpoints at a glance
+
+| Endpoint | Purpose |
+|---|---|
+| [`GET /tickers`](/api-reference/tickers) | 24-hour stats for every active pair |
+| [`GET /orderbook`](/api-reference/orderbook) | Order book depth for one pair |
+| [`GET /historical_trades`](/api-reference/historical-trades) | Recent completed trades for one pair |
+| [`GET /asset`](/api-reference/asset) | Asset metadata (deposit/withdraw status, fees) |
+
+## Base URL
+
+```
+https://internal-api.binibit.com/api/marketdata/getcoingecko
+```
+
+See [Base URL](/general/base-url) for details and migration plans.
+
+## API stability
+
+This is **API v1**. Breaking changes will be announced 30 days in advance via:
+
+- The [Changelog](/changelog) page
+- [@binibit](https://x.com/binibit) on X
+- The `api-updates@binibit.com` mailing list
+
+## Roadmap
+
+| Version | Scope |
+|---|---|
+| v1 (current) | Public market data: `/tickers`, `/orderbook`, `/historical_trades`, `/asset` |
+| v1.x | `/ping`, `/time`, `/summary`, `/klines` (OHLCV candles) |
+| v2 | Authenticated trading API (HMAC-SHA256), WebSocket streams |
+
+## Need higher rate limits?
+
+Aggregators, market makers, and high-volume integrators can request elevated rate limits and IP whitelisting. Email [api@binibit.com](mailto:api@binibit.com).

@@ -1,0 +1,30 @@
+---
+title: "Authentication"
+description: "Public market data endpoints require no authentication."
+---
+
+## Public endpoints
+
+All endpoints documented in [API Reference](/api-reference/introduction) are **public**. They require:
+
+- No API key
+- No HMAC signature
+- No request signing
+- No bearer token
+
+You can call them anonymously from any environment — server, browser, mobile app.
+
+```bash
+curl https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers
+```
+
+## Trading API (v2, planned)
+
+The authenticated trading API is on the [roadmap](/introduction#roadmap) for v2. It will use:
+
+- API key + secret pair (issued from the user dashboard)
+- HMAC-SHA256 request signing over canonical query strings
+- Server timestamp synchronization (`/time` endpoint)
+- Optional IP whitelisting
+
+Subscribe to [api-updates@binibit.com](mailto:api-updates@binibit.com) to be notified when v2 is released.

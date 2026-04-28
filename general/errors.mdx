@@ -1,0 +1,70 @@
+---
+title: "Errors"
+description: "HTTP status codes and error response format."
+---
+
+## HTTP status codes
+
+| Status | Meaning |
+|---|---|
+| `200 OK` | Request succeeded. |
+| `400 Bad Request` | Missing or invalid query parameter. |
+| `404 Not Found` | Unknown ticker_id, asset, or path. |
+| `429 Too Many Requests` | [Rate limit](/general/rate-limits) exceeded. |
+| `500 Internal Server Error` | Transient server-side error — retry. |
+| `503 Service Unavailable` | Maintenance window or overload — retry later. |
+
+## Error envelope
+
+Non-2xx responses include a JSON body:
+
+```json
+{
+  "code": "INVALID_PARAM",
+  "message": "ticker_id is required",
+  "field": "ticker_id"
+}
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `code` | string | Machine-readable error code (see table below). |
+| `message` | string | Human-readable description. |
+| `field` | string \| null | The query parameter or field that triggered the error, when applicable. |
+
+## Error codes
+
+| Code | HTTP | Meaning |
+|---|---|---|
+| `INVALID_PARAM` | 400 | A query parameter is missing, malformed, or out of range. |
+| `NOT_FOUND` | 404 | The requested ticker_id, asset, or path does not exist. |
+| `RATE_LIMIT` | 429 | Per-IP rate limit exceeded. See `Retry-After` header. |
+| `INTERNAL` | 500 | Unexpected server error. Safe to retry with backoff. |
+| `UNAVAILABLE` | 503 | Service is temporarily down for maintenance. See `Retry-After` if present. |
+
+## Retry strategy
+
+| HTTP | Retry? | Strategy |
+|---|---|---|
+| 4xx (except 429) | No | Fix the request. |
+| 429 | Yes | Honor `Retry-After`. |
+| 500 | Yes | Exponential backoff with jitter, max 5 attempts. |
+| 503 | Yes | Honor `Retry-After`, longer backoff. |
+
+```python
+import time, random, requests
+
+def fetch_with_retry(url, max_attempts=5):
+    for attempt in range(max_attempts):
+        r = requests.get(url, timeout=10)
+        if r.status_code == 200:
+            return r.json()
+        if r.status_code == 429:
+            time.sleep(int(r.headers.get("Retry-After", "1")))
+            continue
+        if 500 <= r.status_code < 600:
+            time.sleep((2 ** attempt) + random.random())
+            continue
+        r.raise_for_status()
+    raise RuntimeError(f"Exhausted retries for {url}")
+```

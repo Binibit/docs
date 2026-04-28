@@ -1,0 +1,71 @@
+---
+title: "Timestamps"
+description: "All timestamps are Unix epoch in milliseconds."
+---
+
+## Unit
+
+Every timestamp returned by the API is an **integer in milliseconds** since the Unix epoch (`1970-01-01T00:00:00Z`).
+
+```json
+{
+  "timestamp": 1777399660025,
+  "trade_timestamp": 1777397315466
+}
+```
+
+## Conversion
+
+<CodeGroup>
+
+```javascript JavaScript
+const ts = 1777399660025;
+new Date(ts).toISOString();
+// "2026-04-28T22:41:00.025Z"
+```
+
+```python Python
+from datetime import datetime, UTC
+ts = 1777399660025
+datetime.fromtimestamp(ts / 1000, tz=UTC).isoformat()
+# '2026-04-28T22:41:00.025000+00:00'
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func main() {
+    ts := int64(1777399660025)
+    fmt.Println(time.UnixMilli(ts).UTC().Format(time.RFC3339Nano))
+    // 2026-04-28T22:41:00.025Z
+}
+```
+
+```rust Rust
+use chrono::{DateTime, Utc};
+let ts: i64 = 1777399660025;
+let dt: DateTime<Utc> = DateTime::from_timestamp_millis(ts).unwrap();
+println!("{}", dt.to_rfc3339());
+// 2026-04-28T22:41:00.025+00:00
+```
+
+</CodeGroup>
+
+## Sending timestamps in requests
+
+Query parameters that accept a timestamp (e.g. `start_time`, `end_time` on `/historical_trades`) also expect **milliseconds**:
+
+```bash
+curl "https://internal-api.binibit.com/api/marketdata/getcoingecko/historical_trades?ticker_id=TRX_USDT&start_time=1777380000000&end_time=1777400000000"
+```
+
+## Server time
+
+Server clock is synced via NTP. Drift is typically under 100 ms.
+
+A dedicated `GET /time` endpoint is on the [roadmap](/introduction#roadmap) for v1.x.

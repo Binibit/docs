@@ -1,0 +1,50 @@
+---
+title: "ticker_id format"
+description: "Trading pair identifier convention used across the API."
+---
+
+## Format
+
+```
+{BASE}_{TARGET}
+```
+
+- `BASE` and `TARGET` are uppercase asset symbols (`BTC`, `USDT`, `AAVE`, `TRX` ...)
+- They are joined by a single underscore `_` (CoinGecko convention)
+- The order matters: **left side is the base asset**, **right side is the target (quote) asset**
+
+## What ticker_id tells you
+
+For any pair `X_Y`:
+
+- `last_price = N` means **1 X = N Y**
+- `base_volume` is denominated in **X**
+- `target_volume` is denominated in **Y**
+- Order book `bids[i] = [price, qty]` — `price` is in `Y`, `qty` is in `X`
+
+## Examples
+
+| ticker_id | base | target | Reading |
+|---|---|---|---|
+| `BTC_USDT` | BTC | USDT | "Bitcoin priced in Tether" |
+| `ETH_BTC` | ETH | BTC | "Ether priced in Bitcoin" |
+| `AAVE_USDT` | AAVE | USDT | "AAVE priced in Tether" |
+| `TRX_USDT` | TRX | USDT | "Tron priced in Tether" |
+
+## Naming clashes
+
+`BTC_USDT` and `USDT_BTC` are **not** the same market — they are different tickers and reflect different conventions for which side is base. Binibit uses the conventional direction (e.g. `BTC_USDT`, not `USDT_BTC`).
+
+## Cross-pairs
+
+Pairs that don't have a stablecoin on either side use the same convention:
+
+| ticker_id | Reading |
+|---|---|
+| `ETH_BTC` | 1 ETH priced in BTC |
+| `BNB_ETH` | 1 BNB priced in ETH |
+| `LINK_BTC` | 1 LINK priced in BTC |
+
+## Listing live pairs
+
+See [Trading Pairs](/reference/trading-pairs) for the live list of supported `ticker_id` values.

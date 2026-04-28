@@ -1,0 +1,118 @@
+---
+title: "GET /orderbook"
+description: "Order book depth for a single trading pair."
+api: "GET https://internal-api.binibit.com/api/marketdata/getcoingecko/orderbook"
+---
+
+## Description
+
+Returns the current order book for a single pair, split into `bids` and `asks` arrays.
+
+## Parameters
+
+<ParamField query="ticker_id" type="string" required>
+  Pair identifier in `{base}_{target}` format, e.g. `TRX_USDT`. See [ticker_id format](/reference/ticker-id-format).
+</ParamField>
+
+<ParamField query="depth" type="integer" default="100">
+  Total order count across both sides.
+
+  - Allowed values: `0`, `100`, `200`, `500`
+  - `depth=100` returns up to 50 bids and 50 asks
+  - `depth=0` returns full order book depth
+</ParamField>
+
+## Response
+
+<ResponseField name="ticker_id" type="string" required>
+  The requested pair identifier, echoed back.
+</ResponseField>
+
+<ResponseField name="timestamp" type="integer" required>
+  Last order book update time, Unix epoch in milliseconds.
+</ResponseField>
+
+<ResponseField name="bids" type="array" required>
+  Array of `[price, quantity]` tuples sorted by price **descending** (best bid first).
+
+  - `price` is the bid price in target currency
+  - `quantity` is the order size in base currency
+</ResponseField>
+
+<ResponseField name="asks" type="array" required>
+  Array of `[price, quantity]` tuples sorted by price **ascending** (best ask first).
+
+  - `price` is the ask price in target currency
+  - `quantity` is the order size in base currency
+</ResponseField>
+
+## Example request
+
+<CodeGroup>
+
+```bash curl
+curl "https://internal-api.binibit.com/api/marketdata/getcoingecko/orderbook?ticker_id=TRX_USDT&depth=100"
+```
+
+```javascript Node
+const url = new URL(
+  "https://internal-api.binibit.com/api/marketdata/getcoingecko/orderbook"
+);
+url.searchParams.set("ticker_id", "TRX_USDT");
+url.searchParams.set("depth", "100");
+const book = await fetch(url).then(r => r.json());
+```
+
+```python Python
+import requests
+book = requests.get(
+    "https://internal-api.binibit.com/api/marketdata/getcoingecko/orderbook",
+    params={"ticker_id": "TRX_USDT", "depth": 100},
+).json()
+```
+
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "ticker_id": "TRX_USDT",
+  "timestamp": 1777399660025,
+  "bids": [
+    [0.31970297, 554.73],
+    [0.31969307, 4.43],
+    [0.31968317, 111.41]
+  ],
+  "asks": [
+    [0.3261391, 503.02],
+    [0.3261694, 123.38],
+    [0.3261795, 20.01]
+  ]
+}
+```
+
+## Computing spread
+
+```javascript
+const bestBid = book.bids[0][0];
+const bestAsk = book.asks[0][0];
+const spread = bestAsk - bestBid;
+const spreadPct = (spread / bestAsk) * 100;
+console.log(`Spread: ${spread} (${spreadPct.toFixed(2)}%)`);
+```
+
+## Notes
+
+<Note>
+  - Order book snapshots are eventually consistent — a trade you observe in `/historical_trades` may take up to 1 second to be removed from the book.
+  - For real-time order book streams, a WebSocket API is on the [roadmap](/introduction#roadmap) for v2.
+  - The `quantity` is the **remaining** order size at that price level after partial fills.
+</Note>
+
+## Errors
+
+| Code | Cause |
+|---|---|
+| `400 INVALID_PARAM` | `ticker_id` is missing or `depth` is not in `{0, 100, 200, 500}`. |
+| `404 NOT_FOUND` | The ticker_id is not a valid trading pair. |

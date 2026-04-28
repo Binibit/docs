@@ -1,0 +1,148 @@
+---
+title: "GET /historical_trades"
+description: "Recent completed trades for a single trading pair, grouped into buy and sell sides."
+api: "GET https://internal-api.binibit.com/api/marketdata/getcoingecko/historical_trades"
+---
+
+## Description
+
+Returns recent trades for one pair, split into `buy` and `sell` arrays.
+
+By the CoinGecko convention:
+
+- **`buy`** trades are those where the **ask was removed** from the order book (the taker bought into a resting ask).
+- **`sell`** trades are those where the **bid was removed** from the order book (the taker sold into a resting bid).
+
+## Parameters
+
+<ParamField query="ticker_id" type="string" required>
+  Pair identifier in `{base}_{target}` format, e.g. `TRX_USDT`.
+</ParamField>
+
+<ParamField query="type" type="string">
+  Filter by trade side. One of:
+
+  - `buy` — only return trades in the `buy` array
+  - `sell` — only return trades in the `sell` array
+  - omitted — return both
+</ParamField>
+
+<ParamField query="limit" type="integer" default="200">
+  Maximum number of trades **per side** to return.
+
+  - Allowed values: `0`, `100`, `200`, `500`
+  - `0` returns the maximum available history
+</ParamField>
+
+<ParamField query="start_time" type="integer">
+  Inclusive lower bound on `trade_timestamp`, Unix epoch in milliseconds.
+</ParamField>
+
+<ParamField query="end_time" type="integer">
+  Inclusive upper bound on `trade_timestamp`, Unix epoch in milliseconds.
+</ParamField>
+
+## Response
+
+<ResponseField name="buy" type="array" required>
+  Array of trade objects (see schema below) where the taker bought.
+</ResponseField>
+
+<ResponseField name="sell" type="array" required>
+  Array of trade objects where the taker sold.
+</ResponseField>
+
+### Trade object schema
+
+<ResponseField name="trade_id" type="integer" required>
+  Unique trade identifier. Strictly increasing per pair.
+</ResponseField>
+
+<ResponseField name="price" type="decimal" required>
+  Trade price in target currency.
+</ResponseField>
+
+<ResponseField name="base_volume" type="decimal" required>
+  Trade size in base currency.
+</ResponseField>
+
+<ResponseField name="target_volume" type="decimal" required>
+  Trade size in target currency. Equals `price * base_volume`.
+</ResponseField>
+
+<ResponseField name="trade_timestamp" type="integer" required>
+  Trade execution time, Unix epoch in milliseconds.
+</ResponseField>
+
+<ResponseField name="type" type="string" required>
+  `"buy"` or `"sell"` — matches the array the trade appears in.
+</ResponseField>
+
+## Example request
+
+<CodeGroup>
+
+```bash curl
+curl "https://internal-api.binibit.com/api/marketdata/getcoingecko/historical_trades?ticker_id=TRX_USDT&limit=50"
+```
+
+```javascript Node
+const url = new URL(
+  "https://internal-api.binibit.com/api/marketdata/getcoingecko/historical_trades"
+);
+url.searchParams.set("ticker_id", "TRX_USDT");
+url.searchParams.set("limit", "50");
+const trades = await fetch(url).then(r => r.json());
+```
+
+```python Python
+import requests
+trades = requests.get(
+    "https://internal-api.binibit.com/api/marketdata/getcoingecko/historical_trades",
+    params={"ticker_id": "TRX_USDT", "limit": 50},
+).json()
+```
+
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "buy": [
+    {
+      "trade_id": 290334,
+      "price": 0.32332854,
+      "base_volume": 49.24,
+      "target_volume": 15.9206973096,
+      "trade_timestamp": 1777397315466,
+      "type": "buy"
+    }
+  ],
+  "sell": [
+    {
+      "trade_id": 290394,
+      "price": 0.32428732,
+      "base_volume": 72.56,
+      "target_volume": 23.5302879392,
+      "trade_timestamp": 1777397655839,
+      "type": "sell"
+    }
+  ]
+}
+```
+
+## Notes
+
+<Note>
+  - Trades are sorted by `trade_timestamp` descending (most recent first).
+  - `trade_id` is unique within a pair, but is not guaranteed to be globally unique across pairs.
+  - For very high-frequency consumers, a WebSocket trade stream is on the [roadmap](/introduction#roadmap) for v2.
+</Note>
+
+## Errors
+
+| Code | Cause |
+|---|---|
+| `400 INVALID_PARAM` | `ticker_id` missing, or `limit`/`type` invalid, or `start_time > end_time`. |
+| `404 NOT_FOUND` | The ticker_id is not a valid trading pair. |

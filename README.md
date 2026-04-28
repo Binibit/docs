@@ -1,55 +1,56 @@
-# Mintlify Starter Kit
+# Binibit API Documentation
 
-Use the starter kit to get your docs deployed and ready to customize.
+Source for [docs.binibit.com](https://docs.binibit.com) — public market data API documentation for the Binibit centralized spot exchange.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+Built with [Mintlify](https://mintlify.com).
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+## Contents
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+| Path | What |
+|---|---|
+| `index.mdx` | Landing page |
+| `introduction.mdx` | API overview |
+| `general/` | Base URL, auth, rate limits, response format, timestamps, errors |
+| `api-reference/` | REST endpoint reference (`/tickers`, `/orderbook`, `/historical_trades`, `/asset`) |
+| `reference/` | ticker_id format, trading pairs, supported assets |
+| `verification.mdx` | Live data snapshot for aggregator verification |
+| `changelog.mdx` | API version history and roadmap |
+| `faq.mdx` | Frequently asked questions |
+| `support.mdx` | Contact channels |
+| `docs.json` | Mintlify navigation, theme, and site config |
 
-## AI-assisted writing
+## Local preview
 
-Set up your AI coding tool to work with Mintlify:
+Install the Mintlify CLI:
 
 ```bash
-npx skills add https://mintlify.com/docs
-```
-
-This command installs Mintlify's documentation skill for your configured AI tools like Claude Code, Cursor, Windsurf, and others. The skill includes component reference, writing standards, and workflow guidance.
-
-See the [AI tools guides](/ai-tools) for tool-specific setup.
-
-## Development
-
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
-
-```
 npm i -g mint
 ```
 
-Run the following command at the root of your documentation, where your `docs.json` is located:
+Run from the repo root (where `docs.json` lives):
 
-```
+```bash
 mint dev
 ```
 
-View your local preview at `http://localhost:3000`.
+Preview at http://localhost:3000.
 
-## Publishing changes
+To validate links and broken references:
 
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
+```bash
+mint broken-links
+```
 
-## Need help?
+## Deployment
 
-### Troubleshooting
+Pushes to `main` are deployed automatically via the Mintlify GitHub App. Pull requests get a preview URL.
 
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
+## Contributing
 
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+For typos, broken links, or unclear wording, open an [issue](https://github.com/Binibit/docs/issues) or a PR.
+
+## License
+
+[MIT](./LICENSE).

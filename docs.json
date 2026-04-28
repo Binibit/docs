@@ -1,13 +1,12 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Binibit Labs",
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
     "dark": "#15803D"
   },
-  "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
@@ -118,5 +117,7 @@
       "github": "https://github.com/mintlify",
       "linkedin": "https://linkedin.com/company/mintlify"
     }
-  }
+  },
+  "description": "Ecosystem Docs: Binibit Exchange, BiniChain (EVM L1), BaiDEX (AI-managed DEX), Bini App, and BINI Token.",
+  "favicon": "/images/logolisting.png"
 }

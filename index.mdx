@@ -1,6 +1,6 @@
 ---
-title: "Binibit API"
-description: "Public market data API for the Binibit centralized spot exchange. CoinGecko-compatible, no authentication required."
+title: "Binibit Spot Market API"
+description: "Public market data REST API for the Binibit centralized spot exchange."
 ---
 
 ## Quick start
@@ -36,17 +36,16 @@ curl https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers
     List of all active markets and their volumes.
   </Card>
   <Card title="Verification" icon="shield-check" href="/verification">
-    Live data view used by aggregators to verify exchange data.
+    Live data snapshot for cross-checking against the trading interface.
   </Card>
 </Columns>
 
-## Standards
+## Highlights
 
-The Binibit public API follows the **CoinGecko Integration API Standards v8** for centralized spot exchanges. Aggregators (CoinGecko, CoinMarketCap, DefiLlama) can integrate Binibit market data directly with no schema translation.
-
-<Card title="CoinGecko Integration Standards" icon="book" href="https://www.coingecko.com/learn/coingecko-api-integration">
-  Read the upstream specification.
-</Card>
+- **Public.** No authentication, no API key.
+- **REST + JSON.** Standard HTTP, predictable schemas.
+- **Real-time.** Tickers refresh every few seconds.
+- **Rate-limited fairly.** 60 requests per minute per IP by default; aggregators and integrators get whitelisted on request.
 
 ## Status
 

@@ -42,12 +42,12 @@ description: "Frequently asked questions about the Binibit public API."
   </Accordion>
 
   <Accordion title="What's the buy/sell convention in /historical_trades?">
-    Following the CoinGecko convention:
+    The `type` field reflects the **taker side**:
 
     - **`buy`** — taker bought (an ask was removed from the order book)
     - **`sell`** — taker sold (a bid was removed from the order book)
 
-    This is the **taker side**. Each trade has exactly one taker, so each trade appears in exactly one of the two arrays.
+    Each trade has exactly one taker, so each trade appears in exactly one of the two arrays.
   </Accordion>
 
   <Accordion title="Why do trade_timestamps look like very large integers?">

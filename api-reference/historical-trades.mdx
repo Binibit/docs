@@ -8,7 +8,7 @@ api: "GET https://internal-api.binibit.com/api/marketdata/getcoingecko/historica
 
 Returns recent trades for one pair, split into `buy` and `sell` arrays.
 
-By the CoinGecko convention:
+Convention — `type` reflects the **taker side**:
 
 - **`buy`** trades are those where the **ask was removed** from the order book (the taker bought into a resting ask).
 - **`sell`** trades are those where the **bid was removed** from the order book (the taker sold into a resting bid).

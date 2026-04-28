@@ -11,7 +11,7 @@ This file briefs AI coding agents (Claude Code, Cursor, Copilot, etc.) working i
 
 ## Project scope
 
-Documents the **public market data API** of the Binibit centralized spot exchange. Schema follows CoinGecko Integration API Standards v8 (Section A: Spot Exchanges).
+Documents the **Binibit Spot Market API** — the public REST surface for market data of the Binibit centralized spot exchange.
 
 Endpoints documented:
 
@@ -21,6 +21,8 @@ Endpoints documented:
 - `GET /asset`
 
 Production API base: `https://internal-api.binibit.com/api/marketdata/getcoingecko`.
+
+The schema happens to align with CoinGecko Integration API Standards v8 so aggregators can ingest without translation, but framing in user-facing docs should be **brand-agnostic**: "Binibit Spot Market API", not "Binibit's CoinGecko endpoint". Mention CG compatibility once, in a "Standards" section, not as the primary pitch.
 
 Out of scope: account / KYC / trading / WebSocket APIs. v2 will introduce those — not yet.
 

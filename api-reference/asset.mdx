@@ -6,13 +6,9 @@ api: "GET https://internal-api.binibit.com/api/marketdata/getcoingecko/asset"
 
 ## Description
 
-Returns metadata for every asset listed on Binibit.
+Returns metadata for every asset listed on Binibit — display name, deposit/withdrawal status, fees, and limits.
 
-<Info>
-  This endpoint is **not part** of the CoinGecko Integration API Standards v8 for spot exchanges. It is provided for convenience and parity with CoinMarketCap's `/assets` endpoint.
-
-  CoinGecko aggregator integration relies only on `/tickers`, `/orderbook`, and `/historical_trades`.
-</Info>
+Useful for rendering deposit and withdrawal screens, fee calculators, and asset directories.
 
 ## Parameters
 

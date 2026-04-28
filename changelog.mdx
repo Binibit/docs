@@ -5,7 +5,7 @@ description: "Versioned changes to the Binibit public API."
 
 ## v1.0 — 2026-04-28
 
-Initial public release of the CoinGecko-compatible market data API.
+Initial public release of the Spot Market API.
 
 ### Endpoints
 
@@ -14,12 +14,12 @@ Initial public release of the CoinGecko-compatible market data API.
 - `GET /historical_trades` — recent trades per pair
 - `GET /asset` — asset metadata
 
-### Standards
+### Conventions
 
-- Schema follows CoinGecko Integration API Standards v8 (Section A: Spot Exchanges)
 - All timestamps in milliseconds (Unix epoch)
 - All `type` values lowercase (`"buy"` / `"sell"`)
 - `historical_trades` response shape: `{ buy: [...], sell: [...] }`
+- Schema aligns with CoinGecko Integration API Standards v8 so aggregators can ingest without translation
 
 ## Roadmap
 
@@ -27,7 +27,8 @@ Initial public release of the CoinGecko-compatible market data API.
 
 - `GET /ping` — liveness check
 - `GET /time` — server time
-- `GET /summary` — CMC-compatible summary endpoint
+- `GET /summary` — compact summary endpoint (CMC-compatible)
+- Cleaner path alias `/v1/spot/market/*` mapped to current `/getcoingecko/*` routes
 - Public OpenAPI 3.1 spec at `/openapi.json`
 
 ### v1.2 — planned

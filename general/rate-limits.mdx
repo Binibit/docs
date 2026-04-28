@@ -7,7 +7,7 @@ description: "Per-IP request quotas for public endpoints."
 
 | Tier | Scope | Limit |
 |---|---|---|
-| Public | All `/getcoingecko/*` endpoints | **60 requests / minute / IP** |
+| Public | All Spot Market API endpoints | **60 requests / minute / IP** |
 | Burst | All public | **10 requests / second / IP** |
 
 Both limits apply simultaneously. Exceeding either returns HTTP `429`.

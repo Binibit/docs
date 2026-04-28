@@ -1,13 +1,15 @@
 ---
 title: "Data Verification"
-description: "Live snapshot used to verify Binibit market data against third-party aggregators."
+description: "Live snapshot for cross-checking API data against the trading interface."
 ---
 
 ## Purpose
 
-This page exists to satisfy the CoinGecko Integration requirement that **API data must match what is shown on the trading interface**.
+A side-by-side view: numbers pulled live from the public API next to links to the matching trading pages. Useful for:
 
-It displays values fetched directly from the public `/tickers` endpoint, so anyone — CoinGecko reviewers, CoinMarketCap reviewers, end users — can independently verify Binibit market data.
+- Operations teams monitoring data integrity
+- Developers sanity-checking their integrations
+- Data aggregators (CoinGecko, CoinMarketCap, DefiLlama) verifying that Binibit API data matches the trading interface — a precondition for listing
 
 ## Live snapshot
 
@@ -36,11 +38,11 @@ curl -s https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers \
 
 ## For aggregator reviewers
 
-If you are reviewing Binibit for listing on CoinGecko, CoinMarketCap, DefiLlama, or similar:
+If you are reviewing Binibit for a third-party listing (CoinGecko, CoinMarketCap, DefiLlama, Kaiko, etc.):
 
-- The `/tickers` endpoint is the source of truth for last prices and 24h volumes
-- Click any "open" link above to see the same numbers on the live trading interface
-- Email [api@binibit.com](mailto:api@binibit.com) for IP whitelisting and elevated rate limits during your review
+- The [`/tickers`](/api-reference/tickers) endpoint is the source of truth for last prices and 24h volumes
+- Click any "open" link above to verify the same numbers appear on the live trading interface
+- Email [api@binibit.com](mailto:api@binibit.com) for IP whitelisting and elevated rate limits during review
 
 ## Status & uptime
 

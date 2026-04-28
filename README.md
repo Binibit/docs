@@ -1,6 +1,6 @@
-# Binibit API Documentation
+# Binibit Docs
 
-Source for [docs.binibit.com](https://docs.binibit.com) — public market data API documentation for the Binibit centralized spot exchange.
+Source for [docs.binibit.com](https://docs.binibit.com) — developer documentation for the Binibit Spot Market API.
 
 Built with [Mintlify](https://mintlify.com).
 

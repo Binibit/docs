@@ -1,17 +1,17 @@
 ---
 title: "Introduction"
-description: "Overview of the Binibit public market data API."
+description: "Overview of the Binibit Spot Market API."
 ---
 
 ## What is Binibit API?
 
-Binibit is a centralized cryptocurrency spot exchange. Our public API exposes real-time market data for all listed trading pairs.
+Binibit is a centralized cryptocurrency spot exchange. The Spot Market API is the public REST surface for real-time market data: tickers, order books, recent trades, and asset metadata.
 
-The API is:
+Key properties:
 
 - **Public** — no API key, no authentication required
-- **JSON-only** — every endpoint returns `application/json`
-- **CoinGecko-compatible** — schema follows CoinGecko Integration API Standards v8
+- **REST + JSON** — every endpoint returns `application/json`
+- **Real-time** — data refreshes every few seconds
 - **Rate-limited** — 60 requests per minute per IP by default ([details](/general/rate-limits))
 
 ## Endpoints at a glance
@@ -44,9 +44,13 @@ This is **API v1**. Breaking changes will be announced 30 days in advance via:
 | Version | Scope |
 |---|---|
 | v1 (current) | Public market data: `/tickers`, `/orderbook`, `/historical_trades`, `/asset` |
-| v1.x | `/ping`, `/time`, `/summary`, `/klines` (OHLCV candles) |
+| v1.x | `/ping`, `/time`, `/summary`, `/klines` (OHLCV candles), cleaner path alias `/v1/spot/market/*` |
 | v2 | Authenticated trading API (HMAC-SHA256), WebSocket streams |
+
+## Standards alignment
+
+The schema returned by `/tickers`, `/orderbook`, and `/historical_trades` aligns with the CoinGecko Integration API Standards v8 for centralized spot exchanges, so data aggregators (CoinGecko, CoinMarketCap, DefiLlama, Kaiko, CryptoCompare) can ingest Binibit market data without translation. This is an implementation detail; the API is intended for any developer.
 
 ## Need higher rate limits?
 
-Aggregators, market makers, and high-volume integrators can request elevated rate limits and IP whitelisting. Email [api@binibit.com](mailto:api@binibit.com).
+Market makers, aggregators, and high-volume integrators can request elevated rate limits and IP whitelisting. Email [api@binibit.com](mailto:api@binibit.com).

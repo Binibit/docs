@@ -82,10 +82,6 @@
       ]
     }
   },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
   "navbar": {
     "links": [
       {
@@ -119,5 +115,10 @@
     }
   },
   "description": "Ecosystem Docs: Binibit Exchange, BiniChain (EVM L1), BaiDEX (AI-managed DEX), Bini App, and BINI Token.",
-  "favicon": "/images/logolisting.png"
+  "favicon": "/images/logolisting.png",
+  "logo": "/images/logobinibitdocs.jpeg",
+  "appearance": {
+    "default": "light",
+    "strict": true
+  }
 }

@@ -1,34 +1,54 @@
-> **Customize this file**: Tailor this template to your project by noting specific contribution types you're looking for, adding a Code of Conduct, or adjusting the writing guidelines to match your style.
+# Contributing
 
-# Contribute to the documentation
+Thank you for helping improve the Binibit API documentation. This repository is the source for [docs.binibit.com](https://docs.binibit.com).
 
-Thank you for your interest in contributing to our documentation! This guide will help you get started.
+## Quick fixes
 
-## How to contribute
+For typos, broken links, unclear wording, or small clarifications:
 
-### Option 1: Edit directly on GitHub
+1. Click **Edit this page** at the bottom of any page on [docs.binibit.com](https://docs.binibit.com), or open the file directly on GitHub.
+2. Make the change and submit a pull request.
+3. A Mintlify preview URL will be generated automatically on the PR.
 
-1. Navigate to the page you want to edit
-2. Click the "Edit this file" button (the pencil icon)
-3. Make your changes and submit a pull request
+## Larger changes
 
-### Option 2: Local development
+For new pages, restructured navigation, or substantial rewrites:
 
-1. Fork and clone this repository
-2. Install the Mintlify CLI: `npm i -g mint`
-3. Create a branch for your changes
-4. Make changes
-5. Navigate to the docs directory and run `mint dev`
-6. Preview your changes at `http://localhost:3000`
-7. Commit your changes and submit a pull request
+1. Open an [issue](https://github.com/Binibit/docs/issues) first to discuss scope and approach.
+2. Fork and clone the repository.
+3. Create a feature branch: `git checkout -b docs/your-change`.
+4. Install the Mintlify CLI and preview locally:
 
-For more details on local development, see our [development guide](development.mdx).
+   ```bash
+   npm i -g mint
+   mint dev
+   ```
 
-## Writing guidelines
+   Preview at http://localhost:3000.
+5. Validate links before pushing:
 
-- **Use active voice**: "Run the command" not "The command should be run"
-- **Address the reader directly**: Use "you" instead of "the user"
-- **Keep sentences concise**: Aim for one idea per sentence
-- **Lead with the goal**: Start instructions with what the user wants to accomplish
-- **Use consistent terminology**: Don't alternate between synonyms for the same concept
-- **Include examples**: Show, don't just tell
+   ```bash
+   mint broken-links
+   ```
+6. Commit, push, and open a pull request against `main`.
+
+## Style
+
+- **Active voice and second person.** Write "Send a `GET` request..." not "A `GET` request should be sent...".
+- **Concise sentences.** One idea per sentence.
+- **Sentence case headings.** "Rate limits" not "Rate Limits".
+- **Backticks for code, paths, and field names.** `ticker_id`, `/tickers`, `docs.json`.
+- **Live examples.** Code samples must be runnable against the production API.
+- **No filler.** Drop "simply", "just", "basically", "in order to".
+
+## Scope
+
+This repository documents the **public market data API**. Out of scope:
+
+- Account / KYC / fiat onboarding flows — see [binibit.com/help](https://binibit.com).
+- Trading API (HMAC, WebSocket) — planned for v2, not yet documented here.
+- Internal dashboards or admin endpoints.
+
+## Reporting API issues
+
+For bugs in the API itself (wrong values, server errors, schema regressions), email [api@binibit.com](mailto:api@binibit.com). Documentation issues stay in this repository.

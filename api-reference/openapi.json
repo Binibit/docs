@@ -1,0 +1,1801 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "PublicApi (Auth-signature is turned off!!)",
+    "description": "You can generate API-keys here: <a href=\"https://binibit.com/apikeys\">https://binibit.com/apikeys</a>\n\n For each request you will need API-Signature:\n1) Calculate signatureText = publicKey + requestUrl + requestBodyString (no separator symbols in-between)\n\n\t publicKey - example: <i>b2H9TlfRu6MOgG4m9wvrf9maSUiPsQJEui0JrB</i>\n\n\t requestUrl - full url of request, example: <i>https://public-api.binibit.com/api/orders</i>\n\n\t requestBodyString - json request body as a 1-line string, example: <i>{\"isBid\":true,\"currencyPairCode\":\"ETH_BTC\",\"amount\":0.01,\"price\":0.02}</i>\n\n\t Then signatureText = <i>b2H9TlfRu6MOgG4m9wvrf9maSUiPsQJEui0JrBhttps://data.binibit.com/api/orders{\"isBid\":true,\"currencyPairCode\":\"ETH_BTC\",\"amount\":0.01,\"price\":0.02}</i>\n2) Convert signatureText as UTF8-string to bytes\n3) Compute HMACSHA256 hash from signatureText-bytes\n4) Convert hash-bytes to HEX-string\n\n Example in JS code:\n\n\t <script src=\"https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js\"></script>\n\n\t let signature = CryptoJS.enc.Hex.stringify(CryptoJS.HmacSHA256(publicKey + requestUrl + requestBodyString, privateKey));\n\n Example in C# code:\n\n\t string signature = new HMACSHA256(Encoding.UTF8.GetBytes(privateKey))\n\t\t .ComputeHash(Encoding.UTF8.GetBytes(publicKey + requestUrl + requestBodyString))\n\t\t .Aggregate(new StringBuilder(), (sb, b) => sb.AppendFormat(\"{0:x2}\", b), (sb) => sb.ToString());\n\n API-Signature should look like this: b7238692e0537d3a7fd13faff266d315e3185247e1644c1155f60e6d4e4e445d",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/currencies": {
+      "get": {
+        "tags": [
+          "Currencies"
+        ],
+        "summary": "Get list of currency codes",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/currencies/pairs": {
+      "get": {
+        "tags": [
+          "Currencies"
+        ],
+        "summary": "Get list of currency pair settings",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CurrencyPairSetting"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/currencies/commissions": {
+      "get": {
+        "tags": [
+          "Currencies"
+        ],
+        "summary": "Get currency pair commissions",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Commission"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/currencies/user/commissions": {
+      "get": {
+        "tags": [
+          "Currencies"
+        ],
+        "summary": "Get currency pair commissions and user commission info",
+        "parameters": [
+          {
+            "name": "API-PublicKey",
+            "in": "header"
+          },
+          {
+            "name": "API-Signature",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommissionsInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/deals": {
+      "get": {
+        "tags": [
+          "Deals"
+        ],
+        "summary": "Get history of trades for CurrencyPair (100)",
+        "parameters": [
+          {
+            "name": "currencyPairCode",
+            "in": "query",
+            "description": "currency pair code",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sinceDate",
+            "in": "query",
+            "description": "Optional. Example: \"2021-02-05T14:00:00\"",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "Optional. Example: \"2021-02-05T15:00:00\"",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DealHistory"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/deals": {
+      "get": {
+        "tags": [
+          "Deals"
+        ],
+        "summary": "Get history of trades for user per CurrencyPair (100)",
+        "parameters": [
+          {
+            "name": "currencyPairCode",
+            "in": "query",
+            "description": "currency pair code",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sinceDate",
+            "in": "query",
+            "description": "Optional. Example: \"2021-02-05T14:00:00\"",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "Optional. Example: \"2021-02-05T15:00:00\"",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "API-PublicKey",
+            "in": "header"
+          },
+          {
+            "name": "API-Signature",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DealHistory"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/healthcheck": {
+      "get": {
+        "tags": [
+          "Healthcheck"
+        ],
+        "summary": "Returns assembly name to check if service is alive",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/tickers": {
+      "get": {
+        "tags": [
+          "Marketdata"
+        ],
+        "summary": "Get ticker info",
+        "parameters": [
+          {
+            "name": "currencyPairCode",
+            "in": "query",
+            "description": "currency pair code",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ticker"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ohlc": {
+      "get": {
+        "tags": [
+          "Marketdata"
+        ],
+        "summary": "Get candles",
+        "parameters": [
+          {
+            "name": "interval",
+            "in": "query",
+            "description": "Candle interval. Possible values: year, month, day, hour4, hour, minutes30, minutes15, minutes5, minutes3, minute",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "currencyPairCode",
+            "in": "query",
+            "description": "Example: \"BTC_USDT\"",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Range start. Example: \"2021-02-05T14:00:00\"",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "description": "Range end. Example: \"2021-02-05T15:00:00\"",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseOHLC"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/orderbook": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Get orderbook (40 bids + 40 asks)",
+        "parameters": [
+          {
+            "name": "currencyPairCode",
+            "in": "query",
+            "description": "currency pair code",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderbookLevel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/orders/{orderId}/deals": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Get user order info with deals",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "order GUID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "API-PublicKey",
+            "in": "header"
+          },
+          {
+            "name": "API-Signature",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderViewModelWithDeals"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/orders": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Get orders of user",
+        "parameters": [
+          {
+            "name": "currencyPairCode",
+            "in": "query",
+            "description": "currency pair code",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "\"all\" / \"active\" / \"canceled\"",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "API-PublicKey",
+            "in": "header"
+          },
+          {
+            "name": "API-Signature",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderViewModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/orders": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Create Buy or Sell limit order",
+        "parameters": [
+          {
+            "name": "API-PublicKey",
+            "in": "header"
+          },
+          {
+            "name": "API-Signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderApiCreateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderApiCreateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderApiCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order GUID string. Example: \"e2cd407c-28c8-4768-bd73-cd7357fbccde\""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Delete all user orders for currency pair",
+        "parameters": [
+          {
+            "name": "currencyPairCode",
+            "in": "query",
+            "description": "currency pair code",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "API-PublicKey",
+            "in": "header"
+          },
+          {
+            "name": "API-Signature",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/orders/{orderId}": {
+      "delete": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Delete selected order",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "order id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "API-PublicKey",
+            "in": "header"
+          },
+          {
+            "name": "API-Signature",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/wallets/history": {
+      "get": {
+        "tags": [
+          "Wallets"
+        ],
+        "summary": "Get deposits and withdrawals of user",
+        "parameters": [
+          {
+            "name": "API-PublicKey",
+            "in": "header"
+          },
+          {
+            "name": "API-Signature",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WalletHistory"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/wallets/balances": {
+      "get": {
+        "tags": [
+          "Wallets"
+        ],
+        "summary": "Get user balances (available and blocked in orders)",
+        "parameters": [
+          {
+            "name": "API-PublicKey",
+            "in": "header"
+          },
+          {
+            "name": "API-Signature",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserBalancesViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/deposit-address/{currencyCode}": {
+      "get": {
+        "tags": [
+          "Wallets"
+        ],
+        "summary": "Get information for deposit",
+        "parameters": [
+          {
+            "name": "currencyCode",
+            "in": "path",
+            "description": "сurrencyCode",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "adapterCode",
+            "in": "query",
+            "description": "code of crypto-adapter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "API-PublicKey",
+            "in": "header"
+          },
+          {
+            "name": "API-Signature",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/withdrawals/limits": {
+      "get": {
+        "tags": [
+          "Wallets"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WithdrawalLimitApi"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/wallets/withdrawal": {
+      "post": {
+        "tags": [
+          "Wallets"
+        ],
+        "summary": "Withdraw money",
+        "parameters": [
+          {
+            "name": "API-PublicKey",
+            "in": "header"
+          },
+          {
+            "name": "API-Signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WithdrawalApiRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WithdrawalApiRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/WithdrawalApiRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Adapter": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "mainCurrencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "isFiat": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Balance": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "amountBtc": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "amountUsdt": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "amountInternalToken": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "currencyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "digits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currencyIsFiat": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClientType": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          40,
+          50,
+          60,
+          70
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Commission": {
+        "required": [
+          "commissionTypeCode"
+        ],
+        "type": "object",
+        "properties": {
+          "commissionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "currencyPairCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "currencyAdapterCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "percent": {
+            "type": "number",
+            "format": "double"
+          },
+          "minimum": {
+            "type": "number",
+            "format": "double"
+          },
+          "commissionCurrencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "commissionTypeCode": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "commissionType": {
+            "$ref": "#/components/schemas/CommissionType"
+          },
+          "hashCode": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommissionType": {
+        "required": [
+          "code",
+          "value",
+          "valueKey"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "value": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "valueKey": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommissionValue": {
+        "required": [
+          "currencyCode"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currencyCode": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommissionsInfo": {
+        "type": "object",
+        "properties": {
+          "commissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Commission"
+            },
+            "nullable": true
+          },
+          "userNoTradeCommissions": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Currency": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "unifiedCryptoAssetId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isHalted": {
+            "type": "boolean"
+          },
+          "isFiat": {
+            "type": "boolean"
+          },
+          "isShowedForUsers": {
+            "type": "boolean"
+          },
+          "isForCommissionConversion": {
+            "type": "boolean"
+          },
+          "availableOnExchange": {
+            "type": "boolean"
+          },
+          "availableAsP2pExternalFiat": {
+            "type": "boolean"
+          },
+          "tokenOf": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "digits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "website": {
+            "type": "string",
+            "nullable": true
+          },
+          "whitePaper": {
+            "type": "string",
+            "nullable": true
+          },
+          "about": {
+            "type": "string",
+            "nullable": true
+          },
+          "issuingTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "issuingPrice": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalSupply": {
+            "type": "string",
+            "nullable": true
+          },
+          "networkConfirmations": {
+            "type": "string",
+            "nullable": true
+          },
+          "logoImage": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "allowDeposits": {
+            "type": "boolean"
+          },
+          "allowWithdrawals": {
+            "type": "boolean"
+          },
+          "currencyAdapters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CurrencyAdapter"
+            },
+            "nullable": true
+          },
+          "cryptoAdapterId": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CurrencyAdapter": {
+        "type": "object",
+        "properties": {
+          "currencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "adapterCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "tokenAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "adapter": {
+            "$ref": "#/components/schemas/Adapter"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CurrencyPairSetting": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "CurrencyPairCode",
+            "nullable": true
+          },
+          "digitsPrice": {
+            "type": "integer",
+            "description": "How many decimal digits should price have after rounding",
+            "format": "int32"
+          },
+          "digitsAmount": {
+            "type": "integer",
+            "description": "How many decimal digits should Order/Deal amount have after rounding",
+            "format": "int32"
+          },
+          "minQuoteAmount": {
+            "type": "number",
+            "description": "Order amount min limit in quote currency",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DealHistory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "dealDateUtc": {
+            "type": "string",
+            "nullable": true
+          },
+          "currencyPairCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "volume": {
+            "type": "number",
+            "format": "double"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "isBuy": {
+            "type": "boolean"
+          },
+          "isUserBuyer": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DepositViewModel": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "isCash": {
+            "type": "boolean"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "adapterCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "txId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderApiCreateRequest": {
+        "required": [
+          "currencyPairCode"
+        ],
+        "type": "object",
+        "properties": {
+          "side": {
+            "type": "string",
+            "description": "\"buy\" or \"sell\"",
+            "nullable": true,
+            "example": "buy"
+          },
+          "isMarket": {
+            "type": "boolean",
+            "description": "true - market, false - limit order",
+            "example": true
+          },
+          "currencyPairCode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Currency pair for order",
+            "example": "BTC_USDT"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Amount in base currency",
+            "format": "double",
+            "example": 0.001
+          },
+          "price": {
+            "type": "number",
+            "description": "Price specifies how much of QuoteCurrency you want to exchange for 1 unit of BaseCurrency",
+            "format": "double",
+            "example": 45000
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderViewModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "isMarket": {
+            "type": "boolean"
+          },
+          "currencyPairCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "isBid": {
+            "type": "boolean"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "initialAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currencyTo": {
+            "type": "number",
+            "format": "double",
+            "deprecated": true
+          },
+          "quoteAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currencyFrom": {
+            "type": "number",
+            "format": "double",
+            "deprecated": true
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "isCanceled": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderViewModelWithDeals": {
+        "type": "object",
+        "properties": {
+          "deals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DealHistory"
+            },
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "isMarket": {
+            "type": "boolean"
+          },
+          "currencyPairCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "isBid": {
+            "type": "boolean"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "initialAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currencyTo": {
+            "type": "number",
+            "format": "double",
+            "deprecated": true
+          },
+          "quoteAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currencyFrom": {
+            "type": "number",
+            "format": "double",
+            "deprecated": true
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "isCanceled": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderbookLevel": {
+        "type": "object",
+        "properties": {
+          "isBid": {
+            "type": "boolean"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currencyTo": {
+            "type": "number",
+            "format": "double",
+            "deprecated": true
+          },
+          "quoteAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currencyFrom": {
+            "type": "number",
+            "format": "double",
+            "deprecated": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResponseOHLC": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "open": {
+            "type": "number",
+            "format": "double"
+          },
+          "max": {
+            "type": "number",
+            "format": "double"
+          },
+          "min": {
+            "type": "number",
+            "format": "double"
+          },
+          "close": {
+            "type": "number",
+            "format": "double"
+          },
+          "volume": {
+            "type": "number",
+            "format": "double"
+          },
+          "volumeBase": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Ticker": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currencyPairCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "price24hAgo": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "priceChangePercentage24h": {
+            "type": "number",
+            "format": "double"
+          },
+          "volume24h": {
+            "type": "number",
+            "format": "double"
+          },
+          "bidPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "askPrice": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserBalancesViewModel": {
+        "type": "object",
+        "properties": {
+          "balances": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Balance"
+            },
+            "nullable": true
+          },
+          "balancesBlockedInOrder": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Balance"
+            },
+            "nullable": true
+          },
+          "balancesInCurrencyOfferingsVesting": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Balance"
+            },
+            "nullable": true
+          },
+          "withdrawalLimits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WithdrawalLimitApi"
+            },
+            "nullable": true
+          },
+          "currencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Currency"
+            },
+            "nullable": true
+          },
+          "totalBtc": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "totalUsdt": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "totalTry": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "totalInternalToken": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "totalInOrderBtc": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "totalInOrderUsdt": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "totalInOrderInternalToken": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "cantRefill": {
+            "type": "boolean"
+          },
+          "cantWithdraw": {
+            "type": "boolean"
+          },
+          "digitsBtc": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "digitsUsdt": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "digitsTry": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "digitsInternalToken": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WalletHistory": {
+        "type": "object",
+        "properties": {
+          "deposits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DepositViewModel"
+            },
+            "nullable": true
+          },
+          "withdrawals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Withdrawal"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Withdrawal": {
+        "required": [
+          "adapterCode",
+          "amount",
+          "currencyCode",
+          "statusId",
+          "userId",
+          "withdrawalAddress"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "withdrawalType": {
+            "$ref": "#/components/schemas/WithdrawalType"
+          },
+          "bankCard": {
+            "$ref": "#/components/schemas/WithdrawalBankCard"
+          },
+          "statusId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "$ref": "#/components/schemas/WithdrawalStatus"
+          },
+          "isToColdWallet": {
+            "type": "boolean"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "calculatedStockCommission": {
+            "$ref": "#/components/schemas/CommissionValue"
+          },
+          "actualNetworkCommission": {
+            "type": "number",
+            "format": "double"
+          },
+          "networkCommissionCurrencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "withdrawalAddress": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "withdrawalAddressPublicKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "memo": {
+            "type": "string",
+            "nullable": true
+          },
+          "clientType": {
+            "$ref": "#/components/schemas/ClientType"
+          },
+          "userId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "txId": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateTimeCreated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dateTimeProcessed": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "currencyCode": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "adapterCode": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "requestWithdrawalTransactionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "errorText": {
+            "type": "string",
+            "nullable": true
+          },
+          "internalRecepientUserId": {
+            "type": "string",
+            "nullable": true
+          },
+          "internalRecepientClientType": {
+            "$ref": "#/components/schemas/ClientType"
+          },
+          "publicId": {
+            "type": "string",
+            "nullable": true
+          },
+          "commissionInWithdrawalCurrency": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "amountAfterCommission": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WithdrawalApiRequest": {
+        "required": [
+          "address",
+          "currencyCode"
+        ],
+        "type": "object",
+        "properties": {
+          "address": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Blockchain address for withdrawal"
+          },
+          "addressPublicKey": {
+            "type": "string",
+            "description": "Public key of node's address, required for Prizm (PZM)",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "currencyCode": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "adapterCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WithdrawalBankCard": {
+        "required": [
+          "cardNumber",
+          "phoneNumber"
+        ],
+        "type": "object",
+        "properties": {
+          "withdrawalId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "withdrawal": {
+            "$ref": "#/components/schemas/Withdrawal"
+          },
+          "cardNumber": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "expiryMonth": {
+            "maximum": 12,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "expiryYear": {
+            "maximum": 99,
+            "minimum": 20,
+            "type": "integer",
+            "format": "int32"
+          },
+          "phoneNumber": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateBirthday": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WithdrawalLimitApi": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currencyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "minAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WithdrawalStatus": {
+        "required": [
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "value": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "valueKey": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WithdrawalType": {
+        "enum": [
+          0,
+          10,
+          20,
+          30,
+          40,
+          50,
+          60
+        ],
+        "type": "integer",
+        "format": "int32"
+      }
+    }
+  }
+}

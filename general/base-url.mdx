@@ -3,18 +3,38 @@ title: "Base URL"
 description: "Production endpoint hostnames for the Binibit public API."
 ---
 
-## Production
+## Production hosts
+
+Two public hostnames serve different purposes:
+
+| Host | What it serves |
+|---|---|
+| `https://public-api.binibit.com` | **Primary public API.** Market data, trading, and wallet endpoints. Used by direct integrators and the Binibit web client. |
+| `https://internal-api.binibit.com/api/marketdata/getcoingecko` | **Aggregator-spec namespace.** A subset of market data reshaped to match the CoinGecko Integration API Standards v8. Used by data aggregators (CoinGecko, CoinMarketCap, DefiLlama) for ingestion. |
+
+Most developers should use `public-api.binibit.com`. The aggregator-spec namespace exists only to provide one-call ingestion in the format aggregators expect — see [Aggregator Compatibility](/api-reference/aggregator/tickers).
+
+## Endpoint examples
+
+### Primary (public-api.binibit.com)
 
 ```
-https://internal-api.binibit.com/api/marketdata/getcoingecko
+https://public-api.binibit.com/api/healthcheck
+https://public-api.binibit.com/api/tickers?currencyPairCode=ETH_BTC
+https://public-api.binibit.com/api/orderbook?currencyPairCode=TRX_USDT
+https://public-api.binibit.com/api/deals?currencyPairCode=TRX_USDT
+https://public-api.binibit.com/api/ohlc?currencyPairCode=BTC_USDT&interval=hour&start=2026-04-28T00:00:00&end=2026-04-29T00:00:00
+https://public-api.binibit.com/api/currencies
+https://public-api.binibit.com/api/currencies/pairs
+https://public-api.binibit.com/api/currencies/commissions
 ```
 
-All public market data endpoints share this base. Append the endpoint path:
+### Aggregator-spec (internal-api.binibit.com)
 
 ```
 https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers
-https://internal-api.binibit.com/api/marketdata/getcoingecko/orderbook?ticker_id=TRX_USDT
-https://internal-api.binibit.com/api/marketdata/getcoingecko/historical_trades?ticker_id=TRX_USDT
+https://internal-api.binibit.com/api/marketdata/getcoingecko/orderbook?ticker_id=ETH_BTC
+https://internal-api.binibit.com/api/marketdata/getcoingecko/historical_trades?ticker_id=ETH_BTC
 https://internal-api.binibit.com/api/marketdata/getcoingecko/asset
 ```
 
@@ -23,15 +43,9 @@ https://internal-api.binibit.com/api/marketdata/getcoingecko/asset
 - HTTPS only. HTTP requests are redirected to HTTPS.
 - TLS 1.2 or higher.
 
-## Hostname migration
-
-<Note>
-The hostname `internal-api.binibit.com` is a transitional name. The API will be migrated to `api.binibit.com` in a future release. The old hostname will remain available as an alias for at least 90 days after the migration is announced.
-</Note>
-
 ## CORS
 
-CORS is enabled for all origins (`Access-Control-Allow-Origin: *`) on every public endpoint, so the API can be called directly from browser-based applications.
+CORS is enabled for all origins (`Access-Control-Allow-Origin: *`) on all public endpoints, so the API can be called directly from browser-based applications.
 
 ## Caching
 

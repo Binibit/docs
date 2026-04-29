@@ -5,51 +5,62 @@ description: "Overview of the Binibit Spot Market API."
 
 ## What is Binibit API?
 
-Binibit is a centralized cryptocurrency spot exchange. The Spot Market API is the public REST surface for real-time market data: tickers, order books, recent trades, and asset metadata.
+Binibit is a centralized cryptocurrency spot exchange. The Spot Market API is the public REST surface for real-time market data: tickers, order books, recent trades, candles, and asset metadata.
 
 Key properties:
 
-- **Public** — no API key, no authentication required
+- **Public** — no API key, no authentication required for market data
 - **REST + JSON** — every endpoint returns `application/json`
 - **Real-time** — data refreshes every few seconds
-- **Rate-limited** — 60 requests per minute per IP by default ([details](/general/rate-limits))
+- **Rate-limited** — fair per-IP quotas by default ([details](/general/rate-limits))
+
+## Two API surfaces
+
+| Host | Purpose |
+|---|---|
+| `public-api.binibit.com` | **Primary public API.** Market data + (auth-gated) trading and wallet endpoints. |
+| `internal-api.binibit.com/.../getcoingecko` | **Aggregator-spec namespace.** A subset of market data reshaped to match CoinGecko Integration API Standards v8 for ingestion by data aggregators. |
+
+Use the primary host unless you specifically need the CoinGecko-format response shape. See [Base URL](/general/base-url).
 
 ## Endpoints at a glance
 
+### Market data (public-api.binibit.com)
+
 | Endpoint | Purpose |
 |---|---|
-| [`GET /tickers`](/api-reference/tickers) | 24-hour stats for every active pair |
-| [`GET /orderbook`](/api-reference/orderbook) | Order book depth for one pair |
-| [`GET /historical_trades`](/api-reference/historical-trades) | Recent completed trades for one pair |
-| [`GET /asset`](/api-reference/asset) | Asset metadata (deposit/withdraw status, fees) |
+| [`GET /api/tickers`](/api-reference/market-data/tickers) | 24h ticker for one pair |
+| [`GET /api/orderbook`](/api-reference/market-data/orderbook) | Up to 40 bids + 40 asks for one pair |
+| [`GET /api/deals`](/api-reference/market-data/deals) | Recent trades for one pair |
+| [`GET /api/ohlc`](/api-reference/market-data/ohlc) | OHLCV candles |
+| [`GET /api/currencies`](/api-reference/market-data/currencies) | List of currency codes |
+| [`GET /api/currencies/pairs`](/api-reference/market-data/currencies-pairs) | Pair settings (precision, min order size) |
+| [`GET /api/currencies/commissions`](/api-reference/market-data/commissions) | Default commissions catalogue |
+| [`GET /api/healthcheck`](/api-reference/market-data/healthcheck) | Liveness probe |
 
-## Base URL
+### Aggregator compatibility (internal-api.binibit.com)
 
-```
-https://internal-api.binibit.com/api/marketdata/getcoingecko
-```
-
-See [Base URL](/general/base-url) for details and migration plans.
+| Endpoint | Purpose |
+|---|---|
+| [`GET /tickers`](/api-reference/aggregator/tickers) | All pairs in one CoinGecko-format response |
+| [`GET /orderbook`](/api-reference/aggregator/orderbook) | Order book for one pair, CoinGecko format |
+| [`GET /historical_trades`](/api-reference/aggregator/historical-trades) | Recent trades, CoinGecko `{buy: [], sell: []}` shape |
+| [`GET /asset`](/api-reference/aggregator/asset) | Asset metadata in CoinMarketCap-compatible shape |
 
 ## API stability
 
 This is **API v1**. Breaking changes will be announced 30 days in advance via:
 
 - The [Changelog](/changelog) page
-- [@binibit](https://x.com/binibit) on X
-- The `api-updates@binibit.com` mailing list
+- The [GitHub repo](https://github.com/Binibit/docs) (watch for releases)
 
 ## Roadmap
 
 | Version | Scope |
 |---|---|
-| v1 (current) | Public market data: `/tickers`, `/orderbook`, `/historical_trades`, `/asset` |
-| v1.x | `/ping`, `/time`, `/summary`, `/klines` (OHLCV candles), cleaner path alias `/v1/spot/market/*` |
-| v2 | Authenticated trading API (HMAC-SHA256), WebSocket streams |
-
-## Standards alignment
-
-The schema returned by `/tickers`, `/orderbook`, and `/historical_trades` aligns with the CoinGecko Integration API Standards v8 for centralized spot exchanges, so data aggregators (CoinGecko, CoinMarketCap, DefiLlama, Kaiko, CryptoCompare) can ingest Binibit market data without translation. This is an implementation detail; the API is intended for any developer.
+| v1 (current) | Public market data on `public-api.binibit.com/api/*` and aggregator-spec namespace |
+| v1.x | Cleaner path alias `/v1/spot/market/*`, server time endpoint, 24h summary endpoint |
+| v2 | Documented authenticated trading API (HMAC-SHA256), WebSocket streams |
 
 ## Need higher rate limits?
 

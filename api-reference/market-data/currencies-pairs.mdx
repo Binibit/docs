@@ -1,0 +1,70 @@
+---
+title: "GET /api/currencies/pairs"
+description: "Trading pair settings: rounding precision and minimum order amounts."
+api: "GET https://public-api.binibit.com/api/currencies/pairs"
+---
+
+## Description
+
+Returns the list of all trading pairs supported by the exchange together with their formatting rules — how many decimal digits to use for price and amount, and the minimum allowed order size.
+
+Use this endpoint when:
+
+- Validating user input on a trading form (clamp to `digitsPrice` / `digitsAmount`)
+- Determining whether an order meets the minimum size
+- Listing all pairs without their live ticker data
+
+## Parameters
+
+This endpoint takes no query parameters.
+
+## Response
+
+Array of pair-setting objects.
+
+<ResponseField name="code" type="string" required>
+  Pair code in `{base}_{target}` format, e.g. `AAVE_USDT`.
+</ResponseField>
+
+<ResponseField name="digitsPrice" type="integer" required>
+  Number of fractional digits to round the **price** to.
+</ResponseField>
+
+<ResponseField name="digitsAmount" type="integer" required>
+  Number of fractional digits to round the order **amount** (base) to.
+</ResponseField>
+
+<ResponseField name="minQuoteAmount" type="decimal | null">
+  Minimum order size measured in target (quote) currency. `null` if no minimum is configured.
+</ResponseField>
+
+## Example request
+
+```bash
+curl https://public-api.binibit.com/api/currencies/pairs
+```
+
+## Example response
+
+```json
+[
+  {
+    "code": "AAVE_USDT",
+    "digitsPrice": 8,
+    "digitsAmount": 8,
+    "minQuoteAmount": null
+  },
+  {
+    "code": "ARB_USDT",
+    "digitsPrice": 8,
+    "digitsAmount": 8,
+    "minQuoteAmount": null
+  },
+  {
+    "code": "ASTER_USDT",
+    "digitsPrice": 8,
+    "digitsAmount": 8,
+    "minQuoteAmount": null
+  }
+]
+```

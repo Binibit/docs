@@ -1,30 +1,105 @@
 ---
 title: "Authentication"
-description: "Public market data endpoints require no authentication."
+description: "Public market data is anonymous. Trading and wallet endpoints require HMAC-SHA256 request signing."
 ---
 
-## Public endpoints
+## Public market data — no auth
 
-All endpoints documented in [API Reference](/api-reference/introduction) are **public**. They require:
+All market data endpoints documented in [API Reference](/api-reference/introduction) are **public**. They require:
 
 - No API key
 - No HMAC signature
-- No request signing
 - No bearer token
 
-You can call them anonymously from any environment — server, browser, mobile app.
+Examples:
 
 ```bash
-curl https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers
+curl "https://public-api.binibit.com/api/tickers?currencyPairCode=ETH_BTC"
+curl "https://public-api.binibit.com/api/orderbook?currencyPairCode=TRX_USDT"
+curl "https://public-api.binibit.com/api/healthcheck"
 ```
 
-## Trading API (v2, planned)
+## Trading and wallets — HMAC-SHA256
 
-The authenticated trading API is on the [roadmap](/introduction#roadmap) for v2. It will use:
+The trading and wallet endpoints (create/cancel orders, deposits, withdrawals, balances) on `public-api.binibit.com` use HMAC-SHA256 request signing.
 
-- API key + secret pair (issued from the user dashboard)
-- HMAC-SHA256 request signing over canonical query strings
-- Server timestamp synchronization (`/time` endpoint)
-- Optional IP whitelisting
+<Note>
+  Detailed documentation for the signing flow is on the [v2 roadmap](/changelog#roadmap). The scheme below is the same one the Binibit web client uses today and is reproduced from the upstream OpenAPI spec at [`/swagger/`](https://public-api.binibit.com/swagger/).
+</Note>
 
-Subscribe to [api-updates@binibit.com](mailto:api-updates@binibit.com) to be notified when v2 is released.
+### Signing scheme
+
+1. Generate an API key pair (`publicKey`, `privateKey`) at [binibit.com/apikeys](https://binibit.com/apikeys).
+2. Build the canonical signature text:
+
+   ```
+   signatureText = publicKey + requestUrl + requestBodyString
+   ```
+
+   - `publicKey` — your API public key, e.g. `b2H9TlfRu6MOgG4m9wvrf9maSUiPsQJEui0JrB`
+   - `requestUrl` — full URL of the request, e.g. `https://public-api.binibit.com/api/orders`
+   - `requestBodyString` — the JSON body as a single-line string for `POST`/`PUT`, or empty string for `GET`/`DELETE`. Example: `{"isBid":true,"currencyPairCode":"ETH_BTC","amount":0.01,"price":0.02}`
+3. Compute the HMAC-SHA256 over UTF-8 bytes of `signatureText` using `privateKey` as the key.
+4. Encode the resulting digest as a lowercase hex string.
+5. Send it in the `API-Signature` header along with `API-PublicKey`.
+
+### JavaScript
+
+```javascript
+import CryptoJS from "crypto-js";
+
+const publicKey = "b2H9...";
+const privateKey = "..."; // never log or expose
+
+const url = "https://public-api.binibit.com/api/orders";
+const body = JSON.stringify({
+  isBid: true,
+  currencyPairCode: "ETH_BTC",
+  amount: 0.01,
+  price: 0.02,
+});
+
+const signatureText = publicKey + url + body;
+const signature = CryptoJS.enc.Hex.stringify(
+  CryptoJS.HmacSHA256(signatureText, privateKey)
+);
+
+await fetch(url, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "API-PublicKey": publicKey,
+    "API-Signature": signature,
+  },
+  body,
+});
+```
+
+### C\#
+
+```csharp
+using System.Security.Cryptography;
+using System.Text;
+
+string publicKey  = "b2H9...";
+string privateKey = "...";
+string requestUrl = "https://public-api.binibit.com/api/orders";
+string body = "{\"isBid\":true,\"currencyPairCode\":\"ETH_BTC\",\"amount\":0.01,\"price\":0.02}";
+
+string signature = new HMACSHA256(Encoding.UTF8.GetBytes(privateKey))
+    .ComputeHash(Encoding.UTF8.GetBytes(publicKey + requestUrl + body))
+    .Aggregate(new StringBuilder(), (sb, b) => sb.AppendFormat("{0:x2}", b))
+    .ToString();
+```
+
+A signature looks like:
+
+```
+b7238692e0537d3a7fd13faff266d315e3185247e1644c1155f60e6d4e4e445d
+```
+
+### Things to watch
+
+- **No separators between the three parts** of `signatureText`. They are concatenated verbatim.
+- **Body string must match exactly** the bytes you transmit. Reformatting (different key order, whitespace) breaks the signature.
+- **Server clock skew** can cause auth failures if the server enforces a timestamp window — see the planned `GET /api/time` endpoint on the [roadmap](/changelog#roadmap).

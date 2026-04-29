@@ -1,25 +1,34 @@
 ---
 title: "Binibit Spot Market API"
-description: "Public market data REST API for the Binibit centralized spot exchange."
+description: "Public REST API for the Binibit centralized spot exchange."
 ---
 
 ## Quick start
 
-Fetch live ticker data for every active trading pair:
+Fetch the latest ticker for `ETH_BTC`:
 
 ```bash
-curl https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers
+curl "https://public-api.binibit.com/api/tickers?currencyPairCode=ETH_BTC"
 ```
 
 <Columns cols={3}>
-  <Card title="Tickers" icon="chart-line" href="/api-reference/tickers">
-    24-hour pricing and volume statistics for all trading pairs.
+  <Card title="Tickers" icon="chart-line" href="/api-reference/market-data/tickers">
+    24h price, change, volume, best bid and ask for one pair.
   </Card>
-  <Card title="Order Book" icon="layer-group" href="/api-reference/orderbook">
-    Order book depth for any trading pair, with bid and ask arrays.
+  <Card title="Order Book" icon="layer-group" href="/api-reference/market-data/orderbook">
+    Up to 40 bids and 40 asks for one pair.
   </Card>
-  <Card title="Historical Trades" icon="clock-rotate-left" href="/api-reference/historical-trades">
-    Recent completed trades grouped into buy and sell sides.
+  <Card title="Deals" icon="clock-rotate-left" href="/api-reference/market-data/deals">
+    Recent trades for one pair, with pagination and date filters.
+  </Card>
+  <Card title="OHLC" icon="chart-candlestick" href="/api-reference/market-data/ohlc">
+    Candle data with intervals from 1 minute to 1 year.
+  </Card>
+  <Card title="Pairs" icon="arrow-right-arrow-left" href="/api-reference/market-data/currencies-pairs">
+    Trading pair settings: rounding precision, minimum order sizes.
+  </Card>
+  <Card title="Healthcheck" icon="heart-pulse" href="/api-reference/market-data/healthcheck">
+    Liveness probe — confirms the API is up.
   </Card>
 </Columns>
 
@@ -27,12 +36,12 @@ curl https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers
 
 <Columns cols={2}>
   <Card title="General Info" icon="circle-info" href="/general/base-url">
-    Base URL, rate limits, response format, errors, timestamps.
+    Base URLs, rate limits, response format, errors, timestamps.
   </Card>
   <Card title="API Reference" icon="terminal" href="/api-reference/introduction">
-    Full REST endpoint reference with live examples.
+    REST endpoint reference with live examples.
   </Card>
-  <Card title="Trading Pairs" icon="arrow-right-arrow-left" href="/reference/trading-pairs">
+  <Card title="Trading Pairs" icon="shapes" href="/reference/trading-pairs">
     List of all active markets and their volumes.
   </Card>
   <Card title="Verification" icon="shield-check" href="/verification">
@@ -45,10 +54,9 @@ curl https://internal-api.binibit.com/api/marketdata/getcoingecko/tickers
 - **Public.** No authentication, no API key.
 - **REST + JSON.** Standard HTTP, predictable schemas.
 - **Real-time.** Tickers refresh every few seconds.
-- **Rate-limited fairly.** 60 requests per minute per IP by default; aggregators and integrators get whitelisted on request.
+- **Two API surfaces.** A primary `public-api.binibit.com` and an aggregator-spec namespace at `internal-api.binibit.com/.../getcoingecko/*` for CoinGecko / CoinMarketCap-style integrations.
+- **Rate-limited fairly.** Aggregators and integrators get whitelisted on request — see [Rate Limits](/general/rate-limits).
 
-## Status
+## Trading and wallets
 
-<Card title="Live status page" icon="signal-bars" href="https://status.binibit.com">
-  Uptime, incidents, and maintenance windows.
-</Card>
+The trading API (create orders, cancel orders, list user orders, deposits, withdrawals) is part of `public-api.binibit.com`. It is documented at `https://public-api.binibit.com/swagger/` and uses HMAC-SHA256 request signing — see the [Roadmap](/changelog#roadmap) for documentation status.

@@ -1,0 +1,116 @@
+---
+title: "GET /api/currencies/commissions"
+description: "Default commissions for deposits, withdrawals, and trades."
+api: "GET https://public-api.binibit.com/api/currencies/commissions"
+---
+
+## Description
+
+Returns the catalogue of default commissions configured on the exchange — broken down by currency, currency pair, blockchain adapter, and commission type (deposit, withdrawal, trade fee).
+
+For the **logged-in user's effective commissions** (which may be lower based on tier or VIP status), use the authenticated trading API endpoint `GET /api/currencies/user/commissions`.
+
+## Parameters
+
+This endpoint takes no query parameters.
+
+## Response
+
+Array of commission objects.
+
+<ResponseField name="commissionId" type="string (UUID)" required>
+  Unique commission record ID.
+</ResponseField>
+
+<ResponseField name="currencyCode" type="string | null">
+  Currency the commission applies to (e.g. `BTC`). `null` for commissions tied only to a pair.
+</ResponseField>
+
+<ResponseField name="currencyPairCode" type="string | null">
+  Pair the commission applies to (e.g. `ETH_BTC`). `null` for commissions tied only to a currency or adapter.
+</ResponseField>
+
+<ResponseField name="currencyAdapterCode" type="string | null">
+  Blockchain or fiat adapter (e.g. `btc`, `bsc`, `erc20`). `null` if not adapter-specific.
+</ResponseField>
+
+<ResponseField name="percent" type="decimal" required>
+  Commission as a fraction (e.g. `0.001` = 0.1%).
+</ResponseField>
+
+<ResponseField name="minimum" type="decimal" required>
+  Minimum absolute commission amount in `commissionCurrencyCode`.
+</ResponseField>
+
+<ResponseField name="commissionCurrencyCode" type="string | null">
+  Currency the `minimum` is measured in.
+</ResponseField>
+
+<ResponseField name="commissionTypeCode" type="string" required>
+  Numeric string code identifying the commission type. See `commissionType.valueKey` for the human-readable type.
+</ResponseField>
+
+<ResponseField name="commissionType" type="object" required>
+  Embedded commission type object.
+
+  <Expandable title="commissionType fields">
+    <ResponseField name="commissionType.code" type="string" required>
+      Same as `commissionTypeCode`.
+    </ResponseField>
+    <ResponseField name="commissionType.value" type="string" required>
+      Localized display name (currently in Russian).
+    </ResponseField>
+    <ResponseField name="commissionType.valueKey" type="string" required>
+      Stable English key. Common values: `Refill` (deposit), `Withdrawal`, `Trade`.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="hashCode" type="string">
+  Internal hash for deduplication (e.g. `1_BTC_btc`).
+</ResponseField>
+
+## Example request
+
+```bash
+curl https://public-api.binibit.com/api/currencies/commissions
+```
+
+## Example response
+
+```json
+[
+  {
+    "commissionId": "019bc366-913b-7be0-90f6-bd715bb09f90",
+    "currencyCode": "BTC",
+    "currencyPairCode": null,
+    "currencyAdapterCode": "btc",
+    "percent": 0.0,
+    "minimum": 0.0,
+    "commissionCurrencyCode": null,
+    "commissionTypeCode": "1",
+    "commissionType": {
+      "code": "1",
+      "value": "Пополнение",
+      "valueKey": "Refill"
+    },
+    "hashCode": "1_BTC_btc"
+  },
+  {
+    "commissionId": "019c8bff-7b9a-730d-a615-2e12c73469a6",
+    "currencyCode": "USDT",
+    "currencyPairCode": null,
+    "currencyAdapterCode": "bsc",
+    "percent": 0.0,
+    "minimum": 0.0,
+    "commissionCurrencyCode": null,
+    "commissionTypeCode": "1",
+    "commissionType": {
+      "code": "1",
+      "value": "Пополнение",
+      "valueKey": "Refill"
+    },
+    "hashCode": "1_USDT_bsc"
+  }
+]
+```

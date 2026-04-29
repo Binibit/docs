@@ -5,43 +5,61 @@ description: "REST endpoints for the Binibit Spot Market API."
 
 ## Overview
 
-The Spot Market API exposes four public REST endpoints:
+Binibit exposes its REST API across **two hostnames**:
 
-| Method | Path | Purpose |
+| Group | Host | Endpoints |
 |---|---|---|
-| `GET` | [`/tickers`](/api-reference/tickers) | 24-hour stats for every active pair |
-| `GET` | [`/orderbook`](/api-reference/orderbook) | Order book depth for one pair |
-| `GET` | [`/historical_trades`](/api-reference/historical-trades) | Recent trades for one pair |
-| `GET` | [`/asset`](/api-reference/asset) | Asset metadata |
+| **Market Data** | `public-api.binibit.com` | Primary public API — tickers, order book, trades, candles, currencies |
+| **Aggregator Compatibility** | `internal-api.binibit.com` | Subset reshaped for CoinGecko / CoinMarketCap-style aggregator ingestion |
 
-## Base URL
+## Market Data (public-api.binibit.com)
 
-```
-https://internal-api.binibit.com/api/marketdata/getcoingecko
-```
+| Method | Path | Page |
+|---|---|---|
+| `GET` | `/api/tickers` | [Tickers](/api-reference/market-data/tickers) |
+| `GET` | `/api/orderbook` | [Order Book](/api-reference/market-data/orderbook) |
+| `GET` | `/api/deals` | [Deals](/api-reference/market-data/deals) |
+| `GET` | `/api/ohlc` | [OHLC](/api-reference/market-data/ohlc) |
+| `GET` | `/api/currencies` | [Currencies](/api-reference/market-data/currencies) |
+| `GET` | `/api/currencies/pairs` | [Currency Pairs](/api-reference/market-data/currencies-pairs) |
+| `GET` | `/api/currencies/commissions` | [Commissions](/api-reference/market-data/commissions) |
+| `GET` | `/api/healthcheck` | [Healthcheck](/api-reference/market-data/healthcheck) |
 
-A cleaner path alias `/v1/spot/market/*` is on the [roadmap](/changelog#roadmap).
+The full OpenAPI 3.0 spec for `public-api.binibit.com` is published at [/swagger/v1/swagger.json](https://public-api.binibit.com/swagger/v1/swagger.json), with an interactive playground at [/swagger/](https://public-api.binibit.com/swagger/).
+
+## Aggregator Compatibility (internal-api.binibit.com)
+
+| Method | Path | Page |
+|---|---|---|
+| `GET` | `/tickers` | [Tickers (aggregator)](/api-reference/aggregator/tickers) |
+| `GET` | `/orderbook` | [Order Book (aggregator)](/api-reference/aggregator/orderbook) |
+| `GET` | `/historical_trades` | [Historical Trades (aggregator)](/api-reference/aggregator/historical-trades) |
+| `GET` | `/asset` | [Asset (aggregator)](/api-reference/aggregator/asset) |
+
+These endpoints follow the CoinGecko Integration API Standards v8 schema (Section A: Spot Exchanges) so aggregators (CoinGecko, CoinMarketCap, DefiLlama) can ingest Binibit market data without translation.
 
 ## Authentication
 
-None. See [Authentication](/general/authentication).
+The market data endpoints documented here are **public** — no API key required. See [Authentication](/general/authentication) for the trading API.
 
 ## Rate limits
 
-60 requests per minute per IP. See [Rate Limits](/general/rate-limits).
+See [Rate Limits](/general/rate-limits).
 
 ## Conventions
 
 - All requests are `GET` with query parameters
 - All responses are JSON
-- All numeric values are decimals (prices, volumes) or integers (timestamps in milliseconds, IDs)
-- All timestamps are Unix epoch milliseconds — see [Timestamps](/general/timestamps)
+- All numeric values are decimals (prices, volumes) or integers (timestamps, IDs)
+- Timestamps differ between the two surfaces:
+  - `public-api.binibit.com` uses **ISO 8601 strings** (`2026-04-29T10:26:08.0053357Z`) and **seconds** for ticker timestamp
+  - `internal-api.binibit.com` aggregator namespace uses **Unix milliseconds** (CoinGecko convention)
 - Errors follow a unified envelope — see [Errors](/general/errors)
 
 ## Try it
 
-Every endpoint page includes copy-paste curl examples that work against the live production API.
+Every endpoint page below includes copy-paste curl examples that work against the live production API.
 
-<Card title="Start with /tickers" icon="chart-line" href="/api-reference/tickers">
-  The most useful endpoint for getting started — returns every active pair in one call.
+<Card title="Start with /api/tickers" icon="chart-line" href="/api-reference/market-data/tickers">
+  Single-pair ticker — the simplest call to confirm your integration works.
 </Card>

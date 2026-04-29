@@ -61,10 +61,23 @@
           {
             "group": "Market Data",
             "pages": [
-              "api-reference/tickers",
-              "api-reference/orderbook",
-              "api-reference/historical-trades",
-              "api-reference/asset"
+              "api-reference/market-data/tickers",
+              "api-reference/market-data/orderbook",
+              "api-reference/market-data/deals",
+              "api-reference/market-data/ohlc",
+              "api-reference/market-data/currencies",
+              "api-reference/market-data/currencies-pairs",
+              "api-reference/market-data/commissions",
+              "api-reference/market-data/healthcheck"
+            ]
+          },
+          {
+            "group": "Aggregator Compatibility",
+            "pages": [
+              "api-reference/aggregator/tickers",
+              "api-reference/aggregator/orderbook",
+              "api-reference/aggregator/historical-trades",
+              "api-reference/aggregator/asset"
             ]
           }
         ]
@@ -76,11 +89,6 @@
           "anchor": "Exchange",
           "href": "https://binibit.com",
           "icon": "arrow-up-right-from-square"
-        },
-        {
-          "anchor": "Status",
-          "href": "https://status.binibit.com",
-          "icon": "signal-bars"
         },
         {
           "anchor": "GitHub",
@@ -114,9 +122,7 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/binibit",
-      "github": "https://github.com/Binibit",
-      "telegram": "https://t.me/binibit"
+      "github": "https://github.com/Binibit"
     }
   },
   "description": "Ecosystem Docs: Binibit Exchange, BiniChain (EVM L1), BaiDEX (AI-managed DEX), Bini App, and BINI Token.",

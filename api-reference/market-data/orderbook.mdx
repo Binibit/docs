@@ -1,0 +1,103 @@
+---
+title: "GET /api/orderbook"
+description: "Order book depth (40 bids + 40 asks) for a single trading pair."
+api: "GET https://public-api.binibit.com/api/orderbook"
+---
+
+## Description
+
+Returns up to **40 bid levels and 40 ask levels** for one trading pair, as a flat array of order-book levels.
+
+Each level has an `isBid` flag indicating whether it is a bid (`true`) or ask (`false`).
+
+## Parameters
+
+<ParamField query="currencyPairCode" type="string" required>
+  Pair code in `{base}_{target}` format, e.g. `TRX_USDT`.
+</ParamField>
+
+## Response
+
+Array of order-book levels. Each level:
+
+<ResponseField name="isBid" type="boolean" required>
+  `true` for a bid, `false` for an ask.
+</ResponseField>
+
+<ResponseField name="price" type="decimal" required>
+  Price level in target (quote) currency.
+</ResponseField>
+
+<ResponseField name="amount" type="decimal" required>
+  Available quantity at this level, denominated in base currency.
+</ResponseField>
+
+<ResponseField name="quoteAmount" type="decimal" required>
+  Equivalent value at this level in target (quote) currency. Equals `price * amount`.
+</ResponseField>
+
+<ResponseField name="currencyTo" type="decimal" deprecated>
+  Deprecated alias of `amount`. Will be removed in a future release.
+</ResponseField>
+
+<ResponseField name="currencyFrom" type="decimal" deprecated>
+  Deprecated alias of `quoteAmount`. Will be removed in a future release.
+</ResponseField>
+
+## Example request
+
+```bash
+curl "https://public-api.binibit.com/api/orderbook?currencyPairCode=TRX_USDT"
+```
+
+## Example response
+
+```json
+[
+  {
+    "isBid": true,
+    "price": 0.31964356,
+    "amount": 479.16033232,
+    "quoteAmount": 153.16051443,
+    "currencyTo": 479.16033232,
+    "currencyFrom": 153.16051443
+  },
+  {
+    "isBid": true,
+    "price": 0.31963366,
+    "amount": 211.93028363,
+    "quoteAmount": 67.74005222,
+    "currencyTo": 211.93028363,
+    "currencyFrom": 67.74005222
+  },
+  {
+    "isBid": false,
+    "price": 0.32621694,
+    "amount": 123.38,
+    "quoteAmount": 40.241386
+  }
+]
+```
+
+## Splitting bids and asks
+
+```javascript
+const levels = await fetch(
+  `https://public-api.binibit.com/api/orderbook?currencyPairCode=TRX_USDT`
+).then(r => r.json());
+
+const bids = levels.filter(l => l.isBid).sort((a, b) => b.price - a.price);
+const asks = levels.filter(l => !l.isBid).sort((a, b) => a.price - b.price);
+
+const bestBid = bids[0]?.price;
+const bestAsk = asks[0]?.price;
+const spread = bestAsk - bestBid;
+```
+
+## Notes
+
+<Note>
+  - Returns up to 40 levels per side. Less if the book is thin.
+  - For deeper books or aggregator-spec format, see [Aggregator Compatibility / orderbook](/api-reference/aggregator/orderbook).
+  - `currencyTo` and `currencyFrom` are deprecated — prefer `amount` and `quoteAmount`.
+</Note>

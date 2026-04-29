@@ -1,0 +1,64 @@
+---
+title: "GET /api/currencies"
+description: "List of currency codes supported by the exchange."
+api: "GET https://public-api.binibit.com/api/currencies"
+---
+
+## Description
+
+Returns a flat array of uppercase currency codes for every asset listed on Binibit.
+
+For full asset metadata (deposit/withdraw status, fees, limits) see the [Aggregator Compatibility / asset](/api-reference/aggregator/asset) endpoint.
+
+## Parameters
+
+This endpoint takes no query parameters.
+
+## Response
+
+Array of strings.
+
+## Example request
+
+```bash
+curl https://public-api.binibit.com/api/currencies
+```
+
+## Example response
+
+```json
+[
+  "AAVE",
+  "ARB",
+  "ASTER",
+  "BINI",
+  "BNB",
+  "BTC",
+  "CRO",
+  "CRV",
+  "DAI",
+  "ENA",
+  "ETH",
+  "FET",
+  "IMX",
+  "LDO",
+  "LINK",
+  "MORPHO",
+  "NFT",
+  "OKB",
+  "ONDO",
+  "PEPE",
+  "POL",
+  "SHIB",
+  "SKY",
+  "TON",
+  "TRX",
+  "TWT",
+  "UNI",
+  "USDT",
+  "WLD",
+  "WLFI",
+  "XAUT",
+  "ZRO"
+]
+```

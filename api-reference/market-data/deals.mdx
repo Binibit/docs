@@ -1,0 +1,102 @@
+---
+title: "GET /api/deals"
+description: "Recent completed trades for a single trading pair."
+api: "GET https://public-api.binibit.com/api/deals"
+---
+
+## Description
+
+Returns up to **100** recent trades for one trading pair. Supports pagination and an optional date range.
+
+## Parameters
+
+<ParamField query="currencyPairCode" type="string" required>
+  Pair code in `{base}_{target}` format, e.g. `TRX_USDT`.
+</ParamField>
+
+<ParamField query="sinceDate" type="string">
+  Inclusive lower bound on `dealDateUtc`, ISO 8601 (UTC, no offset). Example: `2026-04-29T00:00:00`.
+</ParamField>
+
+<ParamField query="endDate" type="string">
+  Inclusive upper bound on `dealDateUtc`, ISO 8601 (UTC, no offset). Example: `2026-04-29T12:00:00`.
+</ParamField>
+
+<ParamField query="pageNumber" type="integer">
+  1-based page number. Defaults to `1`.
+</ParamField>
+
+<ParamField query="pageSize" type="integer">
+  Number of trades per page. Maximum `100`. Defaults to `100`.
+</ParamField>
+
+## Response
+
+Array of trade objects.
+
+<ResponseField name="id" type="string (UUID)" required>
+  Unique deal identifier.
+</ResponseField>
+
+<ResponseField name="dealDateUtc" type="string" required>
+  Trade execution time, ISO 8601 in UTC with sub-millisecond precision (e.g. `2026-04-29T10:26:08.0053357Z`).
+</ResponseField>
+
+<ResponseField name="currencyPairCode" type="string" required>
+  Pair code, echoed back.
+</ResponseField>
+
+<ResponseField name="volume" type="decimal" required>
+  Trade size in base currency.
+</ResponseField>
+
+<ResponseField name="price" type="decimal" required>
+  Trade price in target currency.
+</ResponseField>
+
+<ResponseField name="isBuy" type="boolean" required>
+  `true` if the taker bought (taker hit an ask). `false` if the taker sold (taker hit a bid).
+</ResponseField>
+
+<ResponseField name="isUserBuyer" type="boolean | null">
+  `true`/`false` only on authenticated calls and only when the requesting user participated in the trade. `null` for public calls.
+</ResponseField>
+
+## Example request
+
+```bash
+curl "https://public-api.binibit.com/api/deals?currencyPairCode=TRX_USDT&pageSize=2"
+```
+
+## Example response
+
+```json
+[
+  {
+    "id": "97feb931-a168-4be9-b4bf-1b0736114c69",
+    "dealDateUtc": "2026-04-29T10:26:08.0053357Z",
+    "currencyPairCode": "TRX_USDT",
+    "volume": 40.59,
+    "price": 0.32250046,
+    "isBuy": true,
+    "isUserBuyer": null
+  },
+  {
+    "id": "718cce29-b06b-4651-b53a-5c7b5692aa98",
+    "dealDateUtc": "2026-04-29T10:18:48.4104029Z",
+    "currencyPairCode": "TRX_USDT",
+    "volume": 71.9,
+    "price": 0.32022792,
+    "isBuy": true,
+    "isUserBuyer": null
+  }
+]
+```
+
+## Notes
+
+<Note>
+  - Trades are sorted by `dealDateUtc` descending (most recent first).
+  - For aggregator-spec format with separate `buy`/`sell` arrays and integer trade IDs, see [Aggregator Compatibility / historical_trades](/api-reference/aggregator/historical-trades).
+  - The `id` is a UUID in this endpoint and an integer in the aggregator-spec endpoint — they are different identifier spaces.
+</Note>

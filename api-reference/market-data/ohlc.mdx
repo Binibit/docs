@@ -1,0 +1,109 @@
+---
+title: "GET /api/ohlc"
+description: "OHLCV candle data with multiple intervals."
+api: "GET https://public-api.binibit.com/api/ohlc"
+---
+
+## Description
+
+Returns OHLC (open, high, low, close) candles with volume for a trading pair over a specified date range and interval.
+
+## Parameters
+
+<ParamField query="currencyPairCode" type="string" required>
+  Pair code in `{base}_{target}` format. Example: `BTC_USDT`.
+</ParamField>
+
+<ParamField query="interval" type="string" required>
+  Candle interval. Allowed values:
+
+  - `minute`
+  - `minutes3`
+  - `minutes5`
+  - `minutes15`
+  - `minutes30`
+  - `hour`
+  - `hour4`
+  - `day`
+  - `month`
+  - `year`
+</ParamField>
+
+<ParamField query="start" type="string" required>
+  Range start, ISO 8601 (UTC, no offset). Example: `2026-04-28T00:00:00`.
+</ParamField>
+
+<ParamField query="end" type="string" required>
+  Range end, ISO 8601 (UTC, no offset). Example: `2026-04-29T00:00:00`.
+</ParamField>
+
+## Response
+
+Array of candle objects, sorted by `date` ascending.
+
+<ResponseField name="date" type="string" required>
+  Candle start time, ISO 8601.
+</ResponseField>
+
+<ResponseField name="open" type="decimal" required>
+  Opening price of the candle.
+</ResponseField>
+
+<ResponseField name="max" type="decimal" required>
+  Highest price during the candle.
+</ResponseField>
+
+<ResponseField name="min" type="decimal" required>
+  Lowest price during the candle.
+</ResponseField>
+
+<ResponseField name="close" type="decimal" required>
+  Closing price of the candle.
+</ResponseField>
+
+<ResponseField name="volume" type="decimal" required>
+  Volume during the candle in target (quote) currency.
+</ResponseField>
+
+<ResponseField name="volumeBase" type="decimal" required>
+  Volume during the candle in base currency.
+</ResponseField>
+
+## Example request
+
+```bash
+curl "https://public-api.binibit.com/api/ohlc?currencyPairCode=BTC_USDT&interval=hour&start=2026-04-28T00:00:00&end=2026-04-29T00:00:00"
+```
+
+## Example response
+
+```json
+[
+  {
+    "date": "2026-04-28T00:03:06.897888",
+    "open": 77936.97829703,
+    "max": 78007.06513881,
+    "min": 76834.95847644,
+    "close": 77251.3976702,
+    "volume": 3791.33318336,
+    "volumeBase": 0.048878
+  },
+  {
+    "date": "2026-04-28T01:04:55.385552",
+    "open": 77251.3976702,
+    "max": 77941.52434376,
+    "min": 76416.4096695,
+    "close": 76416.4096695,
+    "volume": 3027.26830741,
+    "volumeBase": 0.039149
+  }
+]
+```
+
+## Notes
+
+<Note>
+  - Field naming is `max` / `min` (not `high` / `low`).
+  - The `date` is approximate — within a few seconds of the canonical interval boundary, depending on when the first trade of the period was matched.
+  - For very long ranges and small intervals, paginate manually by issuing multiple calls with non-overlapping `start`/`end`.
+</Note>

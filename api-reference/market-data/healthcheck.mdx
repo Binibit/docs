@@ -1,0 +1,56 @@
+---
+title: "GET /api/healthcheck"
+description: "Liveness probe — confirms the API service is up."
+api: "GET https://public-api.binibit.com/api/healthcheck"
+---
+
+## Description
+
+Returns the assembly name and version of the running API service. Use it as a liveness probe in your monitoring or CI.
+
+## Parameters
+
+This endpoint takes no query parameters.
+
+## Response
+
+A single JSON string.
+
+## Example request
+
+```bash
+curl https://public-api.binibit.com/api/healthcheck
+```
+
+## Example response
+
+```json
+"PublicApi v1.0.17.0"
+```
+
+## Use as a liveness probe
+
+```bash
+# Returns 0 (success) when API is alive, non-zero on failure.
+curl -fsS https://public-api.binibit.com/api/healthcheck > /dev/null
+```
+
+```yaml
+# Kubernetes-style probe
+livenessProbe:
+  httpGet:
+    path: /api/healthcheck
+    port: 443
+    scheme: HTTPS
+    host: public-api.binibit.com
+  initialDelaySeconds: 10
+  periodSeconds: 30
+```
+
+## Notes
+
+<Note>
+  - The version string format is `<AssemblyName> v<MAJOR>.<MINOR>.<BUILD>.<REVISION>`.
+  - This endpoint is **not** rate-limited the same way as data endpoints — it exists specifically for high-frequency monitoring.
+  - For full system status (per-component uptime, incidents), see the [status page](https://status.binibit.com) when available.
+</Note>

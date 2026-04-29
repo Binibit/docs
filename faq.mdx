@@ -6,31 +6,37 @@ description: "Frequently asked questions about the Binibit public API."
 <AccordionGroup>
 
   <Accordion title="Do I need an API key?">
-    No. All endpoints documented here are public and require no authentication. The trading API (v2, planned) will require an API key — see the [roadmap](/changelog#roadmap).
+    Not for market data. All endpoints under `public-api.binibit.com/api/*` (tickers, orderbook, deals, ohlc, currencies, healthcheck) and the aggregator-spec namespace are public.
+
+    The trading API on `public-api.binibit.com` (create/cancel orders, withdrawals) does require HMAC-SHA256 request signing with an API key + secret — see the [v2 roadmap](/changelog#roadmap).
   </Accordion>
 
-  <Accordion title="How often is /tickers updated?">
-    Every few seconds. Cache for at least 5 seconds on your side; polling more frequently will not return fresher data and will count against your [rate limit](/general/rate-limits).
+  <Accordion title="Why two hostnames?">
+    `public-api.binibit.com` is the primary REST API. `internal-api.binibit.com/.../getcoingecko/*` is a small subset of market data reshaped to match the CoinGecko Integration API Standards v8 — kept around so data aggregators can ingest without translation. See [Base URL](/general/base-url).
   </Accordion>
 
-  <Accordion title="Why does /tickers omit some pairs visible on binibit.com?">
-    Pairs with zero 24-hour volume or empty order books are excluded from `/tickers`. They will appear on the trading interface as "inactive" but will not show up in aggregator feeds until trading resumes.
+  <Accordion title="How often is data refreshed?">
+    Tickers and order books refresh every few seconds. Cache for at least 5 seconds on your side; polling more frequently will not return fresher data and will count against your [rate limit](/general/rate-limits).
+  </Accordion>
+
+  <Accordion title="Why does the aggregator /tickers omit some pairs visible on binibit.com?">
+    Pairs with zero 24-hour volume or empty order books are excluded from the aggregator-spec `/tickers`. They still appear in the primary API's [`/api/currencies/pairs`](/api-reference/market-data/currencies-pairs).
   </Accordion>
 
   <Accordion title="Are decimals returned as strings or numbers?">
-    Numbers. JavaScript's native `Number` type is precise for prices and volumes seen on this exchange, but for safety use a high-precision decimal library (`decimal.js`, `bignumber.js`, Python `Decimal`, Go `big.Float`) when doing arithmetic.
+    Numbers. JavaScript's native `Number` type is precise for the prices and volumes seen on this exchange, but for safety use a high-precision decimal library (`decimal.js`, `bignumber.js`, Python `Decimal`, Go `big.Float`) when doing arithmetic.
   </Accordion>
 
-  <Accordion title="What does last_price mean exactly?">
-    `last_price = X` means the most recent trade for the pair was at `X` units of the **target** currency per **one unit** of the **base** currency. For `AAVE_USDT` with `last_price = 97.44`, one AAVE last traded for 97.44 USDT.
+  <Accordion title="What does price (or last_price) mean exactly?">
+    `price = X` means the most recent trade for the pair was at `X` units of the **target** currency per **one unit** of the **base** currency. For `AAVE_USDT` with `price = 97.44`, one AAVE last traded for 97.44 USDT.
   </Accordion>
 
-  <Accordion title="Why does the host say 'internal-api.binibit.com'?">
-    Legacy. The hostname will be migrated to `api.binibit.com` in a future release. The old hostname will remain available as an alias for at least 90 days after the migration.
+  <Accordion title="Why does one host say 'internal-api'?">
+    Historical naming. The aggregator-spec namespace will get a cleaner alias (`/v1/spot/market/*`) in a future release; the legacy host will continue to work as a redirect for at least 90 days after migration.
   </Accordion>
 
   <Accordion title="Is there a WebSocket API?">
-    Not yet. WebSocket streams for tickers, order book, and trades are on the [v2 roadmap](/changelog#roadmap). Email [api-updates@binibit.com](mailto:api-updates@binibit.com) to be notified.
+    Not yet. WebSocket streams for tickers, order book, and trades are on the [v2 roadmap](/changelog#roadmap). Watch the [GitHub repo](https://github.com/Binibit/docs) for release notifications.
   </Accordion>
 
   <Accordion title="Can I use this API commercially?">
@@ -38,7 +44,7 @@ description: "Frequently asked questions about the Binibit public API."
   </Accordion>
 
   <Accordion title="Do you have an OpenAPI specification?">
-    A public OpenAPI 3.1 spec is planned for v1.1. It will be served at `/openapi.json` and consumed by Mintlify to render this documentation.
+    Yes. The primary API publishes an OpenAPI 3.0 spec at [`https://public-api.binibit.com/swagger/v1/swagger.json`](https://public-api.binibit.com/swagger/v1/swagger.json), with an interactive playground at [`/swagger/`](https://public-api.binibit.com/swagger/).
   </Accordion>
 
   <Accordion title="What's the buy/sell convention in /historical_trades?">
@@ -50,8 +56,8 @@ description: "Frequently asked questions about the Binibit public API."
     Each trade has exactly one taker, so each trade appears in exactly one of the two arrays.
   </Accordion>
 
-  <Accordion title="Why do trade_timestamps look like very large integers?">
-    They are milliseconds since the Unix epoch, e.g. `1777397315466` ≈ `2026-04-28T22:37:55.466Z`. See [Timestamps](/general/timestamps) for conversion examples.
+  <Accordion title="Why do timestamps look like very large integers?">
+    On the aggregator-spec namespace they are milliseconds since the Unix epoch, e.g. `1777397315466` ≈ `2026-04-28T22:37:55.466Z`. The primary API uses ISO 8601 strings instead. See [Timestamps](/general/timestamps).
   </Accordion>
 
   <Accordion title="I'm an aggregator (CoinGecko, CMC, DefiLlama). Who do I contact?">

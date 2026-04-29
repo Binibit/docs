@@ -1,0 +1,96 @@
+---
+title: "GET /api/tickers"
+description: "24-hour ticker information for a single trading pair."
+api: "GET https://public-api.binibit.com/api/tickers"
+---
+
+## Description
+
+Returns the current ticker — last price, 24h price change, 24h volume, best bid and ask — for one trading pair.
+
+## Parameters
+
+<ParamField query="currencyPairCode" type="string" required>
+  Pair code in `{base}_{target}` format, e.g. `ETH_BTC`, `TRX_USDT`. See [Currency pair codes](/reference/ticker-id-format).
+</ParamField>
+
+## Response
+
+<ResponseField name="timestamp" type="integer" required>
+  Last update time, Unix epoch in seconds.
+</ResponseField>
+
+<ResponseField name="currencyPairCode" type="string" required>
+  Pair code, echoed back.
+</ResponseField>
+
+<ResponseField name="price" type="decimal" required>
+  Last traded price (one base unit in target currency).
+</ResponseField>
+
+<ResponseField name="price24hAgo" type="decimal" required>
+  Price 24 hours before the current timestamp.
+</ResponseField>
+
+<ResponseField name="priceChangePercentage24h" type="decimal" required>
+  Percentage change of `price` vs `price24hAgo`.
+</ResponseField>
+
+<ResponseField name="volume24h" type="decimal" required>
+  24-hour trading volume in base currency.
+</ResponseField>
+
+<ResponseField name="bidPrice" type="decimal" required>
+  Current highest bid.
+</ResponseField>
+
+<ResponseField name="askPrice" type="decimal" required>
+  Current lowest ask.
+</ResponseField>
+
+## Example request
+
+<CodeGroup>
+
+```bash curl
+curl "https://public-api.binibit.com/api/tickers?currencyPairCode=ETH_BTC"
+```
+
+```javascript Node
+const url = new URL("https://public-api.binibit.com/api/tickers");
+url.searchParams.set("currencyPairCode", "ETH_BTC");
+const ticker = await fetch(url).then(r => r.json());
+```
+
+```python Python
+import requests
+ticker = requests.get(
+    "https://public-api.binibit.com/api/tickers",
+    params={"currencyPairCode": "ETH_BTC"},
+).json()
+```
+
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "timestamp": 1777458497,
+  "currencyPairCode": "ETH_BTC",
+  "price": 0.03027857,
+  "price24hAgo": 0.02972996,
+  "priceChangePercentage24h": 1.2561641096159775593971696400,
+  "volume24h": 2.53540593,
+  "bidPrice": 0.02981188,
+  "askPrice": 0.0304212
+}
+```
+
+## Notes
+
+<Note>
+  - This endpoint returns a **single** ticker for a specified pair. To list all pairs, use [`GET /api/currencies/pairs`](/api-reference/market-data/currencies-pairs) and combine with this endpoint.
+  - Aggregator-spec equivalent: see [Aggregator Compatibility / tickers](/api-reference/aggregator/tickers) for the CoinGecko-format endpoint that returns all pairs in one call.
+  - `timestamp` is in **seconds**, not milliseconds.
+</Note>

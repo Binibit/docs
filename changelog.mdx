@@ -3,44 +3,52 @@ title: "Changelog"
 description: "Versioned changes to the Binibit public API."
 ---
 
-## v1.0 — 2026-04-28
+## v1.0 — 2026-04-29
 
-Initial public release of the Spot Market API.
+Initial public release of the Spot Market API on `public-api.binibit.com` plus the aggregator-spec namespace on `internal-api.binibit.com/.../getcoingecko/*`.
 
-### Endpoints
+### Market data endpoints (public-api.binibit.com/api)
 
-- `GET /tickers` — 24-hour stats for every active pair
-- `GET /orderbook` — order book depth per pair
-- `GET /historical_trades` — recent trades per pair
-- `GET /asset` — asset metadata
+- `GET /tickers` — single-pair ticker
+- `GET /orderbook` — 40 bids + 40 asks per pair
+- `GET /deals` — recent trades per pair, paginated
+- `GET /ohlc` — OHLCV candles, intervals from 1 minute to 1 year
+- `GET /currencies` — list of currency codes
+- `GET /currencies/pairs` — pair settings (precision, min order size)
+- `GET /currencies/commissions` — default commissions catalogue
+- `GET /healthcheck` — liveness probe
 
-### Conventions
+### Aggregator-spec endpoints (internal-api.binibit.com/.../getcoingecko)
 
-- All timestamps in milliseconds (Unix epoch)
-- All `type` values lowercase (`"buy"` / `"sell"`)
-- `historical_trades` response shape: `{ buy: [...], sell: [...] }`
-- Schema aligns with CoinGecko Integration API Standards v8 so aggregators can ingest without translation
+- `GET /tickers` — all pairs in one call, CoinGecko array shape
+- `GET /orderbook` — CoinGecko `bids/asks` shape
+- `GET /historical_trades` — CoinGecko `{buy: [], sell: []}` shape
+- `GET /asset` — CoinMarketCap-compatible asset metadata
+
+### Standards
+
+- Aggregator-spec schema follows CoinGecko Integration API Standards v8 (Section A: Spot Exchanges)
+- Public OpenAPI 3.0 spec for `public-api.binibit.com` available at [/swagger/v1/swagger.json](https://public-api.binibit.com/swagger/v1/swagger.json)
 
 ## Roadmap
 
-### v1.1 — planned
+### v1.x — planned
 
-- `GET /ping` — liveness check
-- `GET /time` — server time
-- `GET /summary` — compact summary endpoint (CMC-compatible)
-- Cleaner path alias `/v1/spot/market/*` mapped to current `/getcoingecko/*` routes
-- Public OpenAPI 3.1 spec at `/openapi.json`
+- **Cleaner path alias** `/v1/spot/market/*` mapped to current routes (so the user-facing path doesn't carry the `getcoingecko` legacy name)
+- **Server time** endpoint (`GET /api/time`) — useful for clients signing requests against the trading API
+- **24h summary** endpoint (`GET /api/summary`) — compact one-call summary of all pairs (CMC-compatible)
+- **Status page** at `status.binibit.com`
 
-### v1.2 — planned
+### v2 — planned
 
-- `GET /klines` — OHLCV candle data with multiple intervals
-
-### v2.0 — planned
-
-- Authenticated trading API (HMAC-SHA256)
-- WebSocket streams for tickers, order book, and trades
-- IP whitelisting per API key
+- **Authenticated trading API documentation** — endpoints already exist on `public-api.binibit.com`, currently with auth-signature disabled. v2 documents the HMAC-SHA256 signing scheme already used by the Binibit web client.
+- **WebSocket streams** for tickers, order book diffs, and trades
 
 ## Subscribe
 
-Email [api-updates@binibit.com](mailto:api-updates@binibit.com) to receive change announcements 30 days before any breaking change.
+The recommended way to track changes:
+
+- Star or watch [github.com/Binibit/docs](https://github.com/Binibit/docs) — releases and PRs trigger notifications
+- Subscribe to the GitHub Atom feed: `https://github.com/Binibit/docs/releases.atom`
+
+A dedicated email mailing list will be added once `api@binibit.com` is provisioned.

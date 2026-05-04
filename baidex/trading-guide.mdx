@@ -1,0 +1,185 @@
+---
+title: "Trading Guide"
+description: "Swap on BaiDEX via the V3 router. Examples in JavaScript and Solidity."
+---
+
+## Quick swap (BaiDEX UI)
+
+1. Open the BaiDEX UI on [binibit.com](https://binibit.com) (or BaiDEX subdomain when published)
+2. Connect your wallet (MetaMask, WalletConnect, Telegram-native wallet)
+3. Switch network to BiniChain
+4. Pick the pair (e.g., USBI → an Agent Token)
+5. Enter amount, view price impact and minimum out
+6. Confirm — pay BiniChain gas in BINI, receive output token
+
+## Swap via SDK (programmatic)
+
+BaiDEX exposes the standard Uniswap V3 `SwapRouter02` interface. Use `@uniswap/v3-sdk`:
+
+```javascript
+import { ethers } from "ethers";
+import { SwapRouter, Token, CurrencyAmount, TradeType, Percent } from "@uniswap/sdk-core";
+import { Pool, Route, Trade, SwapOptions } from "@uniswap/v3-sdk";
+
+const CHAIN_ID = /* BiniChain chainId */;
+const SWAP_ROUTER_ADDRESS = "0x..."; // see /baidex/contracts
+
+const provider = new ethers.JsonRpcProvider("https://rpc.binibit.com");
+const signer = new ethers.Wallet(privateKey, provider);
+
+// Token instances
+const USBI = new Token(CHAIN_ID, "0x...USBI", 18, "USBI", "Binibit USBI");
+const WBINI = new Token(CHAIN_ID, "0x...wBINI", 18, "wBINI", "Wrapped BINI");
+
+// Build pool, route, trade as standard V3 SDK...
+// (full pool fetch and trade construction omitted for brevity)
+
+const swapOptions = {
+  slippageTolerance: new Percent(50, 10_000), // 0.50%
+  deadline: Math.floor(Date.now() / 1000) + 60 * 10,
+  recipient: signer.address,
+};
+
+const { calldata, value } = SwapRouter.swapCallParameters(trade, swapOptions);
+
+const tx = await signer.sendTransaction({
+  data: calldata,
+  to: SWAP_ROUTER_ADDRESS,
+  value,
+  gasLimit: 500_000,
+});
+await tx.wait();
+```
+
+## Swap via Solidity (on-chain integration)
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+contract MyContract {
+    ISwapRouter public immutable swapRouter;
+
+    address public constant WBINI = 0x...;
+    address public constant USBI  = 0x...;
+
+    constructor(ISwapRouter _swapRouter) {
+        swapRouter = _swapRouter;
+    }
+
+    function swapWbiniForUsbi(uint256 amountIn, uint256 amountOutMinimum)
+        external
+        returns (uint256 amountOut)
+    {
+        IERC20(WBINI).transferFrom(msg.sender, address(this), amountIn);
+        IERC20(WBINI).approve(address(swapRouter), amountIn);
+
+        ISwapRouter.ExactInputSingleParams memory params = ISwapRouter.ExactInputSingleParams({
+            tokenIn:           WBINI,
+            tokenOut:          USBI,
+            fee:               10_000,            // 1.00% (BaiDEX single tier)
+            recipient:         msg.sender,
+            deadline:          block.timestamp + 600,
+            amountIn:          amountIn,
+            amountOutMinimum:  amountOutMinimum,
+            sqrtPriceLimitX96: 0,
+        });
+
+        amountOut = swapRouter.exactInputSingle(params);
+    }
+}
+```
+
+## Quote a trade (no swap)
+
+Use the V3 `Quoter` contract to get an expected output amount before swapping:
+
+```javascript
+import { ethers } from "ethers";
+
+const QUOTER_ADDRESS = "0x..."; // see /baidex/contracts
+const QUOTER_ABI = [
+  "function quoteExactInputSingle(address tokenIn, address tokenOut, uint24 fee, uint256 amountIn, uint160 sqrtPriceLimitX96) external returns (uint256 amountOut)",
+];
+
+const quoter = new ethers.Contract(QUOTER_ADDRESS, QUOTER_ABI, provider);
+
+const amountOut = await quoter.quoteExactInputSingle.staticCall(
+  WBINI_ADDRESS,
+  USBI_ADDRESS,
+  10_000,           // 1.00% fee tier
+  ethers.parseEther("1"),
+  0,
+);
+
+console.log("Expected output:", ethers.formatEther(amountOut), "USBI");
+```
+
+## Multi-hop swaps
+
+V3 supports multi-hop via `exactInput` (encode path as a sequence of token addresses + fee tiers).
+
+```solidity
+// Path: WBINI → USBI → AgentToken
+bytes memory path = abi.encodePacked(WBINI, uint24(10_000), USBI, uint24(10_000), AGENT_TOKEN);
+
+ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
+    path:              path,
+    recipient:         msg.sender,
+    deadline:          block.timestamp + 600,
+    amountIn:          amountIn,
+    amountOutMinimum:  amountOutMinimum,
+});
+
+amountOut = swapRouter.exactInput(params);
+```
+
+Off-chain routers (1inch, Paraswap) integrate with BaiDEX as a V3 instance — they handle multi-hop automatically.
+
+## Slippage settings
+
+Default slippage = 0.50%. For:
+
+- Tight liquidity pools (small Agent Tokens) → use higher slippage (1-3%)
+- Anchor wBINI/USBI pool → 0.10-0.50% works most days
+- Cross-pool routes → add per-hop slippage budget
+
+See [Slippage & MEV](/baidex/slippage-mev).
+
+## Approval requirement
+
+Before any swap, the input token's `approve()` must be called for the SwapRouter address. Standard ERC-20 approval flow.
+
+For repeat traders, the standard pattern is `approve(spender, type(uint256).max)` — but this gives the router unlimited approval for that token. Trade off security vs convenience.
+
+## Gas
+
+Every swap pays gas in **native BINI**. Typical V3 swap gas:
+
+| Swap type | Gas estimate |
+|---|---:|
+| Single-hop within one pool | ~150,000 gas |
+| Multi-hop (2 pools) | ~250,000 gas |
+| Multi-hop (3 pools) | ~350,000 gas |
+
+Multiply by current BiniChain gas price for the BINI cost.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="AMM mechanics" icon="layer-group" href="/baidex/amm">
+    V3 fork details
+  </Card>
+  <Card title="Fees" icon="percent" href="/baidex/fees">
+    1.00% fee mechanics
+  </Card>
+  <Card title="Slippage & MEV" icon="shield" href="/baidex/slippage-mev">
+    Protection settings
+  </Card>
+  <Card title="Contracts" icon="file-code" href="/baidex/contracts">
+    Router and pool addresses
+  </Card>
+</CardGroup>

@@ -1,0 +1,119 @@
+---
+title: "Slippage & MEV"
+description: "Standard V3 protections plus considerations for thin Agent Pools."
+---
+
+## Slippage
+
+Slippage is the difference between the price you expect and the price you get. On AMMs, it scales with:
+
+1. **Trade size** relative to pool depth
+2. **Volatility** during the time between quote and execution
+3. **Other trades** sandwiching yours
+
+Set your slippage tolerance in the swap UI or `swapOptions.slippageTolerance`.
+
+### Recommended slippage by pool
+
+| Pool | Typical slippage |
+|---|---|
+| wBINI/USBI (anchor) | 0.10 – 0.50% |
+| USBI/Agent Token (high volume) | 0.50 – 1.50% |
+| USBI/Agent Token (low volume) | 1.50 – 5.00% |
+| wBINI/Agent Token (high volume) | 0.50 – 2.00% |
+| wBINI/Agent Token (thin) | 2.00 – 5.00% |
+
+For very thin pools, slippage can blow out — consider chunking large trades or using a router that splits across multiple pools.
+
+### Why default 0.50% works most of the time
+
+The wBINI/USBI anchor pool is well-funded → 0.50% covers normal execution. Most user trades clear here or via single-hop into a healthy growth pool.
+
+For Agent Token swaps in fresh pools, **raise slippage** to avoid failed transactions.
+
+## Failed transactions ("Out of slippage")
+
+If price moved more than your tolerance between quote and execution, the V3 router reverts. You pay gas, get no swap.
+
+Mitigations:
+
+- Raise slippage tolerance
+- Reduce trade size (smaller fraction of pool)
+- Wait for low volatility (off-peak hours)
+
+## MEV (Maximal Extractable Value)
+
+V3 swaps are public mempool transactions. Sandwich attacks are possible:
+
+```
+1. You broadcast a buy with X% slippage tolerance
+2. Searcher sees pending tx, front-runs with their own buy (raises pool price)
+3. Your tx executes at the worse price (within your tolerance)
+4. Searcher sells immediately, profiting from the price difference
+```
+
+### BaiDEX MEV protections
+
+| Protection | Status |
+|---|---|
+| Standard V3 `sqrtPriceLimitX96` | Yes — set this in your swap to prevent execution beyond a price |
+| Slippage tolerance check | Yes — V3 native |
+| Private mempool / Flashbots-style relay | TBD — see roadmap |
+| Builder API / commit-reveal | TBD |
+
+For now, MEV protection on BaiDEX is at the **slippage tolerance level**. Set it conservatively for large trades.
+
+### Worker-layer signals (future)
+
+The Agent Hive Worker assigned to each pool can in principle:
+
+- Detect anomalous trade patterns (sandwich-like flows)
+- Flag suspect transactions in on-chain logs
+- Suggest tightening pool parameters
+
+This is a Phase-2 capability. Currently, Workers are advisory rather than execution-blocking.
+
+## Limit-order behavior
+
+V3's range orders effectively act as limit orders:
+
+- LP a tight range above current price → sells the in-range asset when price rises into range
+- LP a tight range below current price → buys when price drops
+
+This works on BaiDEX identically to Uniswap V3. Useful for setting a "I want to sell BINI at $0.15" type order without active management.
+
+## Transaction priority
+
+BiniChain transactions follow a standard fee market. Higher gas price = faster inclusion.
+
+For time-sensitive trades:
+
+- Increase gas price (priority fee)
+- Use a limited-time deadline (`block.timestamp + 60`) so stale transactions revert
+
+## Trade execution checklist
+
+Before signing a swap:
+
+- [ ] Slippage tolerance is appropriate for pool depth
+- [ ] Output amount looks reasonable (not 0, not absurd)
+- [ ] You have enough native BINI for gas
+- [ ] Deadline is short enough that the tx won't sit pending overnight
+- [ ] You've approved the input token to the router
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Trading guide" icon="arrow-right-arrow-left" href="/baidex/trading-guide">
+    Code examples
+  </Card>
+  <Card title="Pools" icon="droplet" href="/baidex/pools">
+    Pool depth varies by type
+  </Card>
+  <Card title="Fees" icon="percent" href="/baidex/fees">
+    The 1.00% fee is on top of slippage
+  </Card>
+  <Card title="Agent Hive" icon="bolt" href="/agent-hive/overview">
+    Worker layer (future MEV signals)
+  </Card>
+</CardGroup>

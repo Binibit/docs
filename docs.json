@@ -64,9 +64,31 @@
         "tab": "BaiDEX",
         "groups": [
           {
-            "group": "BaiDEX",
+            "group": "Overview",
             "pages": [
-              "baidex/overview"
+              "baidex/overview",
+              "baidex/amm",
+              "baidex/fees"
+            ]
+          },
+          {
+            "group": "Pools & liquidity",
+            "pages": [
+              "baidex/pools",
+              "baidex/liquidity"
+            ]
+          },
+          {
+            "group": "Trading",
+            "pages": [
+              "baidex/trading-guide",
+              "baidex/slippage-mev"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "baidex/contracts"
             ]
           }
         ]

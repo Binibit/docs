@@ -1,0 +1,96 @@
+---
+title: "AMM Mechanics"
+description: "Uniswap V3 fork with concentrated liquidity and a custom fee router on BiniChain."
+---
+
+## Foundation: Uniswap V3
+
+BaiDEX is a **fork of Uniswap V3**, deployed on BiniChain. All standard V3 concepts apply:
+
+- **Concentrated liquidity** — LPs choose a price range; capital is more efficient when the price is in range
+- **Ticks** — discrete price levels, standard tick spacing
+- **Position NFTs** — each LP position is an ERC-721 NFT
+- **Range orders** — LPs can act as limit-order placers by tightly bracketing a tick range
+
+If you're familiar with Uniswap V3, BaiDEX feels identical for swap and LP UX.
+
+## What's customized
+
+### Custom fee router (`BaiDexFeeRouter`)
+
+Standard V3 sends 100% of swap fees to LPs. BaiDEX intercepts the fee via a router contract and splits it three ways:
+
+```
+0.50% → LP providers
+0.25% → burn address (permanent removal of swap-input asset)
+0.25% → referrer (or treasury if no referrer)
+```
+
+The router is V3-compatible — swaps still go through `SwapRouter02` semantics, but the fee accounting is rewritten.
+
+See [Fees](/baidex/fees) for the full mechanism.
+
+### Pool listing rules
+
+Standard V3 is permissionless — anyone can pool any pair. BaiDEX is **partly opinionated**:
+
+| Asset on the pool side | Listing rule |
+|---|---|
+| **wBINI** | DEX Liquidity (5% / 50M BINI allocation) seeds canonical pools. New wBINI-side pools use whatever wBINI is outside the anchor pool |
+| **USBI** | Permissionless on the USBI side — anyone with USBI can LP |
+| **Agent Token** | Auto-listed by the Spawner contract when an Agent Token is spawned; no manual creation needed |
+
+Result: there's a wBINI/USBI **anchor pool** (capped at $12M TVL) and many smaller USBI/Agent-Token + wBINI/Agent-Token pools created either manually or by the Spawner.
+
+See [wBINI Cap Rule](/tokenomics/wbini-cap).
+
+### Agent layer (per-pool)
+
+Every **Agent Token pool** has an Agent Worker assigned to it (from [Agent Hive](/agent-hive/overview)). The Worker:
+
+- Tracks pool depth and trade flow
+- Reacts to signals from Scouts and Queens
+- Can execute defined actions (e.g., cancel range order, adjust LP position) within boundaries set by Hive governance
+
+The Worker doesn't custody user funds — LPs and traders interact with the V3 contracts directly. The Worker layer is advisory + governance, with strict on-chain logging.
+
+## Tick spacing
+
+Standard V3 tick spacing applies. The exact value (1, 10, 60, 200) per pool is set at pool creation and is implementation-defined per BaiDEX deploy.
+
+## Concentrated liquidity in practice
+
+| LP scenario | Fees earned | Capital efficiency |
+|---|---|---|
+| Full-range LP (like V2) | Earns 100% of in-range swap fees pro-rata | Low — a lot of capital sits inactive |
+| Tight range around current price | Earns much higher per-capital fees while in range | High — but goes "out of range" if price moves |
+| Lopsided range | Effectively a passive limit order | N/A until price reaches the range |
+
+LPs should choose ranges based on their conviction in price stability. BaiDEX UI provides standard V3 tooling.
+
+## Routing
+
+BaiDEX exposes the V3 `SwapRouter02` interface. Off-chain routers (1inch, Paraswap) integrate via the standard V3 ABI.
+
+Direct quotes via the `Quoter` contract.
+
+## SDK & Integrations
+
+The `@uniswap/v3-sdk` works against BaiDEX with a different chain config. Address book values for BiniChain pools are published in [Contract addresses](/baidex/contracts).
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Fees" icon="percent" href="/baidex/fees">
+    The fee router in detail
+  </Card>
+  <Card title="Pools" icon="droplet" href="/baidex/pools">
+    Pool types: wBINI / USBI / Agent Token
+  </Card>
+  <Card title="Slippage & MEV" icon="shield" href="/baidex/slippage-mev">
+    Standard V3 protections
+  </Card>
+  <Card title="Trading guide" icon="arrow-right-arrow-left" href="/baidex/trading-guide">
+    Swap code example
+  </Card>
+</CardGroup>

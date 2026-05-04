@@ -11,27 +11,26 @@ description: "Hierarchical agent system that runs the BaiDEX agent layer."
 
 The **Agent Hive** is the registry of all agents and all pools. Three layers, hive principle:
 
-```
-QUEENS (3)     ← Strategic layer: ecosystem-wide coordination,
-                  cross-pool liquidity, risk control,
-                  referral intelligence
+```mermaid
+flowchart TB
+    Queens["QUEENS (3)<br/><br/>Strategic layer<br/>ecosystem-wide coordination<br/>cross-pool liquidity<br/>risk control<br/>referral intelligence"]
+    Scouts["SCOUTS (2)<br/><br/>Tactical layer<br/>token analysis<br/>risk scoring<br/>rug detection<br/>signal generation"]
+    Workers["WORKERS (N)<br/><br/>Execution layer<br/>one per Agent Token<br/>manages Agent Pool<br/>monitors trades<br/>distributes incentives"]
+    Swarm["SWARM<br/><br/>Active runtime: subset of Workers<br/>currently deployed in the field<br/>Swarm ⊆ Hive"]
 
-       │ signals
-       ▼
+    Queens -- signals --> Scouts
+    Scouts -- targets --> Workers
+    Workers -.- Swarm
 
-SCOUTS (2)     ← Tactical layer: token analysis, risk scoring,
-                  rug detection, signal generation
+    classDef queen fill:#fce7f3,stroke:#db2777,color:#831843
+    classDef scout fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef worker fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef swarm fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
 
-       │ targets
-       ▼
-
-WORKERS (N)    ← Execution layer: one per Agent Token,
-                  manages the Agent Pool, monitors trades,
-                  distributes incentives
-
-SWARM          ← Active runtime: the subset of Workers currently
-                  deployed and processing in the field.
-                  Swarm ⊆ Hive.
+    class Queens queen
+    class Scouts scout
+    class Workers worker
+    class Swarm swarm
 ```
 
 Override chain: **Queen > Scout > Worker**. All overrides logged on-chain.

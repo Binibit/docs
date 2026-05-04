@@ -30,28 +30,22 @@ This is a **ceiling** for the canonical wBINI/USBI pool. Beyond this point:
 
 The wBINI cap forces a specific liquidity topology: **diverse pools, not one fat pool**.
 
-```
-                          BaiDEX pool topology
-                          
-                ┌─────────────────────────────┐
-                │  wBINI / USBI               │
-                │  Capped at $12M TVL         │   ← anchor pool
-                │  (one pool)                 │
-                └─────────────────────────────┘
-                              │
-                              │ trades clear here
-                              ▼
-                ┌─────────────────────────────┐
-                │  USBI / Agent Token (×N)    │
-                │  No cap (USBI side scales   │   ← growth pools
-                │  with user XP entitlement)  │
-                └─────────────────────────────┘
+```mermaid
+flowchart TB
+    Anchor["wBINI / USBI<br/>Capped at \$12M TVL<br/>(one pool)<br/><br/>Anchor pool"]
+    Growth["USBI / Agent Token (×N)<br/>No cap on USBI side<br/>(scales with user XP entitlement)<br/><br/>Growth pools"]
+    Premium["wBINI / Agent Token (×M)<br/>Limited by remaining wBINI<br/>outside the anchor pool<br/><br/>Premium pools"]
 
-                ┌─────────────────────────────┐
-                │  wBINI / Agent Token (×M)   │
-                │  Limited by remaining wBINI │   ← premium pools
-                │  outside the anchor pool    │
-                └─────────────────────────────┘
+    Anchor -- trades clear here --> Growth
+    Anchor -.- Premium
+
+    classDef anchor fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef growth fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef premium fill:#fef9c3,stroke:#ca8a04,color:#713f12
+
+    class Anchor anchor
+    class Growth growth
+    class Premium premium
 ```
 
 Most user activity should happen in **USBI/Agent Token** pools. These are uncapped on the USBI side because USBI is a sandbox stablecoin that scales linearly with user count and engagement.

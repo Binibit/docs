@@ -1,0 +1,115 @@
+---
+title: "Lottery"
+description: "BINI ticket lottery with 60/20/10/10 revenue split. Phase 2 of the Bini App rollout."
+---
+
+<Note>
+  The lottery launches in **Phase 2** of the Bini App rollout. This page documents the canonical mechanics. Live values (ticket price, draw frequency, jackpot rules) will be confirmed in the app at launch.
+</Note>
+
+## What it is
+
+A ticketed BINI lottery integrated into the Bini App. Buy tickets in BINI, watch draws, win jackpots.
+
+The lottery is the **fourth permanent BINI sink** (sink #4 in the ecosystem) — 20% of every ticket purchase is permanently burned.
+
+## Revenue split
+
+Every ticket purchased with BINI splits as follows:
+
+```
+Ticket price:
+├── 60%  Jackpot (winners)
+├── 20%  Burned permanently
+├── 10%  Referral commissions
+└── 10%  Platform operations
+```
+
+| Slice | Where it goes |
+|---|---|
+| **60% Jackpot** | Funds the prize pool. Eventually paid out to winners. |
+| **20% Burn** | Sent to a burn address. Permanently removes BINI from circulation. |
+| **10% Referral** | Paid to the referrer who introduced the ticket buyer (where applicable). |
+| **10% Platform** | Operating reserve and platform development costs. |
+
+## Why these numbers
+
+- **60% to winners** is high enough to attract participation but leaves headroom for sinks
+- **20% burn** makes the lottery a meaningful contributor to deflationary pressure (vs zero in most lotteries)
+- **10% referral** pays the user-acquisition channel
+- **10% platform** funds ongoing operations
+
+## Burn projections
+
+If the lottery sees $V in daily ticket revenue:
+
+```
+Daily burn = V × 0.20   (in BINI)
+```
+
+| Daily ticket revenue | Daily BINI burn (at $0.12 ref) |
+|---:|---:|
+| $1,000 | 1,667 BINI |
+| $10,000 | 16,667 BINI |
+| $100,000 | 166,667 BINI |
+| $1,000,000 | 1,666,667 BINI |
+
+At $1M daily lottery revenue, the lottery alone burns ~600M BINI/year — comparable to the entire Year 1 emission. Realistic adoption is much lower in early phases.
+
+## Draw mechanics (TBD)
+
+Final draw mechanics are being finalized:
+
+- **Frequency**: daily, weekly, both?
+- **Number of winners**: single jackpot, multiple tiers?
+- **Verifiability**: on-chain randomness (Chainlink VRF on BiniChain) or backend-RNG with public proof?
+- **Carryover**: rolls over if no winner?
+
+Draws will be on-chain and verifiable. Exact format announced before launch.
+
+## Buying tickets
+
+After Phase 2 launch:
+
+1. Open the Bini App → Lottery tab
+2. View current pot, time to next draw, your tickets
+3. Choose a number (or auto-pick) and quantity
+4. Confirm — pay BINI at the current ticket price
+5. Wait for the draw — winners notified in-app + on-chain
+
+Tickets cost **BINI native** (not CRS, not USBI). To play, you need on-chain BINI.
+
+For the cheapest path to BINI, use [Bridge B](/bini-app/bini-bridge) (off-chain BINI rewards → native, gated at L7).
+
+## Eligibility
+
+- Open to any user with a Binibit Telegram account
+- Subject to local jurisdiction restrictions (lottery legality varies by country)
+
+## Tokenomics impact
+
+Per [BINI Sinks](/tokenomics/bini-sinks), lottery is sink #4:
+
+- 20% of revenue is permanent burn
+- 60% jackpot eventually re-enters circulation as winnings (effectively a recycle)
+- 10% referral re-enters as referrer-controlled BINI
+- 10% platform stays in reserve, eventually deployed for ops
+
+Net effect on supply: -20% of every ticket. Combined with the [DEX swap burn](/baidex/overview) and [spawn fee burn](/agentt-launchpad/overview), this creates a structural deflationary force.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="BINI Sinks" icon="fire" href="/tokenomics/bini-sinks">
+    Lottery is sink #4 (permanent burn)
+  </Card>
+  <Card title="BINI Bridge" icon="bridge" href="/bini-app/bini-bridge">
+    How to acquire on-chain BINI to play
+  </Card>
+  <Card title="BINI Token" icon="coins" href="/bini-token/overview">
+    The asset paid into tickets
+  </Card>
+  <Card title="BINI Emission" icon="chart-line" href="/tokenomics/bini-emission">
+    Long-term supply trajectory
+  </Card>
+</CardGroup>

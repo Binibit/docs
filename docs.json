@@ -97,9 +97,33 @@
         "tab": "Bini App",
         "groups": [
           {
-            "group": "Bini App",
+            "group": "Getting started",
             "pages": [
-              "bini-app/overview"
+              "bini-app/overview",
+              "bini-app/onboarding"
+            ]
+          },
+          {
+            "group": "Mining loop",
+            "pages": [
+              "bini-app/lessons",
+              "bini-app/claim-mining",
+              "bini-app/levels"
+            ]
+          },
+          {
+            "group": "Bridges",
+            "pages": [
+              "bini-app/usbi-bridge",
+              "bini-app/bini-bridge"
+            ]
+          },
+          {
+            "group": "Community",
+            "pages": [
+              "bini-app/referrals",
+              "bini-app/franchise",
+              "bini-app/lottery"
             ]
           }
         ]

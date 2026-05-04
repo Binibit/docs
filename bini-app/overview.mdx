@@ -1,42 +1,92 @@
 ---
-title: "Bini App"
+title: "Bini App Overview"
 description: "Telegram mini-app: mine, learn, level up, earn."
 ---
 
-<Note>
-  This documentation is being written. Full Bini App reference publishes during the v2.0 docs rollout.
-</Note>
+<Card title="See the full economic model" icon="chart-pie" href="/tokenomics/ecosystem-overview">
+  Tokenomics → Ecosystem Overview is the central hub. Every formula on this page is documented there.
+</Card>
 
-## What is the Bini App
+## What is Bini App
 
-The Bini App is a Telegram mini-app that gamifies entry into the Binibit ecosystem. Users mine **Crystals (CRS)**, level up via **lessons**, and bridge into BaiDEX once they hit the right gates.
+Bini App is a **Telegram mini-app** that gamifies entry into the Binibit ecosystem. Users mine **Crystals (CRS)**, level up via **30 lessons**, and bridge into BaiDEX once they hit the right gates.
+
+It is the user-facing on-ramp to the entire ecosystem.
+
+## Headline numbers
 
 | | |
 |---|---|
 | Levels | 30 (Seed → Genesis) |
-| Lessons | 30 lessons (upgrade cards) |
-| Mining | Background, claim every 4 hours |
-| Bridges | A: Crystals → USBI · B: BINI off → BINI native |
+| Lessons | 30 lessons × 10 levels = 300 upgrades |
+| Mining | Continuous, claim every 4 hours |
+| Base mining rate | 10,000 CRS/hour |
+| Max mining rate (lessons L10) | 194,650 CRS/hour |
+| Welcome grant | See [Onboarding](/bini-app/onboarding) |
+| Bridges | A: CRS → USBI · B: BINI off-chain → native |
 
-## What will be documented
+## How it works (the loop)
 
-- Onboarding & Welcome Grant
-- 30 Lessons (upgrade cards) — question, answer, facts, infographic
-- Claim & mining mechanic (4-hour window, base 10K CRS/hr)
-- Levels & progression
-- USBI bridge (Bridge A, Level 5 gate)
-- BINI bridge (Bridge B, Level 7 gate)
-- Referrals (3-level CRS sharing)
-- Franchise statuses
-- Lottery (BINI sink)
+```
+1.  User receives welcome grant on signup
+2.  User mines CRS in the background (10K/hour base + lesson bonuses)
+3.  User claims CRS every 4 hours
+4.  User receives daily calendar CRS (30-day cycle)
+5.  User spends CRS on lesson upgrades
+6.  Lesson upgrades increase CRS/hour mining rate
+7.  CRS spend creates XP (1:1)
+8.  XP increases USBI entitlement (floor(XP / 10K))
+9.  User claims / bridges USBI via Bridge A
+10. USBI flows into BaiDEX as LP or for trading
+11. More CRS spend moves the user toward Level 30
+```
+
+## The eight pages
+
+<CardGroup cols={2}>
+  <Card title="Onboarding & Welcome Grant" icon="hand-wave" href="/bini-app/onboarding">
+    First-session experience and the starter USBI/BINI grant
+  </Card>
+  <Card title="30 Lessons" icon="graduation-cap" href="/bini-app/lessons">
+    Upgrade cards that boost your mining rate
+  </Card>
+  <Card title="Claim & mining" icon="pickaxe" href="/bini-app/claim-mining">
+    Background CRS accrual and 4-hour claim cycle
+  </Card>
+  <Card title="Levels" icon="ranking-star" href="/bini-app/levels">
+    30 tiers from Seed to Genesis
+  </Card>
+  <Card title="USBI Bridge (A)" icon="bridge" href="/bini-app/usbi-bridge">
+    Convert CRS to on-chain USBI at 10,000:1 (Level 5)
+  </Card>
+  <Card title="BINI Bridge (B)" icon="bridge" href="/bini-app/bini-bridge">
+    Convert off-chain BINI to native at 1:1 (Level 7)
+  </Card>
+  <Card title="Referrals" icon="diagram-project" href="/bini-app/referrals">
+    3-level CRS sharing on team mining
+  </Card>
+  <Card title="Franchise" icon="building" href="/bini-app/franchise">
+    Member → Builder → Manager → Director → Partner
+  </Card>
+  <Card title="Lottery" icon="ticket" href="/bini-app/lottery">
+    BINI sink, 60/20/10/10 split (Phase 2)
+  </Card>
+</CardGroup>
+
+## Where to download
+
+The Bini App is a Telegram mini-app. Open Telegram and search for the official Binibit bot. Verified launch links will be published on [binibit.com](https://binibit.com).
 
 ## Related
 
 <CardGroup cols={2}>
   <Card title="Tokenomics" icon="chart-pie" href="/tokenomics/ecosystem-overview">
-    The full economic model
+    Full economic model
   </Card>
   <Card title="BaiDEX" icon="layer-group" href="/baidex/overview">
-    Where USBI and wBINI flow
+    Where USBI and wBINI provide liquidity
+  </Card>
+  <Card title="BINI Token" icon="coins" href="/bini-token/overview">
+    Native ecosystem token
   </Card>
 </CardGroup>

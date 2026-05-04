@@ -1,0 +1,105 @@
+---
+title: "Bridges"
+description: "Two bridges: Bridge A (CRS↔USBI) and Bridge B (BINI off-chain↔native), plus future Ethereum cross-chain bridge."
+---
+
+## Three bridges total
+
+| Bridge | What it moves | Direction | Ratio | Level gate |
+|---|---|---|---|---|
+| **Bridge A** | Crystals (CRS) ↔ USBI | Off-chain ↔ BiniChain ERC-20 | 10,000 : 1 | Level 5 |
+| **Bridge B** | BINI off-chain ↔ BINI native | Off-chain ↔ BiniChain native | 1 : 1 | Level 7 |
+| **Cross-chain bridge** | ERC-20 BINI ↔ native BINI | Ethereum ↔ BiniChain | 1 : 1 | None (standard) |
+
+Bridge A and B are off-chain ↔ on-chain (within the Binibit ecosystem). The cross-chain bridge connects BiniChain to Ethereum.
+
+## Bridge A — CRS to USBI
+
+Detail: [Tokenomics → USBI Bridge](/tokenomics/usbi-bridge), [Bini App → USBI Bridge](/bini-app/usbi-bridge).
+
+Summary:
+
+- Convert off-chain Crystals (CRS) earned in Bini App into on-chain USBI ERC-20
+- Fixed rate: 10,000 CRS = 1 USBI
+- Gated at Level 5 (50M XP)
+- USBI used in BaiDEX pools as LP
+
+The Bridge A contract on BiniChain mints USBI when off-chain CRS is consumed. The Bini App backend signs the redemption request; the contract verifies and mints.
+
+## Bridge B — BINI off-chain to native
+
+Detail: [Tokenomics → BINI Bridge](/tokenomics/bini-bridge), [Bini App → BINI Bridge](/bini-app/bini-bridge).
+
+Summary:
+
+- Convert off-chain BINI rewards (quest wins, lottery, grants) into native BINI on BiniChain
+- Fixed 1:1 ratio
+- Gated at Level 7 (105M XP)
+- Native BINI used for gas, staking (after withdrawal to Ethereum), pool participation
+
+The Bridge B contract on BiniChain transfers native BINI from the Rewards pool reserve when off-chain BINI is consumed. The Bini App backend signs; the contract verifies and transfers.
+
+## Cross-chain bridge — Ethereum ↔ BiniChain
+
+For users moving BINI between Ethereum (ERC-20) and BiniChain (native):
+
+```
+ERC-20 BINI on Ethereum  ←→  Native BINI on BiniChain  (1:1)
+```
+
+Mechanism (TBD pending team finalization):
+
+- **Lock-and-mint**: lock BINI on origin chain, mint on destination
+- **Burn-and-mint**: burn on origin, mint on destination (more capital-efficient but trusts the bridge contracts)
+
+The exact mechanism + bridge contract addresses publish before mainnet. For now, the canonical path for cross-chain users is via Binibit Exchange (which handles the bridge as part of withdrawals).
+
+## Anti-sybil
+
+Bridges B and A both have anti-sybil designs:
+
+| Bridge | Anti-sybil mechanism |
+|---|---|
+| Bridge A (CRS→USBI) | Level 5 gate + USBI entitlement cap (max 101K USBI per user) |
+| Bridge B (BINI off→native) | Level 7 gate + monthly cap (TBD value) + per-account fraud detection |
+| Cross-chain | Standard signature verification + nonce + replay protection |
+
+The L7 gate on Bridge B is intentionally high — BINI is real-value, so the gate has to filter out farm accounts.
+
+## Bridge security
+
+All bridges are smart contracts with:
+
+- Audited code (audit firm TBD pre-mainnet)
+- Multi-sig admin (no single key controls minting/locking)
+- Emergency pause (can halt withdrawals if exploit detected)
+- Time-delayed governance for parameter changes
+- On-chain logs for every action
+
+The bridge contracts custody real BINI (in the lock-and-mint case). Bridge security is **the most critical security concern** in the ecosystem.
+
+## Failure modes
+
+| Scenario | What happens |
+|---|---|
+| Bridge contract has a bug | Emergency pause; users wait for fix; no funds lost from contract |
+| Bridge admin keys compromised | Multi-sig requires multiple keys; mitigates single-key compromise |
+| Cross-chain message lost | Replay protection ensures no double-spend; users can retry |
+| Off-chain backend (Bini App) compromised | Bridge contract verifies signatures cryptographically — backend can't mint without valid sigs |
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="USBI Bridge (Tokenomics)" icon="bridge" href="/tokenomics/usbi-bridge">
+    Bridge A formula
+  </Card>
+  <Card title="BINI Bridge (Tokenomics)" icon="bridge" href="/tokenomics/bini-bridge">
+    Bridge B formula
+  </Card>
+  <Card title="Bini App / Bridges" icon="mobile" href="/bini-app/usbi-bridge">
+    User-facing bridge UX
+  </Card>
+  <Card title="BINI Token" icon="coins" href="/bini-token/overview">
+    What native BINI is for
+  </Card>
+</CardGroup>

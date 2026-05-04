@@ -1,0 +1,118 @@
+---
+title: "Architecture"
+description: "EVM-compatible L1 architecture: consensus, block model, gas, smart contract environment."
+---
+
+<Note>
+  Some specific values (block time, gas limits, consensus algorithm) are pending confirmation from the chain engineering team. This page documents the architecture at the level of public commitment; specific numbers will be filled in before mainnet.
+</Note>
+
+## Layer 1, EVM-compatible
+
+BiniChain is its own **Layer 1 chain**, not a rollup or sidechain. It operates independently with its own validator set, block production, and security model.
+
+It is **EVM-compatible**:
+
+- Solidity-deployable smart contracts
+- ETH-style accounts (`0x` addresses, ECDSA signatures)
+- Standard Ethereum tooling: Hardhat, Foundry, ethers.js, viem, MetaMask
+- Same transaction formats as Ethereum
+
+This means: any contract deployable on Ethereum can be deployed on BiniChain with no modification.
+
+## Consensus
+
+(Specific algorithm TBD per chain team final implementation; expected: Proof-of-Stake with block-based finality.)
+
+Properties:
+
+- **Finality**: deterministic (no probabilistic reorgs after finalization window)
+- **Validator set**: bounded; rotation per fixed period
+- **Slashing**: standard for misbehavior (double-sign, downtime)
+
+## Block model
+
+| Parameter | Value (TBD) | Notes |
+|---|---|---|
+| Block time | TBD | Likely 1-3 seconds for fast UX |
+| Block gas limit | TBD | Standard EVM gas semantics |
+| Finality time | TBD | Deterministic post-finalization |
+
+## Gas mechanics
+
+BINI is the **native gas token**. Every transaction pays gas in BINI.
+
+Gas market:
+
+- Standard EIP-1559-style fee market (base fee + priority tip), pending team's specific implementation
+- Base fee may be **partially burned** (deflationary) and partially sent to validators (security)
+- Priority fees go entirely to the validator that includes the transaction
+
+The exact split (burn vs validator) is being finalized — see [BINI Sinks](/tokenomics/bini-sinks) sink #1 (Gas).
+
+## Smart contract environment
+
+BiniChain runs an **EVM execution layer** with:
+
+- Standard Solidity 0.8.x compatibility
+- Standard precompiles (ecrecover, sha256, etc.)
+- Standard opcodes (push0, etc.)
+
+Some chain-specific opcodes or precompiles may be added for Binibit-specific functionality (e.g., Hive action log batching). These will be additive, not breaking.
+
+## Account model
+
+ETH-style:
+
+- Externally Owned Accounts (EOAs) — controlled by ECDSA private keys
+- Smart contract accounts — controlled by their code
+- 20-byte addresses (`0x...`)
+- Account nonces
+- Native balance (BINI)
+
+ERC-20 / ERC-721 / ERC-1155 tokens deploy as standard contracts.
+
+## Time and timestamps
+
+All BiniChain timestamps are **Unix epoch seconds** at the block level. Smart contracts read `block.timestamp` for current time within the EVM.
+
+For wall-clock applications, use BiniChain block timestamps as the canonical time source.
+
+## Security model
+
+The chain's security depends on:
+
+1. **Validator economic stake** — validators bond BINI; misbehavior slashes their stake
+2. **Cryptographic finality** — confirmed transactions cannot be reverted post-finalization
+3. **Open-source code** — chain implementation will be auditable
+4. **Bug bounty** — pre and post mainnet (see Hive [Trust Model](/agent-hive/trust-model))
+
+## Hosted contracts
+
+BiniChain is the home of:
+
+| Contract group | Where documented |
+|---|---|
+| BaiDEX V3 (Factory, Router, Pools) | [BaiDEX → Contracts](/baidex/contracts) |
+| HiveSpawner + SpawnedERC20 | [BaiDEX → Contracts](/baidex/contracts) |
+| HiveRegistry (ERC-721 / ERC-8004) | [AgentT Launchpad → Registry](/agentt-launchpad/registry) |
+| HiveActionLog | [Agent Hive → Action logs](/agent-hive/action-logs) |
+| Bridge A / Bridge B | [Bridges](/binichain/bridges) |
+| wBINI / USBI tokens | [BaiDEX → Contracts](/baidex/contracts) |
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Network parameters" icon="server" href="/binichain/network-params">
+    chainId and connection details
+  </Card>
+  <Card title="Native BINI" icon="coins" href="/binichain/native-bini">
+    BINI as gas
+  </Card>
+  <Card title="RPC" icon="terminal" href="/binichain/rpc">
+    Connecting to BiniChain
+  </Card>
+  <Card title="BINI Token" icon="coins" href="/bini-token/overview">
+    The token deployed at L1
+  </Card>
+</CardGroup>

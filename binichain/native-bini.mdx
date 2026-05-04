@@ -1,0 +1,110 @@
+---
+title: "Native BINI"
+description: "BINI as the native gas token of BiniChain."
+---
+
+<Card title="See the full token spec" icon="coins" href="/bini-token/overview">
+  BINI Token → Overview covers allocation, emission, sinks, and where to buy.
+</Card>
+
+## BINI as gas
+
+Every BiniChain transaction pays its gas in **native BINI**. This is the same role ETH plays on Ethereum — the native currency that pays validators / gets burned.
+
+| | Ethereum | BiniChain |
+|---|---|---|
+| Native currency | ETH | BINI |
+| Token contract | Native (no contract) | Native (no contract) |
+| ERC-20 wrapper | wETH | **wBINI** |
+
+## Acquiring native BINI
+
+Three paths to get BINI on BiniChain:
+
+### 1. Bridge from Ethereum
+
+The [BaiDEX bridge](/baidex/contracts) (when deployed) lets you convert ERC-20 BINI on Ethereum into native BINI on BiniChain at 1:1.
+
+```
+ERC-20 BINI on Ethereum  →  Bridge  →  Native BINI on BiniChain (1:1)
+```
+
+This is the primary path for users who hold ERC-20 BINI from CEX purchases.
+
+### 2. Buy on Binibit Exchange
+
+[binibit.com/en/exchange?symbol=BINI_USDT](https://binibit.com/en/exchange?symbol=BINI_USDT) sells BINI as ERC-20. Withdraw to BiniChain (when supported by the exchange UI) — bypasses the explicit bridge for some flows.
+
+### 3. Bridge B (off-chain rewards → native)
+
+If you've earned off-chain BINI in the [Bini App](/bini-app/overview) (quest rewards, lottery wins), use [Bridge B](/bini-app/bini-bridge) at Level 7+ to convert at 1:1.
+
+## Wrapping and unwrapping
+
+To use BINI in BaiDEX pools (V3 LP positions), you wrap it to **wBINI** (ERC-20):
+
+```javascript
+// Wrap: native BINI → wBINI ERC-20
+await wbiniContract.deposit({ value: ethers.parseEther("1.0") });
+
+// Unwrap: wBINI ERC-20 → native BINI
+await wbiniContract.withdraw(ethers.parseEther("1.0"));
+```
+
+1:1 conversion, no fee.
+
+## Gas cost expectations
+
+Typical transaction gas (subject to BiniChain final settings):
+
+| Transaction | Gas | Cost (at chain gas price × $0.12 BINI) |
+|---|---|---|
+| Native BINI transfer | ~21,000 | ~$0.005 (illustrative) |
+| ERC-20 transfer | ~50,000 | ~$0.012 |
+| BaiDEX swap (single hop) | ~150,000 | ~$0.036 |
+| AgentT Launchpad spawn | ~500,000 + spawn fee | ~$0.12 + fee |
+| LP position mint | ~250,000 | ~$0.06 |
+
+Numbers are illustrative — final gas economics depend on chain config + actual gas price.
+
+## Block reward and burn
+
+BiniChain validators earn block rewards in BINI:
+
+```
+Block reward = priority fees + (optional) emission
+```
+
+Per the [BINI emission schedule](/bini-token/emission), the Rewards pool (60% / 600M BINI) is allocated over 4 years. Some portion of that may flow to validators as block rewards (final policy TBD).
+
+The base fee (EIP-1559 style) is partially **burned** — sink #1 in [BINI Sinks](/tokenomics/bini-sinks).
+
+## Native BINI vs ERC-20 BINI
+
+| | ERC-20 BINI (Ethereum) | Native BINI (BiniChain) |
+|---|---|---|
+| Address | `0x445d03f499f1c150615957bb87588fb465fc91cc` | No contract — native |
+| Used as gas? | No (ETH is gas on Ethereum) | **Yes** |
+| Tradable on CEX? | Yes (Binibit, Azbit, Blynex) | Indirectly (via bridge) |
+| Stake on Binibit Exchange? | Yes (160% APR) | No |
+| Used in BaiDEX pools? | Bridge to wBINI first | Wrap to wBINI |
+| Total supply ceiling | 1B (combined with native) | 1B (combined with ERC-20) |
+
+The 1B supply is **shared across both representations**. The bridge maintains the 1:1 peg — at any time, total ERC-20 + total native = 1,000,000,000 BINI.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Bridges" icon="bridge" href="/binichain/bridges">
+    How to move BINI on/off chain
+  </Card>
+  <Card title="BINI Token" icon="coins" href="/bini-token/overview">
+    Full token spec
+  </Card>
+  <Card title="Contracts" icon="file-code" href="/baidex/contracts">
+    wBINI contract address
+  </Card>
+  <Card title="Tokenomics: BINI Sinks" icon="fire" href="/tokenomics/bini-sinks">
+    Gas burn mechanic
+  </Card>
+</CardGroup>

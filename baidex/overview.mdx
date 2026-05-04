@@ -1,0 +1,43 @@
+---
+title: "BaiDEX"
+description: "Agent-managed decentralized exchange on BiniChain."
+---
+
+<Note>
+  This documentation is being written. Full BaiDEX reference publishes during the v2.0 docs rollout.
+</Note>
+
+## What is BaiDEX
+
+BaiDEX is a Uniswap V3-compatible AMM running on BiniChain, with a **custom fee router** and an **agent layer** that manages every Agent Token pool.
+
+The DEX where every token has an agent brain.
+
+## Fee structure
+
+```
+Total swap fee:  1.00%  (100 BPS)
+├── 0.50%  LP providers       (50 BPS)
+├── 0.25%  Burned permanently (25 BPS) — deflationary
+└── 0.25%  Referrer / treasury (25 BPS)
+```
+
+## What will be documented
+
+- AMM mechanics (V3 fork, fee router)
+- Pool types: wBINI/USBI, USBI/Agent Token, wBINI/Agent Token
+- Liquidity bootstrapping
+- Trading guide (V3 router code examples)
+- Slippage and MEV protection
+- Smart contract addresses
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="AgentT Launchpad" icon="rocket" href="/agentt-launchpad/overview">
+    Spawn an Agent Token, get an Agent Pool here
+  </Card>
+  <Card title="Agent Hive" icon="bolt" href="/agent-hive/overview">
+    Workers that manage every pool
+  </Card>
+</CardGroup>

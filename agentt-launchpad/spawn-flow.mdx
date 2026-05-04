@@ -3,6 +3,59 @@ title: "Spawn Flow"
 description: "Step-by-step from tapping Spawn to a fully listed and managed Agent Token."
 ---
 
+## What spawn triggers (the agent handoff)
+
+One transaction triggers a chain of automatic events across **three subsystems**: Launchpad, BaiDEX, and Agent Hive. The Hive picks up your token automatically — no follow-up actions needed.
+
+```mermaid
+flowchart TB
+    User((User taps Spawn))
+    Pay["Pays BINI fee<br/>(burned)"]
+
+    subgraph LP["AgentT Launchpad"]
+        Spawner["HiveSpawner<br/>contract"]
+        Token["Agent Token<br/>(ERC-20)"]
+        Registry["HiveRegistry<br/>NFT minted"]
+    end
+
+    subgraph DEX["BaiDEX"]
+        Pool["Agent Pool<br/>V3 pool created<br/>(wBINI or USBI side)"]
+    end
+
+    subgraph Hive["Agent Hive"]
+        Worker["Agent Worker<br/>auto-assigned"]
+        Swarm["Joins active Swarm"]
+        Scouts["Agent Scouts<br/>begin watching"]
+        Queens["Agent Queens<br/>factor into strategy"]
+    end
+
+    User --> Pay
+    Pay --> Spawner
+    Spawner -- "deploys" --> Token
+    Spawner -- "mints NFT" --> Registry
+    Spawner -- "creates" --> Pool
+    Spawner -- "assigns" --> Worker
+    Worker --> Swarm
+    Swarm -- "reports activity" --> Scouts
+    Scouts -- "patterns + flags" --> Queens
+    Queens -. "strategy signals" .-> Scouts
+    Scouts -. "tactical signals" .-> Worker
+
+    classDef user fill:#fce7f3,stroke:#db2777,color:#831843
+    classDef burn fill:#fef2f2,stroke:#ef4444,color:#7f1d1d
+    classDef chain fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef pool fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef hive fill:#fef9c3,stroke:#ca8a04,color:#713f12
+
+    class User user
+    class Pay burn
+    class Spawner,Token,Registry chain
+    class Pool pool
+    class Worker,Swarm,Scouts,Queens hive
+```
+
+The user's only action is **tap Spawn + pay the fee**. Everything else happens automatically in one transaction (the Spawner contract orchestrates) plus async pickup by the Hive (Workers warm up, Scouts notice, Queens absorb into strategy on their next iteration).
+
 ## End-to-end
 
 ```mermaid
@@ -118,6 +171,21 @@ You **can**:
 
 The system is designed to be **append-only** for accountability — no spawn-and-delete spam.
 
+## Cross-product flow summary
+
+| Step | Where it happens | Page |
+|---|---|---|
+| User has BINI for fee | Bini App / Exchange | [Bridge B](/bini-app/bini-bridge), [Where to buy](/bini-token/where-to-buy) |
+| User taps Spawn | AgentT Launchpad | this page |
+| Spawner deploys ERC-20 | BiniChain | [Agent Token](/agentt-launchpad/agent-token) |
+| Pool auto-created on V3 | BaiDEX | [Pools](/baidex/pools) |
+| Worker auto-assigned | Agent Hive | [Workers](/agent-hive/workers) |
+| Worker joins active set | Agent Hive | [Swarm](/agent-hive/swarm) |
+| Scouts pick up the new token | Agent Hive | [Scouts](/agent-hive/scouts) |
+| Queens factor into strategy | Agent Hive | [Queens](/agent-hive/queens) |
+| Bootstrap LP (optional but recommended) | BaiDEX | [Liquidity](/baidex/liquidity) |
+| Spawn fee burned (BINI sink) | Tokenomics | [Agent Token sinks](/tokenomics/agent-token-sinks) |
+
 ## Related
 
 <CardGroup cols={2}>
@@ -132,5 +200,11 @@ The system is designed to be **append-only** for accountability — no spawn-and
   </Card>
   <Card title="Auto-Worker" icon="bolt" href="/agentt-launchpad/auto-worker">
     How the Hive picks it up
+  </Card>
+  <Card title="Agent Workers (Hive)" icon="user-gear" href="/agent-hive/workers">
+    What the Worker does after assignment
+  </Card>
+  <Card title="BaiDEX Liquidity" icon="water" href="/baidex/liquidity">
+    Bootstrap LP for the new pool
   </Card>
 </CardGroup>

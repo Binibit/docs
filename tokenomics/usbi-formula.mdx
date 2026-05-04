@@ -15,6 +15,24 @@ total_usbi_available = 1,000 + usbi_entitlement
 claimable_usbi = total_usbi_available - already_claimed_usbi
 ```
 
+```mermaid
+flowchart LR
+    CRS[CRS spent] --> XP[XP +1 per CRS]
+    XP -- "÷ 10,000<br/>(floor, capped at 100K)" --> Entitlement[USBI entitlement]
+    Welcome[Welcome grant<br/>1,000 USBI] --> Total[Total USBI<br/>available]
+    Entitlement --> Total
+    Already[Already claimed] -. "subtracted from" .-> Claimable
+    Total --> Claimable[Claimable USBI<br/>can bridge / use on DEX]
+
+    classDef input fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef calc fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef output fill:#dcfce7,stroke:#16a34a,color:#14532d
+
+    class CRS,Welcome,Already input
+    class XP,Entitlement,Total calc
+    class Claimable output
+```
+
 ## Caps
 
 ```

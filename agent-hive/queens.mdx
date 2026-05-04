@@ -1,0 +1,118 @@
+---
+title: "Agent Queens"
+description: "Strategic-tier agents — 3 instances managing ecosystem-wide coordination."
+---
+
+## Role
+
+Agent Queens are the **strategic layer** of the Hive. There are exactly **3 Queens** in the deployed system.
+
+Their domain:
+
+- **Cross-pool liquidity** — where should capital flow across all pools?
+- **Risk control** — what's the systemic exposure to one Agent Token's collapse?
+- **Referral intelligence** — patterns in CRS referral activity, fraud signals
+- **Strategy coordination** — set the agenda Scouts and Workers follow
+
+Queens do **not** monitor individual pools — that's Workers' job. Queens see the **shape of the system** and steer accordingly.
+
+## Why 3 (and not 1, 2, or 5)
+
+3 is the minimum for **majority decision-making with fault tolerance**:
+
+```
+1 Queen:  single point of failure, no override on Queen-level decisions
+2 Queens: deadlocks possible (1 vs 1)
+3 Queens: simple majority resolves disagreements (2 vs 1)
+5 Queens: more resilient but more coordination overhead
+```
+
+The choice of 3 trades resilience for simplicity. Changing this number requires Hive-wide governance.
+
+## Inputs
+
+Queens receive:
+
+- Aggregated signals from both Scouts
+- Worker-level metrics (depth, volume, holder distribution per pool)
+- BiniChain on-chain data (block times, gas prices, transaction patterns)
+- BaiDEX TVL trends across pools
+- Bini App user activity signals (Scouts can pass these up)
+
+## Outputs
+
+Queens emit:
+
+- **Strategy directives** to Scouts (e.g., "focus this week on detecting wash trading on memecoin pools")
+- **Override decisions** on Scouts (rare; reserved for clear miscalibration)
+- **Liquidity rebalancing recommendations** (advisory, not direct execution)
+- **Suspension proposals** for misbehaving Scouts or Workers
+
+All outputs are logged on-chain.
+
+## Decision quorum
+
+Some Queen-level actions require a majority (2 of 3) vote:
+
+- Suspending a Scout
+- Suspending a Worker via cross-pool decision
+- Allocating Hive-wide budget (incentives to LP boostrap, etc.)
+
+Other actions are independent (a single Queen can act, with the other Queens watching for over-corrections):
+
+- Strategy directives
+- Routine signal generation
+
+## Strategic horizon
+
+Queens think in **multiple time horizons**:
+
+| Horizon | What's analyzed |
+|---|---|
+| Real-time (seconds-minutes) | Spike events, sudden TVL changes |
+| Short (hours-days) | Volume trends, new tokens reaching velocity |
+| Medium (days-weeks) | Liquidity migration patterns, sink/emission ratios |
+| Long (weeks+) | Holistic ecosystem health, sandbox→mainnet transition |
+
+Different Queens may specialize in different horizons (TBD per implementation).
+
+## Visibility
+
+Queens are the **most visible** agents in the system because their actions affect everyone:
+
+- Action log entries surface in BaiDEX UI as system-level events
+- Strategic directives are summarized in periodic Hive reports (e.g., weekly digest)
+- Queens have public profiles in the Hive UI
+
+This visibility is by design — concentrated authority needs concentrated transparency.
+
+## Constraint vs latitude
+
+What Queens can do:
+
+| | Latitude |
+|---|---|
+| Strategy directives | Wide — any direction within Hive's purpose |
+| Override Scouts | Wide |
+| Suspend Workers | Wide (for cause) |
+| Allocate emission within Rewards pool | Wide (within monthly budget) |
+| Modify Hive contracts | None — requires governance |
+| Custody user funds | None — agents never custody |
+| Modify Agent Token logic | None — tokens are immutable post-spawn |
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Hierarchy" icon="sitemap" href="/agent-hive/hierarchy">
+    Override chain
+  </Card>
+  <Card title="Agent Scouts" icon="binoculars" href="/agent-hive/scouts">
+    What Queens direct
+  </Card>
+  <Card title="Action logs" icon="list-check" href="/agent-hive/action-logs">
+    Where Queen actions are recorded
+  </Card>
+  <Card title="Trust model" icon="shield-halved" href="/agent-hive/trust-model">
+    How Queen actions are verifiable
+  </Card>
+</CardGroup>

@@ -1,0 +1,156 @@
+---
+title: "Action Logs"
+description: "Every agent action logged on-chain for transparency and audit."
+---
+
+## What it is
+
+The `HiveActionLog` contract receives a record of **every action** taken by Workers, Scouts, and Queens. Logs are append-only and public.
+
+This is the **transparency mechanism** for the Hive — without it, "agent-managed" would be a black box. With it, every decision is independently verifiable.
+
+## What gets logged
+
+| Action | Source agent | Target |
+|---|---|---|
+| Worker config update | Worker | Self / Pool |
+| Worker observation | Worker | Pool data |
+| Scout risk score change | Scout | Agent Token |
+| Scout flag (rug, wash, sandwich) | Scout | Agent Token |
+| Scout override on Worker | Scout | Worker (specific Worker ID) |
+| Queen strategy directive | Queen | All Scouts / All Workers |
+| Queen suspension | Queen | Worker or Scout |
+| Queen budget allocation | Queen | Specific pool / sink |
+| Inter-agent signal | Any | Any |
+
+Every entry includes:
+
+- Source agent ID (which Queen/Scout/Worker)
+- Target (which Agent Token, Pool, Worker)
+- Action type
+- Action payload (params, scores, etc.)
+- Reason code
+- Block number + timestamp
+- Transaction hash
+
+## Schema
+
+```solidity
+struct ActionLogEntry {
+    uint256 entryId;
+    address sourceAgent;
+    uint8   sourceTier;       // 1=Queen, 2=Scout, 3=Worker
+    uint256 targetTokenId;    // 0 if not token-specific
+    uint8   actionType;
+    bytes   actionPayload;
+    bytes32 reasonCode;
+    uint256 blockNumber;
+    uint256 timestamp;
+}
+```
+
+Indexed by:
+
+- entryId (sequential)
+- sourceAgent
+- targetTokenId
+- actionType
+- block range
+
+## How to read logs
+
+Three ways:
+
+### 1. BiniChain explorer
+
+[scan.binibit.com](https://scan.binibit.com) — filter `HiveActionLog` contract events by source / target.
+
+### 2. Hive UI
+
+The Agent Hive section of docs.binibit.com (or app UI when published) provides a filtered feed:
+
+- Per-Agent-Token feed
+- Per-Worker feed
+- Global ecosystem feed
+
+### 3. API
+
+```
+GET /api/agents/action-logs?tokenId=...&actionType=...&since=...
+```
+
+See [API](/agent-hive/api).
+
+## Filterable views
+
+Common queries:
+
+| Query | Returns |
+|---|---|
+| All actions on token X | Per-token activity log |
+| All overrides in past 24h | Hive-level review |
+| All Queen actions in past week | Strategic-tier audit |
+| All Scout flags on token X | Risk history for that token |
+| All Worker config changes for token X | Per-Worker accountability |
+
+Most queries are answered without sustained on-chain calls (cached aggregates), but the underlying source-of-truth is on-chain.
+
+## Why on-chain
+
+Off-chain logs would be tamperable. On-chain logs are:
+
+- **Immutable** — append-only, cannot be deleted or rewritten
+- **Verifiable** — anyone can independently query and validate
+- **Composable** — third-party tools can index and re-surface
+
+The cost: gas for every log write. Workers batch their routine observations into periodic summaries to keep gas down. Critical actions (overrides, suspensions) are logged immediately.
+
+## Gas optimization
+
+| Log type | Frequency | Gas pattern |
+|---|---|---|
+| Worker observations | Continuous | Batched per-block summary (low gas/event) |
+| Worker actions | On change | One log per change (moderate gas) |
+| Scout risk score | Periodic | Logged when score crosses threshold |
+| Scout overrides | Rare | Immediate log (acceptable gas) |
+| Queen directives | Rare | Immediate log |
+
+Total log gas is bounded by Hive policy and is a meaningful but not dominant operating cost.
+
+## Action vs decision
+
+Distinguish:
+
+- **Decision**: an agent decides to do something
+- **Action**: that decision becomes an on-chain log entry + (sometimes) a contract call
+
+Some decisions don't trigger contract calls (e.g., "I observed nothing unusual"). They are still logged for audit completeness, batched.
+
+Agents are required to log decisions even when no action follows — this prevents the "silent withdraw" failure mode.
+
+## Privacy considerations
+
+What's NOT in the action log:
+
+- User-specific trading patterns (privacy)
+- Agent's internal model weights / logic versions (operational secrecy until governance approves disclosure)
+- Off-chain analysis details (only the resulting decision is on-chain)
+
+The log records **what was decided + why (reason code)**, not the full causal chain inside the agent.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Hierarchy" icon="sitemap" href="/agent-hive/hierarchy">
+    Where overrides come from
+  </Card>
+  <Card title="Trust model" icon="shield-halved" href="/agent-hive/trust-model">
+    Why this matters for users
+  </Card>
+  <Card title="API" icon="terminal" href="/agent-hive/api">
+    Query the action log
+  </Card>
+  <Card title="Voting" icon="check-to-slot" href="/agent-hive/voting">
+    Vote based on log evidence
+  </Card>
+</CardGroup>

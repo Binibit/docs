@@ -1,0 +1,132 @@
+---
+title: "Agent NFT Registry"
+description: "ERC-721 + ERC-8004 registry tracking every Agent Token and its Worker assignment."
+---
+
+## What it is
+
+The `HiveRegistry` contract is an on-chain registry that mints an **NFT for every Agent Token** spawned via the Launchpad. The NFT:
+
+- Identifies the Agent Token + its Worker
+- Stores metadata (description, logo, links)
+- Tracks Worker action references
+- Can be transferred (the NFT is the "agent license" for that token)
+
+| | |
+|---|---|
+| Contract | `HiveRegistry` |
+| Standards | **ERC-721** (transferable NFT) + **ERC-8004** (agent metadata standard) |
+| Mint trigger | Automatic at every Agent Token spawn |
+| Burnable | No (registry is append-only) |
+
+## ERC-8004 (agent metadata)
+
+ERC-8004 is an emerging standard for **on-chain agent identity and capabilities**. It defines metadata fields like:
+
+- `agentType` (e.g., "WORKER", "SCOUT", "QUEEN")
+- `version` (the Worker's logic version)
+- `capabilities` (what the Worker can do)
+- `actions` (action log references)
+- `governance` (who can override / suspend)
+
+Using ERC-8004 makes Binibit's agent layer **inspectable by any third-party tool** that supports the standard, without custom integrations.
+
+## NFT-per-token mapping
+
+```
+Each Agent Token spawned  →  One NFT minted in HiveRegistry
+NFT tokenId               =  Sequential (1, 2, 3, ...) or hash-derived
+NFT owner                 =  Initially the spawner
+NFT can be transferred    =  Yes (transfers Worker ownership)
+```
+
+Transferring the NFT does **not** transfer the Agent Token itself — the ERC-20 lives independently. The NFT only represents the agent assignment.
+
+## Why an NFT and not just a record
+
+Three reasons NFT > simple record:
+
+1. **Composability** — wallets, marketplaces, and tooling already support ERC-721
+2. **Transferability** — the agent license can be sold, gifted, or used as collateral
+3. **Standard compliance** — ERC-8004 plus ERC-721 means any agent-aware tool reads it
+
+## What you can do with the NFT
+
+As the NFT owner:
+
+- View it in standard NFT explorers and wallets
+- Transfer it (transfers Worker ownership)
+- Update mutable metadata (description, links) where allowed
+- Vote with NFT-weighted power on Hive Worker parameters
+
+You **cannot**:
+
+- Mint additional NFTs for the same Agent Token (1:1 mapping enforced)
+- Burn the NFT (registry is append-only)
+- Override Hive governance via NFT alone (governance has its own mechanisms)
+
+## NFT metadata example
+
+```json
+{
+  "name": "Agent: PepeAgent",
+  "description": "Worker for Agent Token PEPEA",
+  "image": "ipfs://...",
+  "external_url": "https://docs.binibit.com/agentt-launchpad",
+  "attributes": [
+    { "trait_type": "Agent Type", "value": "WORKER" },
+    { "trait_type": "Token", "value": "0xAgent..." },
+    { "trait_type": "Symbol", "value": "PEPEA" },
+    { "trait_type": "Pool", "value": "0xPool..." },
+    { "trait_type": "Spawned At", "value": "2026-04-30T12:00:00Z" },
+    { "trait_type": "Status", "value": "Active" }
+  ],
+  "agent": {
+    "type": "WORKER",
+    "version": "1.0",
+    "capabilities": ["pool_param_update", "signal_subscribe"],
+    "registry": "0xHiveRegistry...",
+    "tokenId": 67890
+  }
+}
+```
+
+The `agent` block follows ERC-8004 schema.
+
+## Discovery
+
+| Want to find... | Use |
+|---|---|
+| All Agent Tokens spawned | `HiveRegistry` enumeration (ERC-721 standard) |
+| The NFT for a specific Agent Token | `HiveRegistry.tokenIdByAgentToken(address)` |
+| The Agent Token for a specific NFT | `HiveRegistry.agentTokenByTokenId(uint256)` |
+| The Worker assigned to an NFT | `HiveRegistry.workerByTokenId(uint256)` |
+
+These read methods are public and free (read-only contract calls).
+
+## Standard NFT marketplace integration
+
+Because it's a standard ERC-721, the registry is compatible with NFT marketplaces (when integrated). Future possibilities:
+
+- Buy / sell agent licenses on a secondary market
+- Rent an agent license (Worker temporarily managed by another address)
+- Bundle multiple agent NFTs (e.g., a portfolio of Agent Tokens)
+
+These are not built-in to Binibit but are possible because the registry is standards-compliant.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Auto-Worker" icon="bolt" href="/agentt-launchpad/auto-worker">
+    The Worker that the NFT represents
+  </Card>
+  <Card title="Agent Hive" icon="bolt" href="/agent-hive/overview">
+    Where the NFT integrates into governance
+  </Card>
+  <Card title="Voting" icon="check-to-slot" href="/agent-hive/voting">
+    NFT-weighted votes
+  </Card>
+  <Card title="BaiDEX Contracts" icon="file-code" href="/baidex/contracts">
+    HiveRegistry address
+  </Card>
+</CardGroup>

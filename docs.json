@@ -75,9 +75,32 @@
         "tab": "AgentT Launchpad",
         "groups": [
           {
-            "group": "AgentT Launchpad",
+            "group": "Overview",
             "pages": [
-              "agentt-launchpad/overview"
+              "agentt-launchpad/overview",
+              "agentt-launchpad/spawn-flow"
+            ]
+          },
+          {
+            "group": "What you spawn",
+            "pages": [
+              "agentt-launchpad/agent-token",
+              "agentt-launchpad/auto-worker",
+              "agentt-launchpad/agent-pool"
+            ]
+          },
+          {
+            "group": "Promotion & costs",
+            "pages": [
+              "agentt-launchpad/boost",
+              "agentt-launchpad/spawn-cost"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "agentt-launchpad/api",
+              "agentt-launchpad/registry"
             ]
           }
         ]
@@ -86,9 +109,33 @@
         "tab": "Agent Hive",
         "groups": [
           {
-            "group": "Agent Hive",
+            "group": "Overview",
             "pages": [
-              "agent-hive/overview"
+              "agent-hive/overview",
+              "agent-hive/hierarchy"
+            ]
+          },
+          {
+            "group": "Agent roles",
+            "pages": [
+              "agent-hive/queens",
+              "agent-hive/scouts",
+              "agent-hive/workers",
+              "agent-hive/swarm"
+            ]
+          },
+          {
+            "group": "Transparency & governance",
+            "pages": [
+              "agent-hive/action-logs",
+              "agent-hive/voting",
+              "agent-hive/trust-model"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "agent-hive/api"
             ]
           }
         ]

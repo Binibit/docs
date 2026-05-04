@@ -1,0 +1,119 @@
+---
+title: "Agent Swarm"
+description: "The active runtime: Workers currently deployed and processing in the field."
+---
+
+## What the Swarm is
+
+**Agent Swarm = the live subset of the Agent Hive currently deployed.**
+
+```
+HIVE   = registry of all agents and pools (full set, persistent)
+SWARM  = Workers that are currently active and processing right now
+```
+
+Swarm ⊆ Hive. The Hive is the **definition** (every Agent Token has a Worker). The Swarm is the **runtime** (only some Workers are warm, monitoring, and reacting at any given moment).
+
+## Why distinguish Hive from Swarm
+
+Three reasons:
+
+### 1. Resource efficiency
+Not every Agent Token sees activity every second. Dormant tokens have their Workers cold-stored. Active tokens have their Workers warm and reacting in real time.
+
+The Swarm is the warm subset — what's running and consuming compute.
+
+### 2. Operational clarity
+- "Hive size" = total Agent Tokens spawned (cumulative)
+- "Swarm size" = currently active Workers
+- Swarm size << Hive size at scale
+
+This distinction matters for ops and capacity planning.
+
+### 3. Composability with Scouts and Queens
+Scouts focus on the Swarm (recent activity is what matters for tactical signals). Queens see the full Hive (long-term ecosystem health).
+
+## Activation criteria
+
+A Worker enters the Swarm when:
+
+- Its Agent Token sees a trade in the past N hours (default 24h)
+- A trader subscribes to alerts for its token
+- The token receives a boost
+- Hive governance flags it for active monitoring
+
+A Worker exits the Swarm when:
+
+- No qualifying activity for an extended dormancy window (default 7 days)
+- Its Agent Token is suspended by Hive governance (rare)
+- Manual deactivation via Worker management UI (only by token owner)
+
+Re-activation is automatic on the next qualifying activity.
+
+## Swarm coordination
+
+Workers in the Swarm coordinate via the Hive's inter-agent message bus:
+
+- Cross-pool signals (e.g., "Pool X just saw a 50% drop, watch for cascade")
+- Risk alerts (e.g., "Scout flagged Pool Y for sandwich pattern")
+- Strategic directives from Queens (broadcast to all in-Swarm Workers)
+
+Coordination is **observation + signal sharing**, not control. Each Worker still acts on its own pool autonomously within the bounds Hive policy sets.
+
+## Visibility
+
+The Swarm size is a **public metric** in the Hive UI:
+
+```
+Hive total tokens:    1,523
+Swarm active:           284
+Idle / cold:          1,239
+```
+
+Trends in Swarm size are useful indicators of ecosystem health — a growing Swarm means more activity, a shrinking Swarm could mean trader fatigue or decreasing token quality.
+
+## Swarm vs Hive in API responses
+
+The `/api/agents/overview` endpoint distinguishes:
+
+```json
+{
+  "hive": {
+    "totalTokens": 1523,
+    "totalWorkers": 1523
+  },
+  "swarm": {
+    "activeWorkers": 284,
+    "lastActivityAt": 1762430000
+  }
+}
+```
+
+For most queries, Swarm is the more useful stat (real-time activity).
+
+## Failure modes
+
+| Failure | Effect on Swarm |
+|---|---|
+| Single Worker crashes | Auto-restart; brief gap in Swarm coverage for that token |
+| Inter-agent message bus fails | Swarm continues but uncoordinated; loss of cross-Worker signals |
+| Hive infrastructure scaling event | Swarm may temporarily shrink; Workers re-warm in priority order |
+
+Recovery is **automatic** for transient failures.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Agent Workers" icon="user-gear" href="/agent-hive/workers">
+    What's in the Swarm
+  </Card>
+  <Card title="Hierarchy" icon="sitemap" href="/agent-hive/hierarchy">
+    How Swarm fits into Hive
+  </Card>
+  <Card title="API" icon="terminal" href="/agent-hive/api">
+    /api/agents/overview returns Swarm size
+  </Card>
+  <Card title="Trust model" icon="shield-halved" href="/agent-hive/trust-model">
+    Swarm transparency
+  </Card>
+</CardGroup>

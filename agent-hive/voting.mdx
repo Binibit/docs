@@ -1,0 +1,136 @@
+---
+title: "Voting & Governance"
+description: "User-driven governance over Worker parameters. Level 20 gate, NFT-weighted votes."
+---
+
+## What you can vote on
+
+At **Level 20+**, users can vote to adjust **Worker parameters** for any Agent Token they hold. Examples:
+
+| Voting topic | Effect |
+|---|---|
+| Slippage cap (advisory) | Tighten or loosen Worker's recommended slippage range |
+| MEV protection level | Increase / decrease default protection |
+| Signal subscription set | Which Scouts the Worker listens to |
+| Boost responsiveness | How aggressively the Worker promotes the token |
+
+Votes are **per Agent Token** — your vote on Token A doesn't affect Token B's Worker.
+
+## Level 20 gate
+
+The L20 gate exists because:
+
+1. **Engagement signal** — voters have demonstrated commitment via XP
+2. **Anti-sybil** — reaching L20 requires meaningful CRS spend, hard to fake at scale
+3. **Quality** — L20+ users typically understand the system well enough to vote informedly
+
+Below L20, users can read voting outcomes but cannot vote.
+
+## Vote weight
+
+Three sources of vote weight (combined):
+
+```
+your_weight = level_weight + nft_weight + holdings_weight
+
+level_weight       = your level value (20-30 maps to 1-10)
+nft_weight         = number of Agent NFTs you own (registry NFTs)
+holdings_weight    = log10(your token holdings) — caps influence of mega-holders
+```
+
+The exact formula is set by Hive governance and may evolve. The intent is:
+
+- Higher level → more weight (engagement reward)
+- More agent NFTs → more weight (creator reward)
+- More holdings → more weight, but log-scaled (no whale dominance)
+
+## Quorum and threshold
+
+A vote passes when:
+
+- **Quorum reached** — minimum % of eligible vote weight participates
+- **Threshold reached** — % "yes" of votes cast (typically 60%)
+
+If quorum is not reached by deadline, the vote fails (status quo holds).
+
+Specific quorum/threshold values are set by governance and may differ for different proposal types.
+
+## How to vote
+
+### From Bini App
+
+1. Open Bini App → Hive section
+2. Browse "Active votes" for tokens you hold
+3. Tap to read details and reasoning
+4. Cast your vote (yes / no / abstain)
+
+### From the BaiDEX UI
+
+Each Agent Pool page shows:
+
+- Active votes for the Worker managing this pool
+- Recent votes and outcomes
+- Vote button (gated by L20 + token holdings)
+
+### Via API
+
+`POST /api/agents/workers/:tokenId/vote` — see [API](/agent-hive/api).
+
+## Vote duration
+
+Default vote duration: 7 days. Some urgent votes (security-related) can be shortened to 24 hours by Hive emergency governance.
+
+## What you cannot vote on
+
+| | Can vote? |
+|---|---|
+| Worker advisory params (slippage, MEV) | **Yes** |
+| Worker logic / code | No (Hive governance) |
+| Suspending a Worker | No (Hive governance only) |
+| Spawning new agents | No (automatic at token spawn) |
+| Modifying Hive contracts | No (multisig + governance) |
+| Changing fee structure | No (Hive governance) |
+
+User voting is **scoped to per-Worker tunables** — the parameters that affect operations without changing the protocol.
+
+## Override by higher tiers
+
+Even if a vote passes, **Queens can override** via the standard hierarchy mechanism (logged on-chain). The override is justified by reason code (e.g., "User vote conflicts with Hive risk policy").
+
+This sounds restrictive but is necessary — without it, holders of a token could vote to disable rug-detection on their own token.
+
+In practice, Queen overrides on user votes should be rare and well-motivated.
+
+## Voting history
+
+All votes are logged on-chain. The action log shows:
+
+- Proposal creation
+- Each vote cast (anonymized: weight + direction, not user identity unless self-disclosed)
+- Vote outcome
+- Any subsequent override
+
+You can audit any vote's fairness by reading the log.
+
+## Tokenomics impact
+
+Voting itself doesn't burn or sink BINI. It is a **user-engagement mechanism** that increases the value of being engaged in the ecosystem (more participation in agent-level governance).
+
+Indirectly, well-tuned Workers improve pool health, which drives volume, which drives BaiDEX swap burns. So voting indirectly contributes to deflationary pressure.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="API" icon="terminal" href="/agent-hive/api">
+    Vote via API
+  </Card>
+  <Card title="Action logs" icon="list-check" href="/agent-hive/action-logs">
+    Vote history
+  </Card>
+  <Card title="Levels" icon="ranking-star" href="/bini-app/levels">
+    L20 gate context
+  </Card>
+  <Card title="Registry" icon="address-card" href="/agentt-launchpad/registry">
+    NFT for vote weight
+  </Card>
+</CardGroup>

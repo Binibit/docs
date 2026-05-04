@@ -1,0 +1,129 @@
+---
+title: "Agent Workers"
+description: "Execution-tier agents — one per Agent Token, manages the Agent Pool."
+---
+
+## Role
+
+Agent Workers are the **execution layer** of the Hive. There is **one Worker per Agent Token** (N total, scaling with Launchpad activity).
+
+Each Worker:
+
+- Monitors its assigned Agent Pool's depth and trade flow
+- Receives signals from Scouts and Queens
+- Executes pool-parameter adjustments within Hive policy
+- Distributes incentives (LP rewards, etc.) according to per-pool config
+- Logs all actions on-chain
+
+A Worker does **not** custody user funds. LPs and traders interact with V3 contracts directly.
+
+## Lifecycle
+
+```
+Spawn Agent Token   →   Worker created with default config
+                    →   Worker joins active Swarm
+                    →   Worker begins monitoring
+                    →   Worker reacts to Scout/Queen signals
+                    →   (over time) Worker adjusts pool params
+                    →   Worker logs all actions on-chain
+```
+
+If the Agent Token becomes dormant (no activity for an extended period), the Worker is **retired** to free resources. It can be reactivated when activity resumes.
+
+## What Workers can do
+
+Workers have a bounded set of allowed actions:
+
+| Action | Scope |
+|---|---|
+| Update pool MEV protection params | Within bounds set by Hive policy |
+| Adjust slippage caps for routed trades | Within Hive bounds |
+| Subscribe to Scout signal streams | Yes |
+| Distribute pool-level incentives | Per pool config |
+| Log observations (depth, volume, trade patterns) | Yes |
+| Override traders' slippage tolerance | **No** |
+| Cancel LP positions | **No** |
+| Withdraw user funds | **No** |
+| Modify the Agent Token contract | **No** |
+| Mint or burn tokens beyond standard sinks | **No** |
+
+The "**No**" list is enforced at the contract level — Workers have no privileged role on either the token or pool contracts.
+
+## Defaults vs Hive policy
+
+Each Worker has a **default config** at spawn:
+
+```
+Slippage cap (advisory):    0.5%-2.0% range
+MEV protection level:       standard
+Volume monitoring window:   1 hour rolling
+Signal subscription:        all standard Scouts
+```
+
+These can be **adjusted by Hive policy** (Queens and Scouts can tighten/loosen limits) and **adjusted by user vote** (token holders at L20+ can vote on Worker params for tokens they hold).
+
+## Per-token visibility
+
+For the Agent Token's owner (the spawner) and for token holders:
+
+- Worker management page shows current config, recent actions, status
+- Action log filtered to actions affecting their pool
+- Voting interface (at L20+) for adjusting Worker params
+
+The visibility is per-token, but the underlying Worker logic is shared across all Workers (same code, different config + state).
+
+## Worker scaling
+
+As Launchpad activity grows:
+
+| Active Agent Tokens | Workers running | Compute footprint |
+|---:|---:|---|
+| 100 | 100 | Small |
+| 1,000 | 1,000 | Moderate |
+| 10,000 | 10,000 | Large (requires multi-instance Hive) |
+| 100,000+ | 100,000+ | Will need Worker pooling / sharding |
+
+Hive infrastructure scales horizontally — adding more compute lets more Workers run concurrently. The architecture allows future migration to shared Worker pools (one Worker process serves multiple low-activity tokens) when scale demands.
+
+## Worker performance signals
+
+Workers' own performance is **monitored by Scouts**. Metrics include:
+
+- Reaction time to signals
+- Override frequency from upper tiers
+- Pool health under Worker management
+- Log completeness
+
+Underperforming Workers can be:
+
+- **Re-configured** (default config tightened)
+- **Suspended** by Queens (rare; for clear misbehavior)
+- **Retired** (token dormant; resources freed)
+
+## Why one-per-token
+
+The 1:1 mapping ensures **clear accountability**:
+
+- For every Agent Token, exactly one Worker is responsible
+- Token owner knows whom to look at for Worker activity
+- Action logs are unambiguous per pool
+- Performance metrics are per-Worker
+
+Pooling Workers (one Worker for many tokens) would dilute accountability and complicate the action log.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Hierarchy" icon="sitemap" href="/agent-hive/hierarchy">
+    Override chain
+  </Card>
+  <Card title="Agent Swarm" icon="bolt" href="/agent-hive/swarm">
+    Active Workers right now
+  </Card>
+  <Card title="Voting" icon="check-to-slot" href="/agent-hive/voting">
+    User governance over Worker params
+  </Card>
+  <Card title="Action logs" icon="list-check" href="/agent-hive/action-logs">
+    Worker accountability
+  </Card>
+</CardGroup>

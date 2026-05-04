@@ -1,0 +1,125 @@
+---
+title: "Agent Scouts"
+description: "Tactical-tier agents — 2 instances handling token analysis and signal generation."
+---
+
+## Role
+
+Agent Scouts are the **tactical layer** of the Hive. There are exactly **2 Scouts** in the deployed system.
+
+Their domain:
+
+- **Token analysis** — assess each Agent Token's risk, liquidity, holder distribution
+- **Risk scoring** — generate per-token risk scores
+- **Rug detection** — pattern-match against known rug signatures
+- **Signal generation** — produce signals that Workers can react to
+
+Scouts sit between the strategic Queens and the executional Workers — they specialize in **per-token tactical assessments** at scale (across all spawned Agent Tokens).
+
+## Why 2 (and not 1 or 3)
+
+2 Scouts is the minimum for **redundancy without coordination overhead**:
+
+- 1 Scout: single point of failure
+- 2 Scouts: redundant; can split workload (e.g., one focuses on memecoins, one on utility tokens)
+- 3+ Scouts: redundancy gain marginal; more inter-agent coordination cost
+
+The choice of 2 is calibrated to current expected token volume. Scaling up the number is a Hive governance decision.
+
+## Inputs
+
+Scouts receive:
+
+- Real-time signals from all Workers (one per Agent Token)
+- BaiDEX pool depth + volume data
+- BiniChain transaction patterns (large transfers, contract interactions)
+- Strategic directives from Queens
+- Bini App user signals (Scout sees user-level patterns when relevant)
+
+## Outputs
+
+Scouts emit:
+
+- **Risk scores** per Agent Token (visible to users)
+- **Tactical signals** to Workers (e.g., "dampen sandwich exposure on USBI/PEPEA pool")
+- **Override decisions** on Workers (rare; reserved for clear misbehavior)
+- **Flag reports** to Queens (when patterns require strategic attention)
+- **Rug warnings** (visible to traders before/at rug events)
+
+## Specialization
+
+The two Scouts may specialize:
+
+| Specialization (illustrative) | Focus |
+|---|---|
+| Token-quality Scout | Holder distribution, contract verification, founder reputation |
+| Trading-pattern Scout | Wash trading, sandwich attacks, spoofing |
+
+Both have full coverage as fallback. The split is for analytical depth, not exclusivity.
+
+## Detection patterns
+
+Common rug / abuse patterns Scouts watch for:
+
+| Pattern | Signal |
+|---|---|
+| Single holder >50% supply about to LP-yank | Flag at orange |
+| Sudden coordinated buys (sybil-like signature) | Flag at yellow |
+| LP withdrawn without notice (potential rug) | Flag at red — surface immediately |
+| Wash trades inflating volume | Flag at orange |
+| New token getting outsized boost spend | Flag for review |
+
+These flags surface in:
+
+- BaiDEX UI as a "Scout Risk Score" badge on the pool
+- Trader alerts (if subscribed)
+- Worker overrides (e.g., tighten slippage protection)
+- Queen reports (for strategic review)
+
+## Cooldown / re-evaluation
+
+A Scout's risk score is **not static**. As more data accumulates:
+
+- A red flag can de-escalate to orange or yellow if patterns stabilize
+- A green status can elevate to orange if new concerning patterns emerge
+- Re-evaluation runs at least once per hour, more often for high-activity tokens
+
+## Constraint vs latitude
+
+What Scouts can do:
+
+| | Latitude |
+|---|---|
+| Risk scoring | Full |
+| Signal generation | Full |
+| Override Worker actions | Wide (for cause, logged) |
+| Suspend a Worker | None — that's Queen-level |
+| Modify pool contracts | None |
+| Custody user funds | None |
+
+## Visibility
+
+Scout outputs are user-visible:
+
+- Risk scores shown next to every Agent Pool on BaiDEX
+- Rug warnings on the AgentT Launchpad explorer
+- Signal feed for traders who want to follow Scout calls
+
+The visibility is partly the value — Scouts work because users factor their assessments into trading decisions.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Hierarchy" icon="sitemap" href="/agent-hive/hierarchy">
+    Override chain
+  </Card>
+  <Card title="Agent Queens" icon="crown" href="/agent-hive/queens">
+    Direct Scouts strategically
+  </Card>
+  <Card title="Agent Workers" icon="user-gear" href="/agent-hive/workers">
+    React to Scout signals
+  </Card>
+  <Card title="Action logs" icon="list-check" href="/agent-hive/action-logs">
+    Where Scout decisions are recorded
+  </Card>
+</CardGroup>

@@ -1,0 +1,131 @@
+---
+title: "Validators"
+description: "Validator role, requirements, and onboarding (post-mainnet)."
+---
+
+<Note>
+  Validator onboarding opens **post-mainnet**. The structure below describes the canonical model. Specific values (minimum stake, slashing percentages, performance bands) are TBD pending chain team final design.
+</Note>
+
+## What validators do
+
+BiniChain validators:
+
+1. **Propose blocks** in their assigned slots
+2. **Attest** to other validators' blocks (vote on chain canonicality)
+3. **Finalize** blocks via the consensus protocol
+4. **Earn rewards** for honest participation
+5. **Lose stake** for misbehavior (slashing)
+
+Standard PoS validator role.
+
+## Becoming a validator
+
+To become a validator:
+
+1. Acquire the minimum self-stake in BINI (TBD value)
+2. Run a BiniChain validator node (hardware + uptime requirements TBD)
+3. Submit on-chain registration with bonded stake
+4. Wait for activation queue
+5. Begin attesting and proposing in your slots
+
+Activation is **first-come-first-served** for available slots, with an upper limit on validator set size.
+
+## Validator set size
+
+The validator set has a **soft cap** to keep block finalization efficient:
+
+- Lower bound: enough to be decentralized (e.g., 64+ validators)
+- Upper bound: enough that consensus rounds are fast (e.g., 256 validators)
+
+Final values per chain team's calibration.
+
+## Minimum stake
+
+The minimum self-stake will be set high enough to be meaningful but low enough that mid-size holders can participate.
+
+Likely range: 100K–1M BINI (TBD).
+
+The minimum may **decrease over time** as the validator set matures and network value grows.
+
+## Rewards
+
+Validators earn:
+
+- **Block rewards** in BINI (when proposing or attesting)
+- **Priority fees** from transactions in proposed blocks
+- (Optional) **MEV** captured during block construction (subject to fairness rules)
+
+The exact reward formula is set by chain governance. Total annualized validator yield is calibrated to be **competitive with similar PoS chains** at the current network size.
+
+## Slashing
+
+Validators lose stake for:
+
+| Offense | Slashing % |
+|---|---|
+| Double signing (proposing two blocks for the same slot) | High (e.g., 5-50% of stake) |
+| Surround voting (voting that contradicts a previous vote) | High |
+| Extended downtime | Low to moderate (per period) |
+| Incorrect attestation | Low |
+
+Severe offenses can result in **ejection** from the validator set, with stake locked or partly slashed.
+
+## Withdrawal
+
+Validators can voluntarily exit the active set:
+
+1. Submit on-chain exit request
+2. Wait through the standard exit queue
+3. Stake unlocks after a withdrawal cooldown
+4. BINI returned to the validator's address
+
+Cooldown periods exist to prevent attack patterns where an attacker exits before slashing resolves.
+
+## Validator vs delegator
+
+BiniChain (per chain team's final design) may support **delegation**:
+
+- Holders without validator infrastructure can **delegate** their BINI to existing validators
+- Delegators earn a pro-rata share of validator rewards (minus a commission)
+- Delegators are slashed pro-rata if their validator misbehaves
+
+Delegation lets BINI holders earn validator yield without running infrastructure. Specifics TBD.
+
+## Hardware requirements
+
+Validator node requirements (TBD per chain team):
+
+- CPU: modern multi-core (e.g., 8 cores)
+- RAM: 16-64 GB
+- Storage: 1 TB+ SSD (for state and historical data)
+- Network: stable connection, 100+ Mbps
+- Uptime: 99.5%+ for non-trivial reward share
+
+Running a validator is non-trivial — operators should be technically experienced.
+
+## Validator onboarding timeline
+
+1. **Pre-mainnet (now)**: planning + chain implementation
+2. **Mainnet launch**: initial validator set bootstrapped by team + early partners
+3. **Post-mainnet (months 1-6)**: validator slot opens; first external validators onboard
+4. **Mature**: validator set grows to soft cap; delegation enabled
+
+External validator onboarding is **not open** during the sandbox phase.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Architecture" icon="layer-group" href="/binichain/architecture">
+    Consensus protocol underlying validators
+  </Card>
+  <Card title="Native BINI" icon="coins" href="/binichain/native-bini">
+    What validators stake
+  </Card>
+  <Card title="BINI Emission" icon="chart-line" href="/tokenomics/bini-emission">
+    Where validator rewards come from
+  </Card>
+  <Card title="BINI Token" icon="coins" href="/bini-token/overview">
+    Where to acquire BINI
+  </Card>
+</CardGroup>

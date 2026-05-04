@@ -1,0 +1,115 @@
+---
+title: "Network Parameters"
+description: "chainId, RPC, explorer, native currency settings for connecting to BiniChain."
+---
+
+## Connection details
+
+| Parameter | Value |
+|---|---|
+| **Chain name** | BiniChain |
+| **Chain ID** | (pending mainnet) |
+| **RPC URL** | https://rpc.binibit.com |
+| **WebSocket URL** | wss://rpc.binibit.com (when published) |
+| **Block explorer** | https://scan.binibit.com |
+| **Native currency** | BINI |
+| **Decimals** | 18 |
+
+## Add to MetaMask
+
+```javascript
+await window.ethereum.request({
+  method: "wallet_addEthereumChain",
+  params: [{
+    chainId: "0x...",                        // hex of chainId
+    chainName: "BiniChain",
+    nativeCurrency: {
+      name: "BINI",
+      symbol: "BINI",
+      decimals: 18,
+    },
+    rpcUrls: ["https://rpc.binibit.com"],
+    blockExplorerUrls: ["https://scan.binibit.com"],
+  }]
+});
+```
+
+Once finalized, the chain will be addable via [chainlist.org](https://chainlist.org) (community list) for easy click-to-add.
+
+## ethers.js
+
+```javascript
+import { ethers } from "ethers";
+
+const provider = new ethers.JsonRpcProvider("https://rpc.binibit.com");
+const network = await provider.getNetwork();
+console.log("Connected to:", network.name, "chainId:", network.chainId);
+```
+
+## viem
+
+```javascript
+import { createPublicClient, http } from "viem";
+
+const biniChain = {
+  id: /* chainId */,
+  name: "BiniChain",
+  nativeCurrency: { name: "BINI", symbol: "BINI", decimals: 18 },
+  rpcUrls: { default: { http: ["https://rpc.binibit.com"] } },
+  blockExplorers: { default: { name: "Binibit Scan", url: "https://scan.binibit.com" } },
+};
+
+const client = createPublicClient({
+  chain: biniChain,
+  transport: http(),
+});
+```
+
+## Hardhat config
+
+```javascript
+// hardhat.config.js
+module.exports = {
+  networks: {
+    binichain: {
+      url: "https://rpc.binibit.com",
+      chainId: /* chainId */,
+      accounts: [process.env.PRIVATE_KEY],
+    },
+  },
+};
+```
+
+## Foundry config
+
+```toml
+# foundry.toml
+[rpc_endpoints]
+binichain = "https://rpc.binibit.com"
+
+[etherscan]
+binichain = { key = "...", url = "https://scan.binibit.com/api" }
+```
+
+## Sandbox / testnet
+
+During the sandbox phase, contracts have been deployed on **Base Sepolia** (chainId 84532) for development and testing. See [BaiDEX → Contracts](/baidex/contracts) for testnet addresses.
+
+The BiniChain mainnet RPC and chainId values will be published as part of the v2.x rollout.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Architecture" icon="layer-group" href="/binichain/architecture">
+    Underlying chain design
+  </Card>
+  <Card title="RPC" icon="terminal" href="/binichain/rpc">
+    Endpoint usage and limits
+  </Card>
+  <Card title="Block explorer" icon="magnifying-glass" href="/binichain/explorer">
+    scan.binibit.com
+  </Card>
+  <Card title="Native BINI" icon="coins" href="/binichain/native-bini">
+    Gas token
+  </Card>
+</CardGroup>

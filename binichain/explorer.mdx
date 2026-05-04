@@ -1,0 +1,129 @@
+---
+title: "Block Explorer"
+description: "scan.binibit.com — visual browser for blocks, transactions, contracts, accounts."
+---
+
+## Overview
+
+The BiniChain block explorer is at [scan.binibit.com](https://scan.binibit.com).
+
+Standard block-explorer features:
+
+- **Search** — by transaction hash, block number, address, contract, ENS-like name
+- **Browse** — recent blocks, latest transactions
+- **Account view** — balance, transaction history, holdings, connected contracts
+- **Contract view** — verified source, ABI, read/write functions, events log
+- **Token tracker** — top tokens by holders, transfers, market cap (where data is available)
+- **Hive views** — Agent Tokens, Worker actions, registry NFTs
+
+## Key views for ecosystem participants
+
+### For traders
+- **Address page** — your wallet history, current holdings
+- **Transaction page** — verify your swap settled correctly
+- **Pool page** — view BaiDEX pool reserves, fees collected, recent swaps
+- **Agent Token tracker** — top Agent Tokens by holders / volume
+
+### For LPs
+- **Position NFT page** — your specific V3 LP position with fees accrued
+- **Pool reserves page** — current depth, recent activity
+- **Worker action log** — what the assigned Worker has done recently
+
+### For developers
+- **Contract verification** — view source, ABIs
+- **Event logs** — query events by topic
+- **Storage slots** — direct state read for advanced debugging
+
+### For Hive participants
+- **Agent NFT registry** — all spawned Agent Tokens
+- **Worker action log** — full transparency feed
+- **Vote events** — governance actions on Workers
+
+## API
+
+The explorer exposes a public API at `scan.binibit.com/api`:
+
+```bash
+# Get recent blocks
+curl "https://scan.binibit.com/api?module=block&action=getblockreward&blockno=12345"
+
+# Get transactions for an address
+curl "https://scan.binibit.com/api?module=account&action=txlist&address=0x...&startblock=0&endblock=99999999&sort=desc"
+
+# Get contract source (verified contracts)
+curl "https://scan.binibit.com/api?module=contract&action=getsourcecode&address=0x..."
+```
+
+The API mirrors Etherscan/Blockscout v1 API conventions for compatibility with existing tooling.
+
+## Verifying contracts
+
+To verify your contract source on the explorer:
+
+1. Go to your contract's address page on scan.binibit.com
+2. Click "Verify & Publish"
+3. Provide compiler version, optimization settings, and source code
+4. Wait for verification to complete
+
+Verified contracts show:
+
+- Source code on the address page
+- ABI for direct interaction (Read/Write tabs)
+- Event log decoding
+
+Contract verification is **strongly recommended** for any contract intended for public use — it greatly improves trust.
+
+## Hive-specific features
+
+Beyond standard block explorer features, scan.binibit.com surfaces:
+
+| Feature | URL pattern |
+|---|---|
+| Agent Token list | `/agent-tokens` |
+| Specific Agent Token | `/agent-token/0x...` |
+| Worker action log | `/worker/<workerId>` |
+| Agent Hive overview | `/hive` |
+| Vote history | `/votes/<proposalId>` |
+
+These views are read-only — they pull data from on-chain logs and present it in human-readable form.
+
+## Permalinks
+
+Direct links to common entities:
+
+```
+https://scan.binibit.com/block/<blockNumber>
+https://scan.binibit.com/tx/<txHash>
+https://scan.binibit.com/address/<address>
+https://scan.binibit.com/token/<tokenAddress>
+https://scan.binibit.com/agent-token/<address>
+```
+
+Use these in your tooling for shareable links.
+
+## Status page integration
+
+When the BiniChain status page launches at `status.binibit.com`, it will show:
+
+- RPC uptime
+- Explorer uptime
+- Recent incidents
+
+For now, use scan.binibit.com directly to verify chain health (fresh blocks coming in = chain is up).
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="RPC" icon="terminal" href="/binichain/rpc">
+    Direct chain access
+  </Card>
+  <Card title="Architecture" icon="layer-group" href="/binichain/architecture">
+    What you're exploring
+  </Card>
+  <Card title="Action logs" icon="list-check" href="/agent-hive/action-logs">
+    Hive transparency in the explorer
+  </Card>
+  <Card title="BaiDEX Contracts" icon="file-code" href="/baidex/contracts">
+    Verified contract addresses
+  </Card>
+</CardGroup>

@@ -1,0 +1,171 @@
+---
+title: "RPC"
+description: "JSON-RPC endpoint, WebSocket, rate limits, and standard methods."
+---
+
+## Endpoint
+
+```
+HTTP:       https://rpc.binibit.com
+WebSocket:  wss://rpc.binibit.com   (when published)
+```
+
+## Standard JSON-RPC
+
+BiniChain implements the standard Ethereum JSON-RPC API. Common methods:
+
+| Method | Purpose |
+|---|---|
+| `eth_chainId` | Get the chain ID |
+| `eth_blockNumber` | Latest block number |
+| `eth_getBalance` | Get account balance |
+| `eth_getTransactionCount` | Get account nonce |
+| `eth_gasPrice` | Suggested gas price |
+| `eth_estimateGas` | Estimate gas for a transaction |
+| `eth_sendRawTransaction` | Submit signed transaction |
+| `eth_getTransactionByHash` | Lookup transaction |
+| `eth_getTransactionReceipt` | Lookup receipt |
+| `eth_getLogs` | Query event logs |
+| `eth_call` | Read contract state |
+| `net_version` | Network ID (mirror of chainId) |
+
+Plus standard `web3_clientVersion` and others.
+
+## Curl examples
+
+Get latest block:
+
+```bash
+curl https://rpc.binibit.com \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"eth_blockNumber","params":[]}'
+```
+
+Get balance:
+
+```bash
+curl https://rpc.binibit.com \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"eth_getBalance","params":["0xYourAddress","latest"]}'
+```
+
+## ethers.js example
+
+```javascript
+import { ethers } from "ethers";
+
+const provider = new ethers.JsonRpcProvider("https://rpc.binibit.com");
+
+// Read state
+const balance = await provider.getBalance("0xYourAddress");
+const block = await provider.getBlock("latest");
+
+// Subscribe (HTTP doesn't support subscriptions; use WebSocket below)
+
+// Send transaction (requires signer)
+const wallet = new ethers.Wallet(privateKey, provider);
+const tx = await wallet.sendTransaction({
+  to: "0xRecipient",
+  value: ethers.parseEther("0.01"),
+});
+await tx.wait();
+```
+
+## WebSocket subscriptions
+
+For real-time data:
+
+```javascript
+import { ethers } from "ethers";
+
+const provider = new ethers.WebSocketProvider("wss://rpc.binibit.com");
+
+// Subscribe to new blocks
+provider.on("block", (blockNumber) => {
+  console.log("New block:", blockNumber);
+});
+
+// Subscribe to events on a contract
+const contract = new ethers.Contract(addr, abi, provider);
+contract.on("Transfer", (from, to, amount) => {
+  console.log(`${from} sent ${amount} to ${to}`);
+});
+```
+
+## Rate limits
+
+Standard rate limits apply per IP:
+
+| Tier | Limit |
+|---|---|
+| Public RPC | 60 req/min, 10 req/sec burst |
+| WebSocket | 100 concurrent subscriptions per IP |
+
+Higher limits available for whitelisted integrations — contact [api@binibit.com](mailto:api@binibit.com).
+
+## Error responses
+
+Standard JSON-RPC errors:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "error": {
+    "code": -32603,
+    "message": "Internal error",
+    "data": "..."
+  }
+}
+```
+
+Common codes:
+
+| Code | Meaning |
+|---|---|
+| -32600 | Invalid request |
+| -32601 | Method not found |
+| -32602 | Invalid params |
+| -32603 | Internal error |
+| -32000 | Server error (rate limited, etc.) |
+
+Rate-limited responses also return HTTP 429 with `Retry-After` header.
+
+## Public archive node
+
+For historical queries beyond the standard pruning window:
+
+- Production RPC (`rpc.binibit.com`) keeps recent state and a moving window of historical
+- For deep historical, use a third-party archive node provider (when available)
+
+For now, primary use case is real-time and recent-history. Deep archive is a v2.x roadmap item.
+
+## Tooling
+
+| Tool | Notes |
+|---|---|
+| MetaMask | Add chain via [Network Parameters](/binichain/network-params) |
+| ethers.js | Standard provider works |
+| viem | Standard `createPublicClient` works |
+| Hardhat | Configure as a network in hardhat.config.js |
+| Foundry | Configure as RPC endpoint in foundry.toml |
+| 1inch / ParaSwap | When integrated, will route through BaiDEX |
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Network parameters" icon="server" href="/binichain/network-params">
+    chainId and config
+  </Card>
+  <Card title="Block explorer" icon="magnifying-glass" href="/binichain/explorer">
+    Visual block / tx browser
+  </Card>
+  <Card title="BaiDEX Trading guide" icon="arrow-right-arrow-left" href="/baidex/trading-guide">
+    Use RPC for swap calls
+  </Card>
+  <Card title="Architecture" icon="layer-group" href="/binichain/architecture">
+    What's running behind the RPC
+  </Card>
+</CardGroup>

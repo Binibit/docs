@@ -53,9 +53,31 @@
         "tab": "BiniChain",
         "groups": [
           {
-            "group": "BiniChain",
+            "group": "Overview",
             "pages": [
-              "binichain/overview"
+              "binichain/overview",
+              "binichain/architecture"
+            ]
+          },
+          {
+            "group": "Connecting",
+            "pages": [
+              "binichain/network-params",
+              "binichain/rpc",
+              "binichain/explorer"
+            ]
+          },
+          {
+            "group": "Tokens & bridges",
+            "pages": [
+              "binichain/native-bini",
+              "binichain/bridges"
+            ]
+          },
+          {
+            "group": "Network",
+            "pages": [
+              "binichain/validators"
             ]
           }
         ]

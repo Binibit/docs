@@ -1,0 +1,93 @@
+---
+title: "wBINI Cap Rule"
+description: "DEX Liquidity allocation creates a $240M implied market cap ceiling at 5% LP."
+---
+
+The DEX Liquidity allocation is **50,000,000 BINI (5% of total supply)**. This sets a hard ceiling on how much liquidity the wBINI side of BaiDEX pools can carry.
+
+## The math
+
+| Parameter | Value |
+|---|---:|
+| DEX Liquidity allocation | 50,000,000 BINI |
+| BINI reference price | $0.12 |
+| **wBINI side value** | **$6,000,000** |
+| Matched USBI side | $6,000,000 USBI |
+| **Maximum wBINI/USBI pool TVL** | **$12,000,000** |
+| **Maximum implied MC at 5% LP ratio** | **$240,000,000** |
+
+## Why this matters
+
+A pool's TVL implies a market capitalization. If you have $12M of liquidity (sum of both sides) at a 5% LP ratio against MC, the implied MC is $12M / 5% = $240M.
+
+This is a **ceiling** for the canonical wBINI/USBI pool. Beyond this point:
+
+- Either organic BINI buying lifts the price (not the supply we control)
+- Or liquidity moves to many smaller USBI/Agent Token pools instead of one fat wBINI/USBI pool
+- Or future allocations (post-vesting, post-emission) supplement DEX liquidity
+
+## Why most activity should be in USBI/Agent Token pools
+
+The wBINI cap forces a specific liquidity topology: **diverse pools, not one fat pool**.
+
+```
+                          BaiDEX pool topology
+                          
+                ┌─────────────────────────────┐
+                │  wBINI / USBI               │
+                │  Capped at $12M TVL         │   ← anchor pool
+                │  (one pool)                 │
+                └─────────────────────────────┘
+                              │
+                              │ trades clear here
+                              ▼
+                ┌─────────────────────────────┐
+                │  USBI / Agent Token (×N)    │
+                │  No cap (USBI side scales   │   ← growth pools
+                │  with user XP entitlement)  │
+                └─────────────────────────────┘
+
+                ┌─────────────────────────────┐
+                │  wBINI / Agent Token (×M)   │
+                │  Limited by remaining wBINI │   ← premium pools
+                │  outside the anchor pool    │
+                └─────────────────────────────┘
+```
+
+Most user activity should happen in **USBI/Agent Token** pools. These are uncapped on the USBI side because USBI is a sandbox stablecoin that scales linearly with user count and engagement.
+
+The wBINI/USBI anchor pool exists to give USBI a real-value reference, not to be the main trading venue.
+
+## Future ceiling expansion
+
+The cap is conservative on purpose for the sandbox phase. Avenues to expand:
+
+- **Ecosystem Reserve unlocks** (10% / 100M BINI) can supplement DEX liquidity over time
+- **Marketing milestones** can fund liquidity bootstrapping for high-value pools
+- **Organic BINI accumulation** by the protocol (e.g., from sink-burns being partially routed to LP) can add wBINI without new emission
+- **Mainnet replacement** of USBI may change the entire liquidity model
+
+## Sanity check
+
+| Check | Value | Formula |
+|---|---:|---|
+| wBINI allocation cap | $240,000,000 implied MC | `($6M + $6M) / 5%` |
+| Max wBINI in pools | 50,000,000 BINI | `5% × 1B total supply` |
+| wBINI/USBI pool TVL ceiling | $12,000,000 | `$6M wBINI side + $6M USBI side` |
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="BaiDEX Pools" icon="layer-group" href="/baidex/overview">
+    Pool types: wBINI/USBI, USBI/AT, wBINI/AT
+  </Card>
+  <Card title="BINI Emission" icon="chart-line" href="/tokenomics/bini-emission">
+    Where the 50M DEX Liquidity comes from (TGE)
+  </Card>
+  <Card title="Asset Model" icon="sitemap" href="/tokenomics/asset-model">
+    BINI vs wBINI vs USBI relationships
+  </Card>
+  <Card title="Agent Token Sinks" icon="rocket" href="/tokenomics/agent-token-sinks">
+    How spawn fees affect the pool topology
+  </Card>
+</CardGroup>

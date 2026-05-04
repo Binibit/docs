@@ -1,0 +1,82 @@
+---
+title: "USBI Bridge (Bridge A)"
+description: "Convert Crystals (CRS) to USBI at 10,000 : 1, gated at Level 5."
+---
+
+**Bridge A** converts off-chain Crystals (CRS) into on-chain USBI on BiniChain.
+
+## Conversion rate
+
+```
+10,000 CRS  =  1 USBI
+```
+
+Fixed rate. No oracle, no slippage, no fee on the bridge itself.
+
+## Level gate
+
+Bridge A unlocks at **Level 5** (50,000,000 XP). Below Level 5, users earn USBI entitlement but cannot bridge it on-chain.
+
+This gate exists to ensure users have engaged with the app before flowing into BaiDEX, reducing thin-account spam.
+
+## How it interacts with USBI entitlement
+
+The bridge consumes:
+
+- The user's [USBI entitlement headroom](/tokenomics/usbi-formula)
+- The CRS being burned
+
+Bridging does **not** create new USBI entitlement on its own — but the CRS spent during the bridge **does** count as XP, which raises your entitlement. So bridging is itself slightly self-funding.
+
+Walk-through:
+
+1. User has 10,000,000 CRS spent on lessons → 10,000,000 XP → 1,000 USBI entitlement
+2. User wants to bridge 5,000,000 CRS into 500 USBI
+3. Bridge action burns 5,000,000 CRS, mints 500 USBI on BiniChain
+4. CRS spent during bridge counts as XP → total XP becomes 15,000,000 → entitlement becomes 1,500 USBI
+5. User now has 500 USBI on-chain and 1,000 USBI of remaining entitlement
+
+## Cap
+
+USBI bridged on-chain is bounded by total USBI entitlement (welcome grant + XP-derived). A user cannot bridge more USBI than they are entitled to.
+
+## Gas
+
+The user pays BiniChain gas in **BINI** to execute the bridge transaction. See [BINI Bridge](/tokenomics/bini-bridge) for getting BINI native if needed.
+
+## Sandbox vs Mainnet
+
+USBI is a sandbox stablecoin — it is not externally redeemable. Bridge A operates inside the sandbox/testnet phase.
+
+The mainnet evolution of USBI (or its replacement) is on the roadmap. See [BINI Token / Roadmap](/bini-token/overview).
+
+## Formula in code
+
+```javascript
+const RATIO = 10_000;
+
+function usbiFromCrs(crsBurned) {
+  return Math.floor(crsBurned / RATIO);
+}
+
+function crsRequiredFor(usbiTarget) {
+  return usbiTarget * RATIO;
+}
+```
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="USBI Formula" icon="function" href="/tokenomics/usbi-formula">
+    The entitlement headroom
+  </Card>
+  <Card title="BINI Bridge" icon="bridge" href="/tokenomics/bini-bridge">
+    Bridge B: BINI off → BINI native
+  </Card>
+  <Card title="Bini App / USBI Bridge" icon="mobile" href="/bini-app/overview">
+    User-facing bridge UI
+  </Card>
+  <Card title="BaiDEX Pools" icon="layer-group" href="/baidex/overview">
+    Where USBI provides liquidity
+  </Card>
+</CardGroup>

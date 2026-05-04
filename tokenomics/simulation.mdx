@@ -1,0 +1,105 @@
+---
+title: "Simulation & Cohort Projections"
+description: "Day-to-Level-30 scenarios, USBI supply growth, and DEX TVL projections."
+---
+
+The economy model has been simulated under multiple scenarios. This page shows the key outputs.
+
+## Single-user progression scenarios
+
+Solo users with no skin/lottery spend, varying claim cadence and referral count:
+
+| Scenario | Active refs | Referral CRS/day | Lessons max day | Level 30 day | Level @ d120 | XP @ d120 | USBI @ d120 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Solo 2 claims/day | 0 | 0 | 109 | 352 | 11 | 289.82M | 29,981 |
+| Solo 3 claims/day | 0 | 0 | 91 | 292 | 13 | 348.56M | 35,856 |
+| 2 claims + 50 invited | 10 | 160,000 | 99 | 329 | 12 | 315.49M | 32,549 |
+| 2 claims + 100 invited | 20 | 320,000 | 90 | 316 | 13 | 339.96M | 34,996 |
+| 2 claims + 500 invited (capped) | 100 | 500,000 | 88 | 297 | 14 | 367.37M | 37,736 |
+
+The 500K CRS/day referral cap (kicks in at ~250 active referrals at the 20% active-rate assumption) prevents runaway farming.
+
+## Checkpoint snapshots
+
+Detailed state at day boundaries for the 2-claim and 3-claim scenarios:
+
+### 2 claims/day
+
+| Day | Level | Lesson upgrades | XP | Bonus/hour | Mining/day (excl. calendar) | Total USBI |
+|---|---:|---:|---:|---:|---:|---:|
+| 30 | 5 | 199 | 50.38M | 42,850 | 422,800 | 6,038 |
+| 60 | 7 | 258 | 116.64M | 101,350 | 890,800 | 12,663 |
+| 90 | 9 | 289 | 185.77M | 157,550 | 1,340,400 | 19,576 |
+| 120 | 11 | 300 | 289.82M | 184,650 | 1,557,200 | 29,981 |
+| 180 | 17 | 300 | 480.31M | 184,650 | 1,557,200 | 49,030 |
+| 240 | 21 | 300 | 670.79M | 184,650 | 1,557,200 | 68,079 |
+| 300 | 26 | 300 | 861.28M | 184,650 | 1,557,200 | 87,127 |
+| 360 | 30 | 300 | 1.05B | 184,650 | 1,557,200 | 101,000 |
+
+### 3 claims/day
+
+| Day | Level | Lesson upgrades | XP | Bonus/hour | Mining/day | Total USBI |
+|---|---:|---:|---:|---:|---:|---:|
+| 30 | 5 | 206 | 54.66M | 47,650 | 691,800 | 6,465 |
+| 60 | 7 | 259 | 121.00M | 102,750 | 1,353,000 | 13,100 |
+| 90 | 9 | 299 | 214.41M | 182,150 | 2,305,800 | 22,441 |
+| 120 | 13 | 300 | 348.56M | 184,650 | 2,335,800 | 35,856 |
+| 180 | 19 | 300 | 585.76M | 184,650 | 2,335,800 | 59,576 |
+| 240 | 25 | 300 | 822.97M | 184,650 | 2,335,800 | 83,296 |
+| 300 | 30 | 300 | 1.06B | 184,650 | 2,335,800 | 101,000 |
+| 360 | 30 | 300 | 1.30B | 184,650 | 2,335,800 | 101,000 |
+
+By day 300 the 3-claim user has hit the maximum (Level 30, 101K USBI). XP continues accruing past the 1B cap but no longer affects level or entitlement.
+
+## Cohort USBI supply
+
+Total virtual USBI supply by user count and stage:
+
+| Users | At launch | Lessons maxed (L10) | Level 20 | Level 30 |
+|---|---:|---:|---:|---:|
+| 500 | 500,000 | 12,000,000 | 30,500,000 | 50,500,000 |
+| 1,000 | 1,000,000 | 24,000,000 | 61,000,000 | 101,000,000 |
+| 10,000 | 10,000,000 | 240,000,000 | 610,000,000 | 1,010,000,000 |
+| 50,000 | 50,000,000 | 1,200,000,000 | 3,050,000,000 | 5,050,000,000 |
+
+These are virtual-supply ceilings, not hard mints. Actual circulating USBI depends on user behavior (claim, bridge, hold).
+
+## DEX liquidity simulation
+
+Assuming **10% of USBI** flows to LP and the LP-to-MC ratio is 5%:
+
+| Users | Stage | Total USBI | 10% LP USBI | Matched wBINI | Pool TVL | Implied MC |
+|---|---:|---:|---:|---:|---:|---:|
+| 500 | At launch | 500,000 | 50,000 | 416,667 | 100,000 | 2,000,000 |
+| 500 | Lessons maxed | 12,000,000 | 1,200,000 | 10,000,000 | 2,400,000 | 48,000,000 |
+| 1,000 | At launch | 1,000,000 | 100,000 | 833,333 | 200,000 | 4,000,000 |
+| 1,000 | Lessons maxed | 24,000,000 | 2,400,000 | 20,000,000 | 4,800,000 | 96,000,000 |
+| 10,000 | At launch | 10,000,000 | 1,000,000 | 8,333,333 | 2,000,000 | 40,000,000 |
+| 10,000 | Lessons maxed | 240,000,000 | 24,000,000 | 200,000,000 | 48,000,000 | 960,000,000 |
+| 50,000 | Lessons maxed | 1,200,000,000 | 120,000,000 | 1,000,000,000 | 240,000,000 | 4,800,000,000 |
+
+At 10K users with all lessons maxed, the implied MC of $960M is already approaching the [wBINI cap](/tokenomics/wbini-cap) ceiling of $240M. This is why the design pushes most activity into [USBI/Agent Token pools](/baidex/overview), where the wBINI cap doesn't apply.
+
+## Interpretation
+
+- **Solo 2-claim users reach Level 30 around day 352.** Acceptable but slow — this is the lower bound for casual users.
+- **Solo 3-claim users reach Level 30 around day 292.** Reasonable for engaged users.
+- **Referrals shave ~50–60 days off the path to Level 30**, but the 500K CRS/day cap caps that benefit. Spam-inviting beyond ~250 active refs adds nothing.
+- **At 10K users, virtual USBI hits $1B.** Liquidity must distribute across many pools — the wBINI/USBI anchor pool alone cannot absorb it.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="User Levels" icon="ranking-star" href="/tokenomics/user-levels">
+    XP curve and stage table
+  </Card>
+  <Card title="Lessons" icon="graduation-cap" href="/tokenomics/lessons">
+    Cost/bonus formulas behind these numbers
+  </Card>
+  <Card title="USBI Formula" icon="function" href="/tokenomics/usbi-formula">
+    floor(XP / 10K), capped at 100K
+  </Card>
+  <Card title="wBINI Cap Rule" icon="shield" href="/tokenomics/wbini-cap">
+    Why pools must distribute
+  </Card>
+</CardGroup>

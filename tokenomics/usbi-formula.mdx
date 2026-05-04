@@ -1,0 +1,98 @@
+---
+title: "USBI Formula"
+description: "USBI entitlement = floor(XP / 10,000), plus a 1,000 USBI welcome grant."
+---
+
+USBI entitlement is the amount of USBI a user is allowed to claim or bridge into BaiDEX. It is **derived from total XP**, not granted per action.
+
+## Core formula
+
+```
+usbi_entitlement = floor(total_xp / 10,000)
+
+total_usbi_available = 1,000 + usbi_entitlement
+
+claimable_usbi = total_usbi_available - already_claimed_usbi
+```
+
+## Caps
+
+```
+max_xp                 = 1,000,000,000
+max_usbi_entitlement   = 100,000
+welcome_grant          = 1,000
+max_total_usbi_per_user = 101,000
+```
+
+A Level 30 user with 1B XP has 100,000 USBI of entitlement plus the 1,000 USBI welcome grant = **101,000 USBI maximum** lifetime.
+
+## What entitlement means
+
+Entitlement is a **soft ceiling**. You can:
+
+- Claim USBI on demand from your entitlement pool (subject to cooldown if applicable)
+- Bridge USBI into BaiDEX as LP
+- Hold USBI in your wallet
+
+You cannot exceed entitlement at any time. If you spend USBI on the DEX and your entitlement grows later, the new headroom unlocks fresh claimable USBI.
+
+## Why this design
+
+- **Bound the sandbox supply.** USBI is virtual. A formula tied to XP keeps total supply predictable and prevents free minting.
+- **Reward engagement.** USBI grows with CRS spend, not with hoarding.
+- **Make every level meaningful.** Every level boundary unlocks measurably more USBI capacity.
+
+## Cohort supply projection
+
+Per-user maximum is 101,000 USBI. Total ecosystem USBI scales linearly with active users:
+
+| Users | At launch | Lessons maxed (L10) | Level 20 | Level 30 |
+|---|---:|---:|---:|---:|
+| 500 | 500,000 | 12,000,000 | 30,500,000 | 50,500,000 |
+| 1,000 | 1,000,000 | 24,000,000 | 61,000,000 | 101,000,000 |
+| 10,000 | 10,000,000 | 240,000,000 | 610,000,000 | 1,010,000,000 |
+| 50,000 | 50,000,000 | 1,200,000,000 | 3,050,000,000 | 5,050,000,000 |
+
+These are virtual-supply ceilings, not hard mints. Actual circulating USBI depends on how much users have claimed.
+
+## Welcome grant
+
+<Note>
+  The welcome grant is currently being finalized between two values: **1,000 USBI** (canonical economy v3.1) versus **5 USBI + 0.1 BINI** (production simulation v3.0).
+
+  This page reflects the canonical 1,000 USBI value. The production value will be confirmed in the [Bini App / Onboarding](/bini-app/overview) page when set.
+</Note>
+
+## Formula in code
+
+```javascript
+const WELCOME_GRANT = 1_000;
+const RATIO = 10_000;
+const MAX_ENTITLEMENT = 100_000;
+
+function usbiEntitlement(totalXp) {
+  return Math.min(Math.floor(totalXp / RATIO), MAX_ENTITLEMENT);
+}
+
+function claimableUsbi(totalXp, alreadyClaimed) {
+  const entitlement = usbiEntitlement(totalXp);
+  return WELCOME_GRANT + entitlement - alreadyClaimed;
+}
+```
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="XP Formula" icon="function" href="/tokenomics/xp-formula">
+    The input to USBI entitlement
+  </Card>
+  <Card title="USBI Bridge" icon="bridge" href="/tokenomics/usbi-bridge">
+    Bridge A: how CRS becomes USBI
+  </Card>
+  <Card title="User Levels" icon="ranking-star" href="/tokenomics/user-levels">
+    USBI entitlement at each level
+  </Card>
+  <Card title="BaiDEX Pools" icon="layer-group" href="/baidex/overview">
+    Where USBI provides liquidity
+  </Card>
+</CardGroup>

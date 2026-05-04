@@ -1,0 +1,215 @@
+---
+title: "Glossary"
+description: "Every term in the Binibit ecosystem, in alphabetical order."
+---
+
+## A
+
+### Active referral
+A referred user who has been active within the recent reward window. Used in the Bini App referral CRS calculation.
+
+### Agent Hive
+The full registry of all agents and all pools. The system that runs the [agent layer](/agent-hive/overview) on top of BaiDEX.
+
+### Agent Pool
+A V3 pool on [BaiDEX](/baidex/overview) where an Agent Token trades. Auto-created when the Agent Token is spawned.
+
+### Agent Queen
+Strategic-layer agent role. 3 Queens coordinate ecosystem-wide signals, cross-pool liquidity, and risk control. Override Scouts and Workers.
+
+### Agent Scout
+Tactical-layer agent role. 2 Scouts perform token analysis, risk scoring, rug detection, and signal generation. Override Workers.
+
+### Agent Swarm
+The active runtime subset of [Agent Hive](#agent-hive) — the Workers currently deployed and processing in the field. Swarm ⊆ Hive.
+
+### Agent Token (AT)
+ERC-20 token spawned via [AgentT Launchpad](/agentt-launchpad/overview). Each AT gets an [Agent Worker](#agent-worker) and an [Agent Pool](#agent-pool) automatically.
+
+### Agent Worker
+Execution-layer agent role. One Worker per Agent Token. Manages the Agent Pool's liquidity, monitors trades, distributes incentives.
+
+### AgentT Launchpad
+User-facing product where users [spawn](#spawn) Agent Tokens. See [AgentT Launchpad / Overview](/agentt-launchpad/overview).
+
+### AMM
+Automated Market Maker. The class of DEX that uses liquidity pools instead of an order book. BaiDEX is a Uniswap V3-compatible AMM.
+
+## B
+
+### BaiDEX
+The agent-managed DEX on BiniChain. Uniswap V3 AMM with custom fee router (1.00% = 50/25/25 BPS) and an agent layer managing every Agent Pool. See [BaiDEX](/baidex/overview).
+
+### BiniChain
+EVM Layer 1 chain hosting BaiDEX, AgentT Launchpad, and the Agent Hive. BINI is its native gas token. See [BiniChain](/binichain/overview).
+
+### BINI
+Native token of the Binibit ecosystem. 1B fixed supply. Real market value ($0.12 reference). Gas on BiniChain, staking on Binibit Exchange. See [BINI Token](/bini-token/overview).
+
+### Bini App
+Telegram mini-app where users mine [Crystals](#crs), level up via [lessons](#lessons), and bridge into BaiDEX. 30 levels, 30 lessons. See [Bini App](/bini-app/overview).
+
+### Bonus BINI
+The portion of staking rewards subject to additional vesting / reduced liquidity. Contrasts with [Spot BINI](#spot-bini).
+
+### Bridge A
+The bridge that converts off-chain Crystals (CRS) into ERC-20 USBI on BiniChain. Ratio: **10,000 CRS = 1 USBI**. Level 5 gate. See [USBI Bridge](/tokenomics/usbi-bridge).
+
+### Bridge B
+The bridge that converts off-chain BINI rewards into native BINI on BiniChain. Ratio: **1:1**. Level 7 gate. See [BINI Bridge](/tokenomics/bini-bridge).
+
+## C
+
+### Claim
+The Bini App action to harvest accumulated mined Crystals. Once every 4 hours. Base reward 40,000 CRS plus lesson bonuses.
+
+### Claim window
+The 4-hour cycle between consecutive claims. Mining accumulates during the window; the user must claim to capture it.
+
+### CRS (Crystals)
+Off-chain game points earned in the Bini App. Virtual — no external value. Spent on lessons, USBI bridge, skins, etc. CRS spent = XP earned.
+
+## D
+
+### DEX
+Decentralized exchange. In the Binibit ecosystem, this is [BaiDEX](#baidex).
+
+### Daily calendar
+A 30-day rotating CRS reward calendar. Claiming consecutive days yields bonuses.
+
+## E
+
+### Emission schedule
+The 4-year monthly BINI release from the Rewards pool. Year 1: 17.5M/month; Year 4: 7.5M/month; Year 5+: 0. See [BINI Emission](/tokenomics/bini-emission).
+
+### Entitlement
+The maximum USBI a user is allowed to claim or bridge. Derived from XP via `floor(XP / 10K) + 1,000` welcome grant. See [USBI Formula](/tokenomics/usbi-formula).
+
+### EVM
+Ethereum Virtual Machine. Smart contract execution environment used by Ethereum and EVM-compatible chains like BiniChain.
+
+## F
+
+### Fee router
+The custom contract on BaiDEX that splits the 1.00% swap fee into 0.50% LP / 0.25% burn / 0.25% referrer.
+
+### Franchise
+Bini App user status tied to cumulative CRS engagement. Tiers: Member → Builder → Manager → Director → Partner.
+
+## G
+
+### Gas
+The transaction fee paid in BINI to execute a transaction on BiniChain.
+
+### Genesis
+Bini App Level 30 — the maximum level. Total USBI entitlement: 101,000.
+
+## H
+
+### Hive principle
+The architectural pattern of the [Agent Hive](#agent-hive): hierarchical roles (Queens/Scouts/Workers) with automatic coordination, modeled after biological hives.
+
+## L
+
+### Lesson
+A Bini App upgrade card. Spending CRS on a lesson level increases the per-hour CRS mining bonus. 30 lessons × 10 levels = 300 upgrades. See [Lessons](/tokenomics/lessons).
+
+### Level
+1 of 30 user tiers in the Bini App. Each level requires a cumulative XP threshold and unlocks higher USBI entitlement. Level 30 = Genesis. See [User Levels](/tokenomics/user-levels).
+
+### LP
+Liquidity Provider. A user who deposits both sides of a BaiDEX pool to earn the 0.50% LP fee on swaps.
+
+### Lottery
+Bini App game mechanic. Tickets bought in BINI. Ticket revenue split: 60% jackpot / 20% burn / 10% referral / 10% platform.
+
+## M
+
+### Mainnet
+The production deployment of BiniChain (and the wider ecosystem) following the sandbox/testnet phase.
+
+### Mining
+The continuous accrual of CRS in the Bini App. Base rate 10,000 CRS/hour, plus lesson bonuses.
+
+## R
+
+### Referral
+A user invited via referral link. The Bini App has a 3-level referral system on CRS mining (20% / 10% / 5%). Binibit Exchange has a 9-level referral system (R0–R8) on staking rewards.
+
+### Rewards pool
+The 600M BINI allocation reserved for ecosystem rewards. Released over 4 years per the emission schedule.
+
+### RPC
+Remote Procedure Call. The endpoint at `rpc.binibit.com` for BiniChain JSON-RPC traffic.
+
+## S
+
+### Sandbox
+The current pre-mainnet phase where USBI is a sandbox stablecoin and Hive runs in non-audited mode. See [Sandbox vs Mainnet rules](/tokenomics/ecosystem-overview).
+
+### Sink
+A mechanism that consumes BINI from circulation. Eight sinks total — see [BINI Sinks](/tokenomics/bini-sinks).
+
+### Spawn
+The user action to create a new Agent Token via [AgentT Launchpad](/agentt-launchpad/overview). Pays a BINI fee, triggers Worker assignment, lists an Agent Pool on BaiDEX.
+
+### Spot BINI
+The portion of staking rewards immediately tradable. Contrasts with [Bonus BINI](#bonus-bini).
+
+### Staking
+Locking BINI on Binibit Exchange for 30 / 90 / 180 / 360 days at 160% APR. See [Staking](/tokenomics/staking).
+
+### Swarm
+See [Agent Swarm](#agent-swarm).
+
+### Swap
+A trade on BaiDEX that exchanges one asset for another via an [AMM](#amm) pool.
+
+## T
+
+### TGE
+Token Generation Event. The day BINI was first issued.
+
+### Ticker
+A trading pair identifier in `{base}_{target}` format. Example: `BTC_USDT`.
+
+### Trust score
+A CoinGecko-style metric assessing exchange data quality. Influenced by API coverage, uptime, listed pair quality.
+
+## U
+
+### USBI
+Sandbox stablecoin (ERC-20) on BiniChain. 1 USBI = $1 simulation unit. Not externally redeemable. Earned via Bridge A from CRS, used as LP side in BaiDEX pools.
+
+## V
+
+### Vesting
+Time-based release of allocated BINI. Team: 1 year cliff + 3 years linear. Ecosystem Reserve: 6 month cliff + 48 months linear. See [BINI Emission](/tokenomics/bini-emission).
+
+## W
+
+### wBINI
+Wrapped BINI as ERC-20. 1:1 backed. Used in BaiDEX pools.
+
+### Welcome grant
+The initial USBI given to every new Bini App user.
+
+<Note>
+  The welcome grant amount is being finalized. Two values are in flight: 1,000 USBI (canonical economy v3.1) versus 5 USBI + 0.1 BINI (production simulation v3.0). See [USBI Formula](/tokenomics/usbi-formula).
+</Note>
+
+## X
+
+### XP
+Experience Points. The single progression metric for user levels and USBI entitlement. **1 CRS spent = 1 XP earned**. Capped at 1B for level system. See [XP Formula](/tokenomics/xp-formula).
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Tokenomics Overview" icon="chart-pie" href="/tokenomics/ecosystem-overview">
+    Start here for ecosystem context
+  </Card>
+  <Card title="Asset Model" icon="sitemap" href="/tokenomics/asset-model">
+    BINI, wBINI, USBI, CRS deep dive
+  </Card>
+</CardGroup>

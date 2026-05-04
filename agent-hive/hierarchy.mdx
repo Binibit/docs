@@ -1,0 +1,130 @@
+---
+title: "Hierarchy"
+description: "Three-tier override chain: Queen > Scout > Worker. Every override logged on-chain."
+---
+
+## The chain
+
+```
+QUEEN     (3 instances)   ← can override Scouts and Workers
+   │
+   ▼
+SCOUT     (2 instances)   ← can override Workers
+   │
+   ▼
+WORKER    (N instances)   ← cannot override anyone
+```
+
+## How decisions flow
+
+Two directions:
+
+### Top-down (signals)
+
+```
+Queens compute strategy   →   Signals to Scouts
+Scouts refine for tokens  →   Targets to Workers
+Workers execute           →   Pool-level actions
+```
+
+### Bottom-up (reports)
+
+```
+Workers report status     →   Aggregate up to Scouts
+Scouts surface issues     →   Aggregate up to Queens
+Queens factor into strategy
+```
+
+Both directions run continuously.
+
+## Override mechanics
+
+When a higher-tier agent disagrees with a lower-tier action:
+
+1. Lower-tier agent issues a candidate action (e.g., a Worker proposes a pool param update)
+2. Higher-tier agent reviews (Scout watches Worker, Queen watches Scout)
+3. If override needed, higher-tier emits an `Override` event with reason code
+4. The candidate action is replaced (or blocked) by the higher-tier's decision
+5. All events logged on-chain via the `HiveActionLog` contract
+
+## Override scope
+
+| Tier | Can override | Cannot override |
+|---|---|---|
+| Queen | Scouts, Workers | Other Queens (use governance instead) |
+| Scout | Workers | Queens, other Scouts |
+| Worker | (Nothing) | Anyone |
+
+## Why hierarchy
+
+Three reasons:
+
+### 1. Specialization
+- Workers know one pool deeply
+- Scouts compare across many tokens
+- Queens see the whole ecosystem
+
+### 2. Resilience
+- A misbehaving Worker can be overridden by a Scout
+- A misbehaving Scout can be overridden by a Queen
+- A misbehaving Queen requires Hive-wide governance
+
+### 3. Auditability
+- Every override is on-chain
+- Can verify which agent overrode which decision and why
+- No silent corrections
+
+## Example: hierarchy in action
+
+A new Agent Token is spawned with a high-volume sandwich attack pattern within the first hour:
+
+```
+1. Worker observes large sequential trades from suspicious pattern
+2. Worker has no intervention authority on its own — flags the pattern
+3. Scout running rug-detection picks up the flag + cross-references with similar patterns
+4. Scout decides this looks like sandwich farming
+5. Scout emits an Override on the Worker's default config — applies tighter MEV protections
+6. Queens see the override in their feed; one Queen factors it into ecosystem-level liquidity routing
+7. All four actions (Worker flag, Scout decision, Scout override, Queen factoring) logged on-chain
+```
+
+The hierarchy acts like a layered defense — no single agent has full authority, but every layer can constrain the layer below.
+
+## Failure modes
+
+What happens when an agent fails:
+
+| Failure | Recovery |
+|---|---|
+| Worker crashes | Hive auto-restarts. While down, the Agent Pool runs without Worker management — basic V3 mechanics still work |
+| Scout crashes | Other Scout takes over. With one Scout, lower analysis depth temporarily |
+| Queen crashes | Other Queens take over. With two Queens, slightly slower strategic updates |
+| Multiple agents crash | Worst case: BaiDEX falls back to plain V3 (no agent layer) until restored |
+
+## Worker-only mode (degraded)
+
+If both Scouts and all Queens are unavailable, the system runs in **Worker-only mode**:
+
+- Workers continue routine actions
+- No new strategic signals
+- No cross-pool coordination
+- Pool params stay at last set values
+
+Effectively: BaiDEX becomes Uniswap V3 + still-running Workers. Trading and LP work normally.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Agent Queens" icon="crown" href="/agent-hive/queens">
+    Top tier
+  </Card>
+  <Card title="Agent Scouts" icon="binoculars" href="/agent-hive/scouts">
+    Middle tier
+  </Card>
+  <Card title="Agent Workers" icon="user-gear" href="/agent-hive/workers">
+    Bottom tier
+  </Card>
+  <Card title="Action logs" icon="list-check" href="/agent-hive/action-logs">
+    Where overrides are recorded
+  </Card>
+</CardGroup>

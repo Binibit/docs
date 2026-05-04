@@ -1,0 +1,244 @@
+---
+title: "API"
+description: "REST endpoints for the Agent Hive: overview, workers, voting, action logs."
+---
+
+## Endpoints
+
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/api/agents/overview` | Hive + Swarm summary |
+| `GET` | `/api/agents/workers` | List all Workers |
+| `GET` | `/api/agents/workers/:tokenId` | Worker info for one Agent Token |
+| `POST` | `/api/agents/workers/:tokenId/vote` | Vote on Worker parameters (L20+) |
+| `GET` | `/api/agents/action-logs` | Filtered action log query |
+
+Base URL: TBD (production), pending mainnet.
+
+## GET /api/agents/overview
+
+Hive-level summary including Swarm size.
+
+```json
+{
+  "hive": {
+    "totalTokens": 1523,
+    "totalWorkers": 1523,
+    "totalQueens": 3,
+    "totalScouts": 2
+  },
+  "swarm": {
+    "activeWorkers": 284,
+    "lastActivityAt": 1762430000
+  },
+  "ecosystem": {
+    "totalAgentTokensSpawned": 1523,
+    "tokensSpawnedLast24h": 12,
+    "tokensSpawnedLast7d": 89,
+    "totalActions24h": 12459,
+    "totalOverrides24h": 17
+  }
+}
+```
+
+## GET /api/agents/workers
+
+List all Workers with pagination.
+
+### Query parameters
+
+| Param | Type | Description |
+|---|---|---|
+| `page` | integer | Page number |
+| `pageSize` | integer | Max 100 |
+| `status` | enum | `active` (in Swarm) / `idle` / `suspended` |
+| `tokenAddress` | address | Filter to one Agent Token |
+
+### Response
+
+```json
+{
+  "items": [
+    {
+      "workerId": 12345,
+      "agentNftId": 67890,
+      "tokenAddress": "0x...",
+      "tokenSymbol": "PEPEA",
+      "status": "active",
+      "lastActiveAt": 1762429000,
+      "actionCount24h": 27,
+      "config": {
+        "slippageCapBps": 100,
+        "mevProtection": "standard"
+      }
+    }
+  ],
+  "page": 1,
+  "pageSize": 20,
+  "totalItems": 1523
+}
+```
+
+## GET /api/agents/workers/:tokenId
+
+Detailed Worker info plus recent actions.
+
+```json
+{
+  "worker": {
+    "id": 12345,
+    "agentNftId": 67890,
+    "tokenAddress": "0x...",
+    "deployedAt": 1762344000,
+    "status": "active",
+    "lastActiveAt": 1762429000
+  },
+  "config": {
+    "slippageCapBps": 100,
+    "mevProtection": "standard",
+    "signalSubscriptions": ["scout-token-quality", "scout-trading-pattern"]
+  },
+  "recentActions": [
+    {
+      "txHash": "0x...",
+      "actionType": "config_update",
+      "params": { "slippageCapBps": 150 },
+      "reasonCode": "user_vote",
+      "blockNumber": 12345678,
+      "blockTimestamp": 1762429000
+    }
+  ],
+  "stats": {
+    "totalActions": 27,
+    "lastOverrideAt": 1762400000,
+    "overridingTier": "scout"
+  },
+  "votes": {
+    "activeProposals": 1,
+    "recentlyClosed": 3
+  }
+}
+```
+
+## POST /api/agents/workers/:tokenId/vote
+
+Cast a vote on a Worker parameter proposal.
+
+**Requires**:
+- Authenticated user (HMAC signature)
+- User Level >= 20
+- User holds at least 1 of the Agent Token
+
+### Request
+
+```json
+{
+  "proposalId": "abc123",
+  "vote": "yes",
+  "comment": "I think tighter slippage helps"
+}
+```
+
+### Parameters
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `proposalId` | string | Yes | Active proposal ID |
+| `vote` | enum | Yes | `yes` / `no` / `abstain` |
+| `comment` | string | No | Optional public comment |
+
+### Response
+
+```json
+{
+  "voteId": "vote-789",
+  "proposalId": "abc123",
+  "vote": "yes",
+  "weight": 12.5,
+  "txHash": "0x...",
+  "votedAt": 1762430000,
+  "currentTally": {
+    "yesWeight": 145.2,
+    "noWeight": 23.7,
+    "abstainWeight": 8.1,
+    "quorumThreshold": 100,
+    "quorumReached": true,
+    "passingThreshold": 0.6,
+    "currentlyPassing": true
+  }
+}
+```
+
+### Errors
+
+| Code | Message |
+|---|---|
+| 401 UNAUTHORIZED | Bad HMAC |
+| 403 LEVEL_TOO_LOW | User Level < 20 |
+| 403 NO_HOLDINGS | User holds no Agent Token |
+| 404 PROPOSAL_NOT_FOUND | Invalid proposalId |
+| 409 ALREADY_VOTED | User already cast a vote on this proposal |
+| 409 PROPOSAL_CLOSED | Vote period ended |
+
+## GET /api/agents/action-logs
+
+Filtered action log query.
+
+### Query parameters
+
+| Param | Type | Description |
+|---|---|---|
+| `tokenId` | integer | Filter to one Agent Token |
+| `actionType` | enum | `config_update` / `override` / `flag` / etc. |
+| `sourceTier` | enum | `queen` / `scout` / `worker` |
+| `since` | integer | Unix timestamp lower bound |
+| `until` | integer | Unix timestamp upper bound |
+| `page` | integer | Pagination |
+| `pageSize` | integer | Max 100 |
+
+### Response
+
+```json
+{
+  "items": [
+    {
+      "entryId": 12345,
+      "sourceAgentId": "queen-1",
+      "sourceTier": "queen",
+      "targetTokenId": 67890,
+      "actionType": "directive",
+      "actionPayload": { "...": "..." },
+      "reasonCode": "rug_detected_cluster",
+      "blockNumber": 12345678,
+      "timestamp": 1762429000,
+      "txHash": "0x..."
+    }
+  ],
+  "page": 1,
+  "pageSize": 50,
+  "totalItems": 1234
+}
+```
+
+## Rate limits
+
+Standard public-API rate limits (60 req/min/IP, see [Rate Limits](/general/rate-limits)).
+
+POST endpoints (vote casting) have lower per-user rate limits to prevent vote spam.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Voting" icon="check-to-slot" href="/agent-hive/voting">
+    What you can vote on
+  </Card>
+  <Card title="Action logs" icon="list-check" href="/agent-hive/action-logs">
+    Schema deep dive
+  </Card>
+  <Card title="AgentT Launchpad API" icon="rocket" href="/agentt-launchpad/api">
+    Spawn endpoints
+  </Card>
+  <Card title="Authentication" icon="lock" href="/general/authentication">
+    HMAC for authenticated routes
+  </Card>
+</CardGroup>

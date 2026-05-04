@@ -1,0 +1,112 @@
+---
+title: "Boost & Promotion"
+description: "Pay BINI to surface your Agent Token to Scouts and traders."
+---
+
+<Note>
+  Specific boost mechanics (price, surface placement, duration) are being finalized. This page documents the canonical concept.
+</Note>
+
+## What boost does
+
+After spawning your Agent Token, you can **boost** it to:
+
+- Increase visibility in the AgentT Launchpad explorer (top of pair lists)
+- Trigger faster Scout attention (Scouts prioritize boosted tokens for analysis)
+- Get featured on BaiDEX as a highlighted Agent Pool
+- Show in Bini App promoted-tokens list
+
+Boost is paid in **BINI native** — partly burned, partly retained for platform operations.
+
+## Why boost
+
+For new tokens, organic discovery takes time:
+
+- Without boost: your token is one of N in the explorer, ordered by recency or volume
+- With boost: your token surfaces on featured rails for the duration
+
+Boost is the **paid-acquisition lane** for Agent Tokens.
+
+## Boost payment split
+
+```
+Boost cost (in BINI):
+├── Burn portion        — permanent supply reduction
+└── Platform portion    — operations / dev / treasury
+```
+
+The exact percentages are being set by team. Expected range: 30-70% burn / 30-70% platform.
+
+## Boost effects in detail
+
+### Launchpad explorer
+
+```
+Without boost: token appears in standard order
+With boost:    pinned to "Featured" section for the duration
+```
+
+### Scout attention
+
+Scouts allocate analysis bandwidth across all Agent Tokens. Boost moves your token up the queue:
+
+- Standard token: analyzed within X hours of activity
+- Boosted token: analyzed within minutes
+
+Faster analysis means faster signal generation → faster Worker reactions to opportunities.
+
+### BaiDEX
+
+A boosted token may appear in:
+
+- "Trending Agent Tokens" section
+- Top-of-list in pair selectors
+- Highlighted on the homepage
+
+These placements are temporary and tied to boost duration.
+
+## Boost duration
+
+Boosts run for fixed durations:
+
+| Tier (TBD) | Duration | Cost (TBD in BINI) |
+|---|---|---|
+| Short | 1 hour | TBD |
+| Standard | 24 hours | TBD |
+| Extended | 7 days | TBD |
+| Premium | 30 days | TBD |
+
+Multiple boosts on the same token stack — buying two 24-hour boosts gives 48 hours of surface time.
+
+## Boost is not promotion of value
+
+Important: a boost makes your token **more visible**, not **more valuable**. The Hive's Scouts and Queens evaluate the underlying token (volume, depth, holder distribution, trade patterns) on its merits. Boost just shortens the time-to-discovery.
+
+A spammy or rugged token will not survive Scout analysis just because it's boosted — Scouts can flag it negatively, and boosting a flagged token is a form of self-promotion that the Hive can route around.
+
+## Anti-spam: cooldown
+
+Per-spawner boost cooldown prevents the same address from boosting many tokens in succession to game the visibility system. Specific cooldown TBD.
+
+## Tokenomics impact
+
+Boost is a **BINI sink** (sink #6 in [BINI Sinks](/tokenomics/bini-sinks)).
+
+Per-boost burn × frequency-of-boosts = ongoing deflationary pressure proportional to Launchpad activity. As the Launchpad scales, this sink scales too.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Spawn cost" icon="dollar-sign" href="/agentt-launchpad/spawn-cost">
+    Different sink: paid per spawn (full burn)
+  </Card>
+  <Card title="Tokenomics: Agent Token Sinks" icon="chart-pie" href="/tokenomics/agent-token-sinks">
+    Where boost fits
+  </Card>
+  <Card title="Agent Scouts" icon="binoculars" href="/agent-hive/scouts">
+    Who notices boosted tokens
+  </Card>
+  <Card title="BINI Token / Sinks" icon="fire" href="/bini-token/utility">
+    All BINI sinks
+  </Card>
+</CardGroup>

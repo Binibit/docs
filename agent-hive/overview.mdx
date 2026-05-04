@@ -1,21 +1,21 @@
 ---
-title: "Agent Hive"
-description: "Hierarchical agent system that runs the BaiDEX agent layer."
+title: "Agent Hive Overview"
+description: "Hierarchical agent system that runs the BaiDEX agent layer. Queens, Scouts, Workers, Swarm."
 ---
 
-<Note>
-  This documentation is being written. Full Agent Hive reference publishes during the v2.0 docs rollout.
-</Note>
+<Card title="See the full economic model" icon="chart-pie" href="/tokenomics/ecosystem-overview">
+  Tokenomics → Ecosystem Overview shows how the Hive fits into the wider system.
+</Card>
 
-## What is the Agent Hive
+## What the Agent Hive is
 
-The **Agent Hive** is the registry of all agents and all pools. Three layers, hive principle:
+The Agent Hive is the **registry of all agents and all pools** in the Binibit ecosystem. Three tiers, hive principle:
 
 ```mermaid
 flowchart TB
-    Queens["QUEENS (3)<br/><br/>Strategic layer<br/>ecosystem-wide coordination<br/>cross-pool liquidity<br/>risk control<br/>referral intelligence"]
-    Scouts["SCOUTS (2)<br/><br/>Tactical layer<br/>token analysis<br/>risk scoring<br/>rug detection<br/>signal generation"]
-    Workers["WORKERS (N)<br/><br/>Execution layer<br/>one per Agent Token<br/>manages Agent Pool<br/>monitors trades<br/>distributes incentives"]
+    Queens["QUEENS (3)<br/><br/>Strategic layer<br/>ecosystem-wide coordination<br/>cross-pool liquidity, risk control,<br/>referral intelligence"]
+    Scouts["SCOUTS (2)<br/><br/>Tactical layer<br/>token analysis, risk scoring,<br/>rug detection, signal generation"]
+    Workers["WORKERS (N)<br/><br/>Execution layer<br/>one per Agent Token<br/>manages Agent Pool, monitors trades,<br/>distributes incentives"]
     Swarm["SWARM<br/><br/>Active runtime: subset of Workers<br/>currently deployed in the field<br/>Swarm ⊆ Hive"]
 
     Queens -- signals --> Scouts
@@ -33,20 +33,52 @@ flowchart TB
     class Swarm swarm
 ```
 
-Override chain: **Queen > Scout > Worker**. All overrides logged on-chain.
+Override chain: **Queen > Scout > Worker**. Every override is logged on-chain.
 
-## What will be documented
+## Inside the docs
 
-- Hive overview and registry
-- Hierarchy and override chain
-- Agent Queens (3, strategy)
-- Agent Scouts (2, discovery)
-- Agent Workers (N, per-token)
-- Agent Swarm (active runtime)
-- On-chain action logs
-- User governance (voting, Level 20 gate)
-- API: `/api/agents/*`
-- Trust model
+<CardGroup cols={2}>
+  <Card title="Hierarchy" icon="sitemap" href="/agent-hive/hierarchy">
+    Override chain and decision flow
+  </Card>
+  <Card title="Agent Queens" icon="crown" href="/agent-hive/queens">
+    Strategic agents — 3 instances
+  </Card>
+  <Card title="Agent Scouts" icon="binoculars" href="/agent-hive/scouts">
+    Tactical analysts — 2 instances
+  </Card>
+  <Card title="Agent Workers" icon="user-gear" href="/agent-hive/workers">
+    Per-token executors — N instances
+  </Card>
+  <Card title="Agent Swarm" icon="bolt" href="/agent-hive/swarm">
+    Active runtime layer
+  </Card>
+  <Card title="Action logs" icon="list-check" href="/agent-hive/action-logs">
+    On-chain transparency
+  </Card>
+  <Card title="Voting & governance" icon="check-to-slot" href="/agent-hive/voting">
+    User governance, Level 20+ gate
+  </Card>
+  <Card title="API" icon="terminal" href="/agent-hive/api">
+    /api/agents/* endpoints
+  </Card>
+  <Card title="Trust model" icon="shield-halved" href="/agent-hive/trust-model">
+    How agent actions are verifiable
+  </Card>
+</CardGroup>
+
+## Lifecycle
+
+```
+Spawn Agent Token  →  Worker created  →  Worker joins Swarm
+                  →  Swarm reports to Scouts (eventually)
+                  →  Scouts report to Queens
+                  →  Queens coordinate strategy
+                  →  Strategy flows back as signals
+                  →  Workers act on signals
+```
+
+Continuous loop. No external trigger needed beyond user activity (spawns, swaps, LP).
 
 ## Related
 
@@ -56,5 +88,11 @@ Override chain: **Queen > Scout > Worker**. All overrides logged on-chain.
   </Card>
   <Card title="BaiDEX" icon="layer-group" href="/baidex/overview">
     Where Workers manage liquidity
+  </Card>
+  <Card title="Tokenomics" icon="chart-pie" href="/tokenomics/agent-token-sinks">
+    How Hive activity drives sinks
+  </Card>
+  <Card title="BiniChain" icon="link" href="/binichain/overview">
+    Where action logs live
   </Card>
 </CardGroup>

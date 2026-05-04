@@ -1,0 +1,221 @@
+---
+title: "API"
+description: "REST endpoints for spawning, listing, and inspecting Agent Tokens."
+---
+
+<Note>
+  The Launchpad API is part of the broader Binibit ecosystem API. The endpoints below are documented per the canonical spec. Final base URL and auth requirements ship with mainnet.
+</Note>
+
+## Endpoints
+
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/api/launchpad/spawn` | Spawn a new Agent Token |
+| `GET` | `/api/launchpad/tokens` | List all Agent Tokens |
+| `GET` | `/api/launchpad/tokens/:id` | Get details for one Agent Token |
+| `GET` | `/api/launchpad/tokens/:id/pool` | Get pool details for one Agent Token |
+| `GET` | `/api/launchpad/tokens/:id/worker` | Get Worker info for one Agent Token |
+
+Base URL: TBD (production), pending mainnet.
+
+## POST /api/launchpad/spawn
+
+Spawn a new Agent Token. Requires authenticated user (HMAC signature, see [Authentication](/general/authentication)).
+
+### Request
+
+```json
+{
+  "name": "PepeAgent",
+  "symbol": "PEPEA",
+  "totalSupply": "1000000000",
+  "decimals": 18,
+  "poolSide": "USBI",
+  "metadata": {
+    "description": "An agent-managed Pepe-themed token",
+    "logoUri": "ipfs://...",
+    "website": "https://example.com"
+  }
+}
+```
+
+### Parameters
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | string | Yes | Display name (max 50 chars) |
+| `symbol` | string | Yes | Ticker (3-5 uppercase chars) |
+| `totalSupply` | string | No | Default: 1,000,000,000 |
+| `decimals` | integer | No | Default: 18 (fixed) |
+| `poolSide` | enum | No | `USBI` (default) or `wBINI` |
+| `metadata` | object | No | Free-form metadata stored on-chain |
+
+### Response
+
+```json
+{
+  "token": {
+    "address": "0xAgent...",
+    "name": "PepeAgent",
+    "symbol": "PEPEA",
+    "totalSupply": "1000000000",
+    "owner": "0xCreator..."
+  },
+  "pool": {
+    "address": "0xPool...",
+    "side": "USBI",
+    "feeTier": 10000
+  },
+  "worker": {
+    "id": 12345,
+    "agentNftId": 67890
+  },
+  "txHash": "0xtx..."
+}
+```
+
+### Errors
+
+| Code | Message |
+|---|---|
+| 400 INVALID_SYMBOL | Symbol does not match `[A-Z]{3,5}` |
+| 400 SYMBOL_TAKEN | Symbol already exists on BiniChain |
+| 400 COOLDOWN_ACTIVE | Spawn cooldown still active for this address |
+| 402 INSUFFICIENT_FEE | BINI sent does not cover the spawn fee |
+| 500 SPAWNER_FAILED | Spawner contract reverted (rare; retry) |
+
+## GET /api/launchpad/tokens
+
+List Agent Tokens with pagination and filters.
+
+### Query parameters
+
+| Param | Type | Description |
+|---|---|---|
+| `page` | integer | Page number (1-indexed) |
+| `pageSize` | integer | Items per page (max 100) |
+| `sort` | enum | `recent` / `volume` / `tvl` / `holders` |
+| `boosted` | boolean | Filter to boosted tokens only |
+| `poolSide` | enum | `USBI` / `wBINI` filter |
+
+### Response
+
+```json
+{
+  "items": [
+    {
+      "address": "0x...",
+      "symbol": "PEPEA",
+      "name": "PepeAgent",
+      "spawnedAt": 1762344000,
+      "tvl": "12345.67",
+      "volume24h": "5432.10",
+      "holders": 42,
+      "workerStatus": "active",
+      "boosted": false
+    }
+  ],
+  "page": 1,
+  "pageSize": 20,
+  "totalItems": 156
+}
+```
+
+## GET /api/launchpad/tokens/:id
+
+Detailed info for one Agent Token.
+
+`:id` can be the Agent Token address or its registry NFT ID.
+
+### Response
+
+```json
+{
+  "token": {
+    "address": "0x...",
+    "name": "PepeAgent",
+    "symbol": "PEPEA",
+    "decimals": 18,
+    "totalSupply": "1000000000",
+    "owner": "0x...",
+    "spawnedAt": 1762344000
+  },
+  "pool": {
+    "address": "0x...",
+    "side": "USBI",
+    "feeTier": 10000,
+    "tvl": "12345.67",
+    "volume24h": "5432.10",
+    "lastTradeAt": 1762430000
+  },
+  "worker": {
+    "id": 12345,
+    "agentNftId": 67890,
+    "status": "active",
+    "lastActionAt": 1762429000,
+    "actionCount": 27
+  },
+  "metadata": {
+    "description": "...",
+    "logoUri": "ipfs://...",
+    "website": "..."
+  },
+  "boost": {
+    "active": false,
+    "tier": null,
+    "expiresAt": null
+  }
+}
+```
+
+## GET /api/launchpad/tokens/:id/worker
+
+Detailed Worker info plus action log.
+
+```json
+{
+  "worker": {
+    "id": 12345,
+    "agentNftId": 67890,
+    "status": "active",
+    "deployedAt": 1762344000
+  },
+  "recentActions": [
+    {
+      "txHash": "0x...",
+      "actionType": "param_update",
+      "params": { "...": "..." },
+      "blockNumber": 12345678,
+      "blockTimestamp": 1762429000
+    }
+  ],
+  "stats": {
+    "totalActions": 27,
+    "lastActiveAt": 1762429000
+  }
+}
+```
+
+## Rate limits
+
+Standard public-API rate limits apply (60 req/min per IP, see [Rate Limits](/general/rate-limits)).
+
+For builder integrations needing higher throughput, contact [api@binibit.com](mailto:api@binibit.com).
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Spawn flow" icon="rocket" href="/agentt-launchpad/spawn-flow">
+    What POST /spawn triggers
+  </Card>
+  <Card title="Authentication" icon="lock" href="/general/authentication">
+    HMAC for authenticated routes
+  </Card>
+  <Card title="Agent Hive API" icon="terminal" href="/agent-hive/api">
+    Worker / governance endpoints
+  </Card>
+  <Card title="Registry" icon="address-card" href="/agentt-launchpad/registry">
+    The NFT data model
+  </Card>
+</CardGroup>

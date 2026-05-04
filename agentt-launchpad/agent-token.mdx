@@ -1,0 +1,137 @@
+---
+title: "Agent Token (ERC-20)"
+description: "ERC-20 token deployed by the Spawner contract. Standard interface plus registry hooks."
+---
+
+## What it is
+
+An Agent Token is a **standard ERC-20** deployed by the `HiveSpawner` contract on BiniChain. The contract is the `SpawnedERC20` template, which extends OpenZeppelin's ERC-20 with:
+
+- Owner role (initially the spawner; transferable; renounceable)
+- Registry hooks for the `HiveRegistry` ERC-721 NFT system
+
+## Default parameters
+
+| Parameter | Default | Configurable at spawn? |
+|---|---|---|
+| Decimals | 18 | No (fixed at 18) |
+| Total supply | 1,000,000,000 (1B) | Yes |
+| Name | (user-provided) | Yes |
+| Symbol | (user-provided, 3-5 chars) | Yes |
+| Mintable post-spawn? | No | (immutable) |
+| Burnable? | Yes (any holder can burn their own balance) | (immutable) |
+| Pausable? | No | (immutable) |
+| Initial holder | The spawner address | (immutable) |
+
+## Standard ERC-20 interface
+
+Implements the full ERC-20 interface:
+
+```solidity
+function totalSupply() external view returns (uint256);
+function balanceOf(address account) external view returns (uint256);
+function transfer(address to, uint256 amount) external returns (bool);
+function allowance(address owner, address spender) external view returns (uint256);
+function approve(address spender, uint256 amount) external returns (bool);
+function transferFrom(address from, address to, uint256 amount) external returns (bool);
+
+event Transfer(address indexed from, address indexed to, uint256 value);
+event Approval(address indexed owner, address indexed spender, uint256 value);
+```
+
+Plus extensions:
+
+```solidity
+function burn(uint256 amount) external;
+function burnFrom(address account, uint256 amount) external;
+
+function owner() external view returns (address);
+function renounceOwnership() external;
+function transferOwnership(address newOwner) external;
+```
+
+## Owner powers
+
+The token owner (initially you, the spawner) can:
+
+- Transfer ownership to another address
+- Renounce ownership (set to zero address — immutable forever)
+
+The owner **cannot**:
+
+- Mint additional supply (no mint function)
+- Pause transfers
+- Blacklist addresses
+- Change fee logic (no fee on the token itself; BaiDEX swap fees are at pool level)
+
+This minimal owner-power design is by choice — it makes Agent Tokens more credibly neutral than launchpad tokens with admin fees.
+
+## Renouncing ownership
+
+Best-practice for credibly-neutral tokens:
+
+```solidity
+agentToken.renounceOwnership();
+```
+
+Once renounced, no further owner actions are possible. The token is fully immutable.
+
+## Burning
+
+Anyone can burn their own balance:
+
+```solidity
+agentToken.burn(amount);
+```
+
+Note: BaiDEX's 0.25% trade burn applies to the **swap input asset**. If you swap an Agent Token into wBINI, the burn applies to the Agent Token itself — supply decreases organically with trade volume.
+
+## Holders
+
+Initial holder: the spawner (you), with 100% of supply.
+
+You'll typically want to:
+
+- Provide LP on BaiDEX (your tokens become tradable)
+- Distribute via airdrop, sale, or community grants
+- Keep some for treasury / future use
+
+Holder distribution is up to you. Public block explorer ([scan.binibit.com](https://scan.binibit.com)) shows current top holders for any Agent Token.
+
+## Registry NFT
+
+Every Agent Token also has a corresponding **Agent NFT** in the `HiveRegistry` (ERC-721 + ERC-8004). The NFT represents the agent assignment — it tracks:
+
+- Which Agent Token it covers
+- Which Worker is assigned
+- Action log references
+- Metadata (description, links)
+
+See [Agent NFT registry](/agentt-launchpad/registry).
+
+## Verifying an Agent Token
+
+Before interacting with an Agent Token (LP, buy, sell):
+
+1. Look it up on `scan.binibit.com`
+2. Verify it was deployed by `HiveSpawner` (contract address visible)
+3. Check the `Spawned` event for owner and metadata
+4. Confirm reasonable holder distribution (no single mega-holder typically — risk indicator)
+5. Check the Worker action log for any flagged behavior
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Spawn flow" icon="rocket" href="/agentt-launchpad/spawn-flow">
+    How tokens get deployed
+  </Card>
+  <Card title="Agent Pool" icon="droplet" href="/agentt-launchpad/agent-pool">
+    Where the token trades
+  </Card>
+  <Card title="Registry" icon="address-card" href="/agentt-launchpad/registry">
+    The agent NFT
+  </Card>
+  <Card title="Auto-Worker" icon="bolt" href="/agentt-launchpad/auto-worker">
+    The Worker assigned to your token
+  </Card>
+</CardGroup>

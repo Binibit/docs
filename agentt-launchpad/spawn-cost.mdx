@@ -1,0 +1,122 @@
+---
+title: "Spawn Cost"
+description: "BINI fee paid at spawn, fully burned. Anti-spam plus deflationary pressure."
+---
+
+<Note>
+  The exact spawn cost is being finalized by the team. The burn-on-spawn mechanic is canonical; the dollar value is TBD.
+</Note>
+
+## What you pay
+
+Spawning an Agent Token requires a **fixed BINI fee** paid in the spawn transaction. The fee is **fully burned** (sent to a permanent burn address).
+
+```
+spawn() {
+    require(msg.value >= SPAWN_FEE_BINI, "insufficient fee");
+    burn(SPAWN_FEE_BINI);  // sent to 0x000...dead
+    // ...deploy token, assign Worker, list pool
+}
+```
+
+100% of the spawn fee is permanent supply reduction. There is no platform retention on this fee.
+
+## Why a fee at all
+
+A spawn fee accomplishes two things at once:
+
+| Goal | How spawn fee achieves it |
+|---|---|
+| **Anti-spam** | A non-trivial cost prevents thousands of throwaway tokens flooding the Launchpad |
+| **Deflationary pressure** | Each spawn permanently removes BINI from circulation |
+
+A free spawn would lead to spam (registry bloat, Worker exhaustion, Scout attention dilution). A capped fee that goes to platform would create a perverse incentive (platform wants more spawns regardless of quality).
+
+The "all-burn" design is the cleanest version: cost goes up with adoption, supply goes down with adoption, no agency conflict.
+
+## Fee calibration
+
+Two extremes the fee must avoid:
+
+- **Too low**: spam returns, registry pollution, Hive resource strain
+- **Too high**: only well-funded creators can spawn, ecosystem becomes elitist
+
+The team is calibrating between these. Expected range: enough BINI that a typical retail user has to commit but doesn't lose meaningfully on a single attempt.
+
+Once set, the fee is upgradeable by Hive governance (with notice period).
+
+## Daily burn projections
+
+If N tokens spawn per day at fee F BINI each:
+
+```
+Daily burn (BINI)  = N × F
+Daily burn ($)     = N × F × 0.12   (at $0.12 reference)
+```
+
+Sample scenarios (fee assumed = 100 BINI, illustrative):
+
+| Spawns / day | Daily burn (BINI) | Daily burn ($) | Annual burn (BINI) |
+|---:|---:|---:|---:|
+| 10 | 1,000 | $120 | 365K |
+| 100 | 10,000 | $1,200 | 3.65M |
+| 1,000 | 100,000 | $12,000 | 36.5M |
+| 10,000 | 1,000,000 | $120,000 | 365M |
+
+At 100 spawns/day with 100 BINI/spawn, that's ~3.65M BINI/year — meaningful but not the dominant sink. Combined with [DEX swap burn](/baidex/fees) (~76M/year at $10M daily volume), the deflationary side reaches healthy levels.
+
+## Where the fee shows up
+
+The fee is paid in the **same transaction** that:
+
+- Deploys the Agent Token
+- Creates the Agent Pool
+- Assigns the Agent Worker
+
+Single transaction = single gas + fee payment. You don't need to send separate burns or approvals.
+
+## Required BINI
+
+Before spawning, you need:
+
+- The spawn fee in **native BINI** on BiniChain
+- Plus enough BINI to pay BiniChain gas for the spawn transaction (~300-500K gas)
+- Plus the BINI you'll use to provide initial LP (separately, after spawn)
+
+Total expected per spawn: spawn_fee + 0.5-1.0 BINI for gas + LP capital you choose.
+
+For a typical creator spawning + LPing, this means having a meaningful BINI position. Plan ahead.
+
+## How to acquire BINI
+
+Per [Where to Buy](/bini-token/where-to-buy):
+
+- Binibit Exchange
+- Azbit
+- Blynex
+- (For ERC-20 holders) bridge from Ethereum
+
+For Bini App users at Level 7+: use [Bridge B](/bini-app/bini-bridge) to convert off-chain BINI rewards into native BINI.
+
+## Tokenomics impact
+
+Spawn cost is **BINI sink #5** ([BINI Sinks](/tokenomics/bini-sinks)) — fully permanent burn.
+
+It's also **Agent Token sink #1** ([Agent Token Sinks](/tokenomics/agent-token-sinks)) — the primary entry-point sink for Launchpad activity.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Spawn flow" icon="rocket" href="/agentt-launchpad/spawn-flow">
+    Where the fee fits in
+  </Card>
+  <Card title="Boost" icon="fire-flame-curved" href="/agentt-launchpad/boost">
+    Different fee, post-spawn
+  </Card>
+  <Card title="BINI Sinks" icon="fire" href="/tokenomics/bini-sinks">
+    All eight sinks
+  </Card>
+  <Card title="Agent Token Sinks" icon="chart-pie" href="/tokenomics/agent-token-sinks">
+    Tokenomics view
+  </Card>
+</CardGroup>

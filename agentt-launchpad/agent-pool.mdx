@@ -1,0 +1,111 @@
+---
+title: "Agent Pool (Auto-listing)"
+description: "Spawning an Agent Token automatically creates a V3 pool on BaiDEX."
+---
+
+## What happens at spawn
+
+When `HiveSpawner` deploys your Agent Token, it also calls the BaiDEX V3 factory to create an **Agent Pool**:
+
+```
+factory.createPool(
+  agentToken,         // your new token
+  poolSide,           // wBINI or USBI (chosen at spawn)
+  feeTier             // 10000 (1.00%) — BaiDEX single tier
+)
+```
+
+The pool is created with **zero initial liquidity**. You (or other LPs) must deposit to bootstrap trading.
+
+## Choosing the pool side
+
+| Pool side | Pros | Cons |
+|---|---|---|
+| **USBI** (default) | Lower volatility, scales with user base, abundant liquidity | Less direct BINI exposure |
+| **wBINI** | Direct BINI exposure, premium positioning | wBINI cap means available wBINI is limited; harder to bootstrap |
+
+90%+ of new Agent Tokens use **USBI**. wBINI is for premium projects with curated LP partners.
+
+Choose at spawn time. You can later create a second pool on the other side (manually, not via Spawner) if you want both.
+
+## V3 fee tier
+
+BaiDEX uses a **single fee tier of 1.00%** (10,000 in V3 fee-tier units). All Agent Pools are at this tier.
+
+This is in contrast to Uniswap V3 which has 0.05 / 0.30 / 1.00% tiers — BaiDEX simplified to one.
+
+See [BaiDEX → Fees](/baidex/fees).
+
+## Initial price
+
+The pool is created with **no initial price** (zero liquidity → no price). The first LP to deposit sets the initial price by their deposit ratio.
+
+Example:
+
+```
+You deposit:  100,000 AgentToken + 100 USBI
+Implied price: 1 AgentToken = 0.001 USBI (per simple V3 formula)
+```
+
+Choose your initial deposit ratio carefully — it sets the starting price reference.
+
+## Agent Worker assignment
+
+In parallel with pool creation, an [Agent Worker](/agentt-launchpad/auto-worker) is assigned to your Agent Token. The Worker monitors **all pools** containing the token but typically there's just one (the auto-listed pool).
+
+If you create additional pools (different side, different chain), the Worker covers them too.
+
+## Pool address discovery
+
+After spawn, the pool address is:
+
+- Returned in the spawn transaction's logs
+- Published on the AgentT Launchpad detail page for your token
+- Indexed by the V3 factory (queryable via `factory.getPool(tokenA, tokenB, fee)`)
+
+## Adding liquidity
+
+After spawn, to bootstrap trading:
+
+1. Approve your Agent Token + USBI/wBINI to the V3 position manager
+2. Mint a position in your chosen price range
+3. Provide initial liquidity (typically the spawner's full holdings + matched USBI side)
+
+For step-by-step LP details, see [BaiDEX → Liquidity](/baidex/liquidity).
+
+## Pool visibility on BaiDEX
+
+Your Agent Pool appears on the BaiDEX UI:
+
+- In the pair selector when users browse Agent Tokens
+- With the Worker status badge attached
+- With recent action log entries from the Worker
+
+The pool is **public** — anyone can see, swap, LP. There is no allowlist.
+
+## Listing on aggregators
+
+Once the pool has meaningful TVL, it may surface on:
+
+- BaiDEX's own pair list
+- Third-party DEX aggregators (1inch, ParaSwap if integrated)
+- DefiLlama (if eligible)
+
+These are **discovery layers**, not native BaiDEX features. Listing on aggregators depends on each aggregator's policies.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="BaiDEX Pools" icon="droplet" href="/baidex/pools">
+    All pool types
+  </Card>
+  <Card title="Liquidity" icon="water" href="/baidex/liquidity">
+    LP rules
+  </Card>
+  <Card title="Auto-Worker" icon="bolt" href="/agentt-launchpad/auto-worker">
+    Worker assigned in parallel
+  </Card>
+  <Card title="Spawn flow" icon="rocket" href="/agentt-launchpad/spawn-flow">
+    The full pipeline
+  </Card>
+</CardGroup>

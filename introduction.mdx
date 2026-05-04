@@ -1,67 +1,72 @@
 ---
 title: "Introduction"
-description: "Overview of the Binibit Spot Market API."
+description: "Overview of the Binibit ecosystem and its public APIs."
 ---
 
-## What is Binibit API?
+## What is Binibit?
 
-Binibit is a centralized cryptocurrency spot exchange. The Spot Market API is the public REST surface for real-time market data: tickers, order books, recent trades, candles, and asset metadata.
+Binibit is a multi-product crypto ecosystem built around a single token (**BINI**) and a shared economic model:
 
-Key properties:
-
-- **Public** — no API key, no authentication required for market data
-- **REST + JSON** — every endpoint returns `application/json`
-- **Real-time** — data refreshes every few seconds
-- **Rate-limited** — fair per-IP quotas by default ([details](/general/rate-limits))
-
-## Two API surfaces
-
-| Host | Purpose |
+| Product | Role |
 |---|---|
-| `public-api.binibit.com` | **Primary public API.** Market data + (auth-gated) trading and wallet endpoints. |
-| `internal-api.binibit.com/.../getcoingecko` | **Aggregator-spec namespace.** A subset of market data reshaped to match CoinGecko Integration API Standards v8 for ingestion by data aggregators. |
+| **Binibit Exchange** | Centralized spot exchange. Hosts BINI/USDT and other pairs. Has staking with referral levels R0–R8. |
+| **BiniChain** | EVM Layer 1. Native gas = BINI. Hosts BaiDEX, AgentT Launchpad, the Agent Hive, and the bridges. |
+| **BaiDEX** | Agent-managed Uniswap V3-style AMM on BiniChain. Every Agent Token gets an agent brain managing its pool. |
+| **AgentT Launchpad** | Spawn an Agent Token in one tap. Worker assigned automatically, Agent Pool listed automatically. |
+| **Agent Hive** | Hierarchy of agents — Queens (3), Scouts (2), Workers (N). The Swarm = active runtime subset. |
+| **Bini App** | Telegram mini-app. Users mine **Crystals (CRS)**, level up via **30 lessons**, bridge into BaiDEX. |
+| **BINI Token** | Native token. Gas, staking, lottery, spawn fees, referrals. Fixed 1B supply, 4-year emission. |
 
-Use the primary host unless you specifically need the CoinGecko-format response shape. See [Base URL](/general/base-url).
+## Where to start
 
-## Endpoints at a glance
-
-### Market data (public-api.binibit.com)
-
-| Endpoint | Purpose |
+| Goal | Page |
 |---|---|
-| [`GET /api/tickers`](/api-reference/market-data/tickers) | 24h ticker for one pair |
-| [`GET /api/orderbook`](/api-reference/market-data/orderbook) | Up to 40 bids + 40 asks for one pair |
-| [`GET /api/deals`](/api-reference/market-data/deals) | Recent trades for one pair |
-| [`GET /api/ohlc`](/api-reference/market-data/ohlc) | OHLCV candles |
-| [`GET /api/currencies`](/api-reference/market-data/currencies) | List of currency codes |
-| [`GET /api/currencies/pairs`](/api-reference/market-data/currencies-pairs) | Pair settings (precision, min order size) |
-| [`GET /api/currencies/commissions`](/api-reference/market-data/commissions) | Default commissions catalogue |
-| [`GET /api/healthcheck`](/api-reference/market-data/healthcheck) | Liveness probe |
+| Build against the Spot Market API | [API Reference](/api-reference/introduction) |
+| Understand the economic model | [Tokenomics → Ecosystem Overview](/tokenomics/ecosystem-overview) |
+| Use BiniChain RPC | [BiniChain → Overview](/binichain/overview) |
+| Trade on BaiDEX | [BaiDEX → Overview](/baidex/overview) |
+| Spawn an Agent Token | [AgentT Launchpad](/agentt-launchpad/overview) |
+| Understand the agent hierarchy | [Agent Hive](/agent-hive/overview) |
+| User the Bini App | [Bini App](/bini-app/overview) |
+| Buy / hold / stake BINI | [BINI Token](/bini-token/overview) |
 
-### Aggregator compatibility (internal-api.binibit.com)
+## Public APIs
 
-| Endpoint | Purpose |
-|---|---|
-| [`GET /tickers`](/api-reference/aggregator/tickers) | All pairs in one CoinGecko-format response |
-| [`GET /orderbook`](/api-reference/aggregator/orderbook) | Order book for one pair, CoinGecko format |
-| [`GET /historical_trades`](/api-reference/aggregator/historical-trades) | Recent trades, CoinGecko `{buy: [], sell: []}` shape |
-| [`GET /asset`](/api-reference/aggregator/asset) | Asset metadata in CoinMarketCap-compatible shape |
+| API | Host | Auth |
+|---|---|---|
+| **Spot Market API (primary)** | `public-api.binibit.com` | No auth for market data |
+| **Aggregator-spec namespace** | `internal-api.binibit.com/.../getcoingecko` | No auth |
+| **BiniChain RPC** | `rpc.binibit.com` | Standard JSON-RPC |
+| **BiniChain Explorer API** | `scan.binibit.com` | Standard Blockscout |
+| **BaiDEX / Launchpad / Hive APIs** | TBD during v2.0 rollout | TBD |
 
 ## API stability
 
-This is **API v1**. Breaking changes will be announced 30 days in advance via:
+The Spot Market API is **v1.1**. Breaking changes are announced 30 days in advance via the [Changelog](/changelog) and the GitHub repo.
 
-- The [Changelog](/changelog) page
-- The [GitHub repo](https://github.com/Binibit/docs) (watch for releases)
-
-## Roadmap
+## Documentation versions
 
 | Version | Scope |
 |---|---|
-| v1 (current) | Public market data on `public-api.binibit.com/api/*` and aggregator-spec namespace |
-| v1.x | Cleaner path alias `/v1/spot/market/*`, server time endpoint, 24h summary endpoint |
-| v2 | Documented authenticated trading API (HMAC-SHA256), WebSocket streams |
+| **v1.x** (live) | Spot Market API only (public-api.binibit.com + aggregator-spec namespace) |
+| **v2.0** (in progress) | Full ecosystem: BiniChain, BaiDEX, AgentT Launchpad, Agent Hive, Bini App, BINI Token, Tokenomics |
+| **v2.x** (planned) | OHLC docs, status page, OpenAPI playground per endpoint |
+| **v3.0** (planned) | Authenticated trading API + WebSocket streams |
 
 ## Need higher rate limits?
 
 Market makers, aggregators, and high-volume integrators can request elevated rate limits and IP whitelisting. Email [api@binibit.com](mailto:api@binibit.com).
+
+## Related
+
+<CardGroup cols={3}>
+  <Card title="Tokenomics" icon="chart-pie" href="/tokenomics/ecosystem-overview">
+    The shared economic model
+  </Card>
+  <Card title="API Reference" icon="terminal" href="/api-reference/introduction">
+    REST endpoints
+  </Card>
+  <Card title="Changelog" icon="clock-rotate-left" href="/changelog">
+    Versioned changes
+  </Card>
+</CardGroup>

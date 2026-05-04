@@ -1,62 +1,84 @@
 ---
-title: "Binibit Spot Market API"
-description: "Public REST API for the Binibit centralized spot exchange."
+title: "Binibit Ecosystem Docs"
+description: "Centralized exchange, EVM L1, agent-managed DEX, launchpad, hive, mini-app, and BINI token — all in one place."
 ---
+
+## Welcome
+
+Binibit is a centralized exchange, an EVM Layer 1 chain (**BiniChain**), an agent-managed DEX (**BaiDEX**), an agent hierarchy (**Agent Hive**), an Agent Token launchpad (**AgentT Launchpad**), a Telegram mini-app (**Bini App**), and a native token (**BINI**) — all sharing one economic model.
+
+Pick a product to dive into.
+
+## Products
+
+<CardGroup cols={3}>
+  <Card title="Exchange" icon="chart-line" href="/api-reference/introduction">
+    Public Spot Market API for the Binibit centralized exchange. CoinGecko-compatible.
+  </Card>
+  <Card title="BiniChain" icon="link" href="/binichain/overview">
+    EVM Layer 1 with BINI as native gas.
+  </Card>
+  <Card title="BaiDEX" icon="layer-group" href="/baidex/overview">
+    Agent-managed AMM. Every token has an agent brain.
+  </Card>
+  <Card title="AgentT Launchpad" icon="rocket" href="/agentt-launchpad/overview">
+    Spawn an Agent Token. The Hive picks it up automatically.
+  </Card>
+  <Card title="Agent Hive" icon="bolt" href="/agent-hive/overview">
+    Queens, Scouts, Workers — hierarchical agent system.
+  </Card>
+  <Card title="Bini App" icon="mobile" href="/bini-app/overview">
+    Telegram mini-app: mine, learn, level up, earn.
+  </Card>
+  <Card title="BINI Token" icon="coins" href="/bini-token/overview">
+    Native token: gas, staking, sinks, rewards.
+  </Card>
+  <Card title="Tokenomics" icon="chart-pie" href="/tokenomics/ecosystem-overview">
+    The shared economic model. Start here for full context.
+  </Card>
+  <Card title="API Reference" icon="terminal" href="/api-reference/introduction">
+    REST endpoints for the Spot Market API.
+  </Card>
+</CardGroup>
 
 ## Quick start
 
-Fetch the latest ticker for `ETH_BTC`:
+Fetch the latest ticker for `ETH_BTC` from the Spot Market API:
 
 ```bash
 curl "https://public-api.binibit.com/api/tickers?currencyPairCode=ETH_BTC"
 ```
 
-<Columns cols={3}>
-  <Card title="Tickers" icon="chart-line" href="/api-reference/market-data/tickers">
-    24h price, change, volume, best bid and ask for one pair.
-  </Card>
-  <Card title="Order Book" icon="layer-group" href="/api-reference/market-data/orderbook">
-    Up to 40 bids and 40 asks for one pair.
-  </Card>
-  <Card title="Deals" icon="clock-rotate-left" href="/api-reference/market-data/deals">
-    Recent trades for one pair, with pagination and date filters.
-  </Card>
-  <Card title="OHLC" icon="chart-candlestick" href="/api-reference/market-data/ohlc">
-    Candle data with intervals from 1 minute to 1 year.
-  </Card>
-  <Card title="Pairs" icon="arrow-right-arrow-left" href="/api-reference/market-data/currencies-pairs">
-    Trading pair settings: rounding precision, minimum order sizes.
-  </Card>
-  <Card title="Healthcheck" icon="heart-pulse" href="/api-reference/market-data/healthcheck">
-    Liveness probe — confirms the API is up.
-  </Card>
-</Columns>
+## What's live now
 
-## What's inside
+| Product | Documentation status |
+|---|---|
+| Exchange + Spot Market API | ✅ Published (v1.1.0) |
+| BiniChain | 🚧 In progress (v2.0) |
+| BaiDEX | 🚧 In progress (v2.0) |
+| AgentT Launchpad | 🚧 In progress (v2.0) |
+| Agent Hive | 🚧 In progress (v2.0) |
+| Bini App | 🚧 In progress (v2.0) |
+| BINI Token | 🚧 In progress (v2.0) |
+| Tokenomics | 🚧 In progress (v2.0) |
 
-<Columns cols={2}>
-  <Card title="General Info" icon="circle-info" href="/general/base-url">
-    Base URLs, rate limits, response format, errors, timestamps.
-  </Card>
-  <Card title="API Reference" icon="terminal" href="/api-reference/introduction">
-    REST endpoint reference with live examples.
-  </Card>
-  <Card title="Trading Pairs" icon="shapes" href="/reference/trading-pairs">
-    List of all active markets and their volumes.
-  </Card>
-  <Card title="Verification" icon="shield-check" href="/verification">
-    Live data snapshot for cross-checking against the trading interface.
-  </Card>
-</Columns>
+The non-Exchange products have placeholder pages today. Full content publishes during the v2.0 documentation rollout — see the [Changelog](/changelog).
 
 ## Highlights
 
-- **Public.** No authentication, no API key.
+- **Public.** Market data has no authentication, no API key.
 - **REST + JSON.** Standard HTTP, predictable schemas.
 - **Real-time.** Tickers refresh every few seconds.
-- **Two API surfaces.** A primary `public-api.binibit.com` and an aggregator-spec namespace at `internal-api.binibit.com/.../getcoingecko/*` for CoinGecko / CoinMarketCap-style integrations.
-- **Rate-limited fairly.** Aggregators and integrators get whitelisted on request — see [Rate Limits](/general/rate-limits).
+- **One ecosystem, one economy.** BINI, wBINI, USBI, and CRS share a single model — see [Tokenomics](/tokenomics/ecosystem-overview).
+- **Rate-limited fairly.** Aggregators and integrators get whitelisted on request.
 
-## Trading and wallets
+## Status
 
-The trading API (create orders, cancel orders, list user orders, deposits, withdrawals) is part of `public-api.binibit.com`. It is documented at `https://public-api.binibit.com/swagger/` and uses HMAC-SHA256 request signing — see the [Roadmap](/changelog#roadmap) for documentation status.
+<CardGroup cols={2}>
+  <Card title="Exchange" icon="arrow-up-right-from-square" href="https://binibit.com">
+    Live trading interface
+  </Card>
+  <Card title="GitHub" icon="github" href="https://github.com/Binibit">
+    Source for these docs and other open-source repos
+  </Card>
+</CardGroup>

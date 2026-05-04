@@ -50,6 +50,83 @@
         ]
       },
       {
+        "tab": "BiniChain",
+        "groups": [
+          {
+            "group": "BiniChain",
+            "pages": [
+              "binichain/overview"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "BaiDEX",
+        "groups": [
+          {
+            "group": "BaiDEX",
+            "pages": [
+              "baidex/overview"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "AgentT Launchpad",
+        "groups": [
+          {
+            "group": "AgentT Launchpad",
+            "pages": [
+              "agentt-launchpad/overview"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Agent Hive",
+        "groups": [
+          {
+            "group": "Agent Hive",
+            "pages": [
+              "agent-hive/overview"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Bini App",
+        "groups": [
+          {
+            "group": "Bini App",
+            "pages": [
+              "bini-app/overview"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "BINI Token",
+        "groups": [
+          {
+            "group": "BINI Token",
+            "pages": [
+              "bini-token/overview"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Tokenomics",
+        "groups": [
+          {
+            "group": "Tokenomics",
+            "pages": [
+              "tokenomics/ecosystem-overview"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "API Reference",
         "groups": [
           {
@@ -91,8 +168,18 @@
           "icon": "arrow-up-right-from-square"
         },
         {
+          "anchor": "BINI Token",
+          "href": "https://binibit.com/en/bini",
+          "icon": "coins"
+        },
+        {
+          "anchor": "Staking",
+          "href": "https://binibit.com/en/staking/level-conditions",
+          "icon": "lock"
+        },
+        {
           "anchor": "GitHub",
-          "href": "https://github.com/Binibit/docs",
+          "href": "https://github.com/Binibit",
           "icon": "github"
         }
       ]
@@ -122,10 +209,12 @@
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/Binibit"
+      "github": "https://github.com/Binibit",
+      "x": "https://x.com/binibitcrypto",
+      "instagram": "https://www.instagram.com/binibit_official"
     }
   },
-  "description": "Ecosystem Docs: Binibit Exchange, BiniChain (EVM L1), BaiDEX (AI-managed DEX), Bini App, and BINI Token.",
+  "description": "Binibit Ecosystem Docs: Exchange, BiniChain (EVM L1), BaiDEX (agent-managed DEX), AgentT Launchpad, Agent Hive, Bini App, BINI Token, and Tokenomics.",
   "favicon": "/images/logolisting.png",
   "logo": "/images/logobinibitdocs.jpeg",
   "appearance": {

@@ -1,0 +1,124 @@
+---
+title: "Utility & Sinks"
+description: "Where BINI is used and where it flows back out (8 mechanisms)."
+---
+
+<Card title="Tokenomics view" icon="chart-pie" href="/tokenomics/bini-sinks">
+  The full Tokenomics → BINI Sinks page covers the deflationary mechanics in depth.
+</Card>
+
+## Eight mechanisms
+
+| # | Mechanism | What BINI does | Type |
+|---|---|---|---|
+| 1 | **Gas** | Pays for every BiniChain transaction | Sink (partial burn / validator) |
+| 2 | **Staking** | Locked on Binibit Exchange for 30/90/180/360 days at 160% APR | Lock |
+| 3 | **DEX trade burn** | 0.25% of every BaiDEX swap is burned | **Permanent burn** |
+| 4 | **Lottery burn** | 20% of every BINI lottery ticket is burned | **Permanent burn** |
+| 5 | **Spawn fee** | Agent Token spawn cost is paid in BINI and burned | **Permanent burn** |
+| 6 | **Premium / boost** | Token visibility boosts on AgentT Launchpad consume BINI | Sink (partial burn) |
+| 7 | **Bridge gas** | Bridges A and B consume BINI for transaction execution | Sink |
+| 8 | **LP locking** | wBINI side of BaiDEX pools is locked while LP position is open | Lock |
+
+## Permanent burns (sinks 3, 4, 5)
+
+These three sinks send BINI to a burn address with no recovery path:
+
+```
+DEX swap:    0.25% × swap volume          (permanent)
+Lottery:     20% × ticket revenue         (permanent)
+Spawn:       100% × spawn cost per AT     (permanent)
+```
+
+The combination scales with **DEX volume**, **lottery activity**, and **Launchpad adoption** respectively. Each independently creates deflationary pressure.
+
+## Locks (sinks 2, 8)
+
+These reduce **effective float** — BINI exists but cannot trade for the duration:
+
+| Lock type | Duration | Returns when |
+|---|---|---|
+| Staking | 30 / 90 / 180 / 360 days | Stake matures or user unstakes (if early withdraw allowed at penalty) |
+| LP wBINI side | Indefinite | LP position is closed |
+
+Locked BINI doesn't reduce total supply, but it reduces sell pressure during the lock.
+
+## Gas (sink 1)
+
+Every BiniChain transaction pays gas in BINI. Depending on chain configuration:
+
+- **Burned** — gas is permanently removed from circulation (Ethereum-style EIP-1559)
+- **Paid to validators** — gas goes to validators as block reward
+- **Hybrid** — some burned, some to validators
+
+The exact split is documented in the [BiniChain](/binichain/overview) reference.
+
+## Bridge gas (sink 7)
+
+Bridges A and B execute on BiniChain — they consume BINI gas. This is the same mechanism as #1 but worth calling out: **Bridge B** (off-chain BINI → native) consumes BINI, so bridging is itself slightly self-funding from a sink perspective.
+
+## DEX volume → burn projection
+
+At a constant DEX volume of $V/day with 1% total fee, 0.25% burned:
+
+```
+Daily burn (in $) = V × 0.0025
+
+Daily burn (in BINI at $0.12) = V × 0.0025 / $0.12
+```
+
+| Daily volume | Daily burn ($) | Daily burn (BINI) |
+|---:|---:|---:|
+| $100K | $250 | 2,083 |
+| $1M | $2,500 | 20,833 |
+| $10M | $25,000 | 208,333 |
+| $100M | $250,000 | 2,083,333 |
+
+At $10M daily volume, the DEX burn alone removes ~76M BINI/year — comparable to Year 4's monthly emission rate.
+
+## Spawn cost → burn projection
+
+If 100 Agent Tokens spawn per day at a hypothetical 100 BINI/spawn:
+
+```
+Daily Spawn burn = 100 × 100 = 10,000 BINI/day = ~3.65M BINI/year
+```
+
+The exact spawn cost is being finalized.
+
+## Lottery burn projection
+
+Lottery launches in Phase 2 of the Bini App rollout. Once active, 20% of every BINI ticket is burned. Numbers depend on ticket pricing and frequency — not yet finalized.
+
+## Net long-term effect
+
+```
+Combined permanent burns:
+   DEX trade burn        + ~76M / year (at $10M daily volume)
++  Lottery burn          + TBD
++  Spawn fee burn        + ~3.65M / year (at 100/day, 100 BINI/spawn)
+─────────────────────────────────────────────────────────
+   Total permanent burn  ≈ 80M+ / year (with healthy adoption)
+
+vs Year 4 emission:        90M / year
+vs Year 5+ emission:       0
+```
+
+Once adoption hits the targeted volume levels, **annual burns approach annual emission** in years 3-4 and **exceed emission** in years 5+. This is when BINI becomes net deflationary.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Tokenomics: BINI Sinks" icon="fire" href="/tokenomics/bini-sinks">
+    Full mechanism details
+  </Card>
+  <Card title="Emission" icon="chart-line" href="/bini-token/emission">
+    The supply side
+  </Card>
+  <Card title="BaiDEX" icon="layer-group" href="/baidex/overview">
+    Source of sink #3 (DEX trade burn)
+  </Card>
+  <Card title="AgentT Launchpad" icon="rocket" href="/agentt-launchpad/overview">
+    Source of sink #5 (Spawn fee)
+  </Card>
+</CardGroup>

@@ -1,46 +1,74 @@
 ---
-title: "BINI Token"
-description: "Native ecosystem token: gas, staking, sinks, rewards."
+title: "BINI Token Overview"
+description: "Native ecosystem token: gas, staking, sinks, rewards. 1B fixed supply."
 ---
 
-<Note>
-  This documentation is being written. Full BINI Token reference publishes during the v2.0 docs rollout.
-</Note>
+<Card title="See the full economic model" icon="chart-pie" href="/tokenomics/ecosystem-overview">
+  Tokenomics → Ecosystem Overview is the central hub for how BINI fits into the wider system.
+</Card>
 
 ## What is BINI
 
-BINI is the native token of the Binibit ecosystem. It is gas on BiniChain, the wrapped trading asset on BaiDEX (`wBINI`), and the unit of account for staking, lottery, spawn fees, and referral rewards.
+BINI is the native token of the Binibit ecosystem. It is:
+
+- **Gas** on BiniChain (every transaction pays BINI)
+- **Trading reference** on Binibit Exchange (BINI/USDT pair)
+- **Staking asset** on Binibit Exchange (160% APR, R0-R8 referrals)
+- **Fee currency** for Agent Token spawn, lottery tickets, DEX referrer rewards
+- **LP asset** as wBINI on BaiDEX
+
+## Key facts
 
 | | |
 |---|---|
-| Total supply | 1,000,000,000 BINI (fixed, no mint) |
-| ERC-20 (Ethereum) | [`0x445d03f499f1c150615957bb87588fb465fc91cc`](https://etherscan.io/token/0x445d03f499f1c150615957bb87588fb465fc91cc) |
-| BiniChain native | Mainnet rollout (TBD) |
+| Total supply | **1,000,000,000 BINI** (fixed, no mint after genesis) |
 | Reference price | $0.12 |
+| Allocation | 60% Rewards / 15% Team / 10% Marketing / 10% Ecosystem / 5% DEX Liquidity |
+| Emission | 4-year monthly from Rewards pool, then zero |
+| Token contract (Ethereum ERC-20) | [`0x445d03f499f1c150615957bb87588fb465fc91cc`](https://etherscan.io/token/0x445d03f499f1c150615957bb87588fb465fc91cc) |
+| Native on BiniChain | Mainnet rollout |
 
 ## Where to buy
 
-- [Binibit Exchange (BINI/USDT)](https://binibit.com/en/exchange?symbol=BINI_USDT)
-- [Azbit (BINI/USDT)](https://azbit.com/exchange/BINI_USDT)
-- [Blynex (BINI/USDT)](https://blynex.com/spot/BINI_USDT)
+| Venue | Pair | Link |
+|---|---|---|
+| Binibit Exchange | BINI/USDT | [exchange](https://binibit.com/en/exchange?symbol=BINI_USDT) |
+| Azbit | BINI/USDT | [azbit.com](https://azbit.com/exchange/BINI_USDT) |
+| Blynex | BINI/USDT | [blynex.com](https://blynex.com/spot/BINI_USDT) |
 
-## What will be documented
+Aggregator listings:
 
-- Allocation & vesting (60/15/10/10/5)
-- Emission schedule (4-year, 600M rewards)
-- Utility & sinks (8 mechanisms)
-- Staking packages (160% APR, 4 tiers)
-- Referral levels R0-R8
-- Contract addresses
-- Asset comparison: BINI vs USBI vs CRS vs wBINI
+- [CoinGecko](https://www.coingecko.com/en/coins/binibit)
+- [CryptoRank](https://cryptorank.io/price/binibit-token)
+- [Arkham Intel](https://intel.arkm.com/explorer/token/binibit)
+- [DropStab](https://dropstab.com/coins/binibit)
+- [Etherscan](https://etherscan.io/token/0x445d03f499f1c150615957bb87588fb465fc91cc)
 
-## Related
+## Inside the docs
 
 <CardGroup cols={2}>
-  <Card title="Tokenomics" icon="chart-pie" href="/tokenomics/ecosystem-overview">
-    Full ecosystem model
+  <Card title="Allocation & vesting" icon="chart-pie" href="/bini-token/allocation">
+    1B fixed supply across 5 pools with cliff and linear vesting
   </Card>
-  <Card title="BiniChain" icon="link" href="/binichain/overview">
-    BINI as native gas
+  <Card title="Emission schedule" icon="chart-line" href="/bini-token/emission">
+    4-year monthly Rewards pool release: 17.5M → 7.5M → zero
+  </Card>
+  <Card title="Utility & sinks" icon="fire" href="/bini-token/utility">
+    Eight BINI sinks across the ecosystem
+  </Card>
+  <Card title="Staking" icon="lock" href="/bini-token/staking">
+    160% APR, four duration tiers
+  </Card>
+  <Card title="Referral levels (R0-R8)" icon="diagram-project" href="/bini-token/referral-levels">
+    Nine-level commission system
+  </Card>
+  <Card title="Where to buy" icon="cart-shopping" href="/bini-token/where-to-buy">
+    Listed venues
+  </Card>
+  <Card title="Contract addresses" icon="address-card" href="/bini-token/contracts">
+    Ethereum ERC-20 + future BiniChain native
+  </Card>
+  <Card title="BINI vs other assets" icon="scale-balanced" href="/bini-token/asset-comparison">
+    BINI vs wBINI vs USBI vs CRS
   </Card>
 </CardGroup>

@@ -1,0 +1,105 @@
+---
+title: "Emission Schedule"
+description: "The 4-year monthly release of the 600M Rewards pool, then zero."
+---
+
+<Card title="Tokenomics view" icon="chart-pie" href="/tokenomics/bini-emission">
+  The full Tokenomics page covers emission alongside sinks and supply trajectory.
+</Card>
+
+## The schedule
+
+The Rewards pool (600M BINI) releases over **48 months** in declining monthly amounts. After Year 4, no more emission — the supply is fully diluted.
+
+| Year | Monthly emission | Annual emission | Cumulative emission |
+|---|---:|---:|---:|
+| 1 | 17,500,000 | 210,000,000 | 210M |
+| 2 | 15,000,000 | 180,000,000 | 390M |
+| 3 | 10,000,000 | 120,000,000 | 510M |
+| 4 | 7,500,000 | 90,000,000 | 600M |
+| 5+ | 0 | 0 | 600M (final) |
+
+## Year-over-year inflation impact
+
+Inflation here is measured **against the Rewards pool only** (60% of total supply). Inflation against the full 1B supply is roughly proportional but offset by Marketing milestones and Ecosystem Reserve unlocks.
+
+| Year | Year-end Rewards-only % unlock | Effective annual emission rate |
+|---|---:|---:|
+| Year 1 | 35% (210M / 600M) | High |
+| Year 2 | 65% (390M / 600M) | Moderate |
+| Year 3 | 85% (510M / 600M) | Low |
+| Year 4 | 100% (600M / 600M) | Very low |
+| Year 5+ | 100% | **Zero** |
+
+## Why the front-loaded curve
+
+Year 1 is the highest emission for two reasons:
+
+1. **User acquisition** — early adopters need stronger incentives to join an unproven ecosystem
+2. **DEX liquidity bootstrapping** — early LPs need higher rewards to seed thin pools
+
+The taper means later users get lower headline yields but join a larger, more liquid ecosystem.
+
+## Where the Rewards pool flows (per-month policy)
+
+The exact split between bini-app rewards / Bridge B / Agent Hive incentives / Lottery / LP incentives is set per month and logged on-chain.
+
+A representative split (illustrative, not canonical):
+
+```
+Month X:
+├── 60%  Bini App claims + daily calendar
+├── 15%  Bridge B redemptions
+├── 10%  Agent Hive Worker incentives
+├── 10%  DEX LP incentives (wBINI side seeding)
+└── 5%   Lottery jackpots
+```
+
+The actual split for any given month is announced ahead of time and verifiable on-chain.
+
+## After Year 4 — supply dynamics
+
+```
+Year 5+:
+├── Emission:        0 BINI
+├── Burns:           Continuous (DEX swaps, lottery, spawn fees)
+├── Net trajectory:  Monotonically decreasing
+```
+
+Once emission stops, BINI becomes a **fixed-supply asset with continuous deflationary pressure** from the [eight sinks](/tokenomics/bini-sinks). Three of those sinks (DEX swap burn, lottery burn, spawn fee burn) are permanent — every burn shrinks total supply forever.
+
+## Emission and price model
+
+The price impact of emission depends on:
+
+1. How much of monthly emission lands in active wallets vs locked positions (staking, LP)
+2. How much circulates onto exchanges vs is held long-term
+3. How much is offset by burns from the same month's activity
+
+A sustainable model would have **monthly burns ≥ monthly emission** by some point in years 3-4, after which net supply starts decreasing.
+
+## Emission events on-chain
+
+Each monthly emission is a single transaction batch on BiniChain. The transaction is:
+
+- Pre-announced 7 days in advance
+- Executed on the first day of each month (or scheduled equivalent)
+- Logged with the per-pool split for that month
+- Available via [scan.binibit.com](https://scan.binibit.com)
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Allocation & vesting" icon="chart-pie" href="/bini-token/allocation">
+    Full pool breakdown
+  </Card>
+  <Card title="Utility & sinks" icon="fire" href="/bini-token/utility">
+    Where BINI flows back out (8 sinks)
+  </Card>
+  <Card title="Staking" icon="lock" href="/bini-token/staking">
+    Staking rewards come from the Rewards pool
+  </Card>
+  <Card title="Tokenomics" icon="chart-pie" href="/tokenomics/bini-emission">
+    Long-term supply trajectory
+  </Card>
+</CardGroup>

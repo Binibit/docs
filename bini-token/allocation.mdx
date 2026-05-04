@@ -1,0 +1,130 @@
+---
+title: "Allocation & Vesting"
+description: "1B BINI split across 5 pools with explicit unlock schedules."
+---
+
+<Card title="Tokenomics view" icon="chart-pie" href="/tokenomics/bini-emission">
+  See Tokenomics → BINI Emission for the full emission schedule and sink mechanics.
+</Card>
+
+## Allocation summary
+
+| Pool | BINI | % of supply | Unlock |
+|---|---:|---:|---|
+| **Rewards** | 600,000,000 | 60% | 4-year monthly emission |
+| **Team & Founders** | 150,000,000 | 15% | 1 yr cliff + 3 yr linear |
+| **Marketing** | 100,000,000 | 10% | 5% TGE + milestone-based |
+| **Ecosystem Reserve** | 100,000,000 | 10% | 6 mo cliff + 48 mo linear |
+| **DEX Liquidity** | 50,000,000 | 5% | 100% TGE |
+| **Total** | **1,000,000,000** | **100%** | |
+
+## Visual breakdown
+
+```
+                    BINI ALLOCATION (1B total)
+
+Rewards (60%)                                 ████████████████████████
+Team    (15%)                                 ██████
+Marketing (10%)                               ████
+Ecosystem (10%)                               ████
+DEX Liq (5%)                                  ██
+
+                    REWARDS EMISSION (600M over 4 yr)
+
+Year 1 (210M)                                 ████████████████████████
+Year 2 (180M)                                 ████████████████████
+Year 3 (120M)                                 █████████████
+Year 4 (90M)                                  ██████████
+Year 5+                                       (zero, supply complete)
+```
+
+## Pool-by-pool details
+
+### Rewards (60% / 600M)
+
+The largest pool, dedicated to user-facing incentives:
+
+- Bini App claims (mining, daily calendar, lessons)
+- Bridge B redemptions (off-chain BINI → native)
+- Agent Hive Worker incentives
+- Lottery jackpots
+- DEX LP incentives
+
+Released monthly per the [emission schedule](/bini-token/emission). After Year 4, the Rewards pool is fully drained — no more new BINI from this pool.
+
+### Team & Founders (15% / 150M)
+
+```
+Cliff:   12 months from TGE  (zero unlocked)
+Vesting: 36 months linear    (4.17M BINI/month)
+End:     Month 48
+```
+
+Designed for long-term alignment. The team has zero ability to dump for the first year and a smooth release profile thereafter.
+
+### Marketing (10% / 100M)
+
+```
+TGE:        5% unlocked at TGE  (5,000,000 BINI)
+Milestones: 95M unlocks tied to listings, partnerships, growth KPIs
+```
+
+Marketing unlocks are **milestone-driven, not time-driven**. Each significant milestone (new exchange listing, key partnership, growth target) triggers a defined chunk of BINI to unlock.
+
+This keeps marketing budget tied to outcomes rather than calendar days, but does mean marketing emission is less predictable than time-vested pools.
+
+### Ecosystem Reserve (10% / 100M)
+
+```
+Cliff:   6 months from TGE
+Vesting: 48 months linear
+End:     Month 54
+```
+
+A flexible pool for future grants, bounties, partnerships, and unforeseen ecosystem needs (e.g., supplementing DEX liquidity, funding audits, sponsoring builders). Allocated case-by-case by the team with on-chain transparency.
+
+### DEX Liquidity (5% / 50M)
+
+```
+TGE: 100% unlocked
+```
+
+Used as the **wBINI side of initial BaiDEX pools** — primarily the wBINI/USBI anchor pool. Available immediately at TGE so the DEX has working liquidity from day one.
+
+The 50M cap × $0.12 reference price = **$6,000,000 wBINI side value**, which combined with the matched USBI side creates a $12M pool TVL ceiling. See [wBINI Cap Rule](/tokenomics/wbini-cap).
+
+## Total cumulative supply over time
+
+| Month | Cumulative unlocked |
+|---:|---:|
+| 0 (TGE) | DEX 50M + Marketing 5M + first Rewards = ~73M |
+| 6 | + 6 mo Rewards + Ecosystem cliff ends, Marketing milestones | varies |
+| 12 | + 12 mo Rewards + Team cliff ends, Marketing milestones | varies |
+| 48 | All time-vested pools fully unlocked, Year 4 emission complete | varies (high) |
+| 54 | Ecosystem Reserve fully unlocked | varies (high) |
+
+Total max cumulative supply caps at 1,000,000,000 BINI by month 54 (assuming all Marketing milestones are met).
+
+## Anti-dump considerations
+
+- **Team has 1 year cliff**: zero team-side selling for 12 months
+- **Ecosystem has 6 month cliff**: no flood of grant-related selling early
+- **Rewards taper**: Year 1 is the highest emission; Year 4 is half. Sell pressure decreases over time
+- **Marketing tied to milestones**: cannot front-load if no milestones hit
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Emission schedule" icon="chart-line" href="/bini-token/emission">
+    The 4-year monthly Rewards release
+  </Card>
+  <Card title="Utility & sinks" icon="fire" href="/bini-token/utility">
+    Where BINI flows after unlock
+  </Card>
+  <Card title="Tokenomics" icon="chart-pie" href="/tokenomics/bini-emission">
+    Full economic context
+  </Card>
+  <Card title="wBINI Cap Rule" icon="shield" href="/tokenomics/wbini-cap">
+    50M DEX cap → $240M implied MC ceiling
+  </Card>
+</CardGroup>

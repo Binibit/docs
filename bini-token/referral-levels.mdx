@@ -1,0 +1,133 @@
+---
+title: "Referral Levels (R0–R8)"
+description: "Nine-level referral commission system on staking rewards."
+---
+
+<Card title="Canonical conditions on Binibit Exchange" icon="lock" href="https://binibit.com/en/staking/level-conditions">
+  This page describes mechanics. Live values (thresholds, percentages) are on the staking conditions page.
+</Card>
+
+## The nine levels
+
+Stakers automatically participate in a 9-level referral system, **R0 through R8**. Each level has thresholds for:
+
+- Self-stake (in USDT-equivalent)
+- Number of qualifying direct referrals
+- Cumulative team volume
+
+| Level | Tier description |
+|---|---|
+| R0 | Entry tier (any active stake) |
+| R1 | Active builder |
+| R2 | Active builder |
+| R3 | Mid-tier |
+| R4 | Mid-tier |
+| R5 | Senior |
+| R6 | Senior |
+| R7 | Top tier |
+| R8 | Maximum tier |
+
+Specific thresholds and percentages: see [staking conditions](https://binibit.com/en/staking/level-conditions). Live values may change with BINI price (see [Dynamic threshold](#dynamic-threshold) below).
+
+## How commission works
+
+When a downline (a user in your referral team, direct or indirect) earns staking rewards, you receive a **commission** based on the level difference between you and them.
+
+```
+If downline level >= your level:    base commission rate
+If downline level <  your level:    higher commission per level gap
+```
+
+This rewards being one or more tiers above your team. Unlike flat referral systems, the level-difference design encourages you to keep growing — your team's rewards multiply for you only as long as you stay ahead.
+
+### Example (illustrative)
+
+```
+You are R5. A user in your downline is R3.
+Difference: 2 levels.
+Commission on their staking rewards: base + 2 × per-level-bonus
+```
+
+(Exact percentages on the canonical conditions page.)
+
+## Same-level commission
+
+If your downline reaches your level or higher, the commission falls to a **flat 15%** (or the published base rate). This is the floor — even if your downline outranks you, you still earn from their stakes, just at a lower rate.
+
+## Dynamic threshold
+
+Level thresholds are denominated in **USDT**, not BINI. As BINI price moves, the BINI required to maintain a given level moves inversely:
+
+```
+required_bini = required_usdt / current_bini_price
+```
+
+| BINI price | BINI required for hypothetical R5 (e.g. $5,000 USDT) |
+|---|---:|
+| $0.10 | 50,000 BINI |
+| $0.12 (reference) | 41,667 BINI |
+| $0.20 | 25,000 BINI |
+| $0.50 | 10,000 BINI |
+
+If BINI rises, you need less BINI to maintain your level. If BINI falls, you need more (or risk dropping a tier).
+
+This protects the level system against price volatility — your level reflects USD-equivalent commitment, not raw BINI quantity.
+
+## Maintaining your level
+
+Your level is checked **at stake initiation** and on **periodic rebalancing**:
+
+- If your self-stake (in USDT-equivalent) drops below your level's threshold, you fall a level
+- If your team volume drops below your level's threshold, you fall a level
+- New stakes or team additions can raise your level
+
+Specific check intervals are on the staking conditions page.
+
+## Combined with R0-R8 — examples
+
+The combination of self-stake and team volume creates a **diagonal progression**:
+
+```
+You can reach R5 by:
+  - Higher self-stake + smaller team
+  OR
+  - Smaller self-stake + larger team
+
+Both paths viable.
+```
+
+This makes the system accessible to both **whales** (large self-stake) and **community builders** (large team).
+
+## Tokenomics impact
+
+The R0-R8 system is what makes **staking compounding for the protocol**:
+
+- Stakers lock BINI (sink #2)
+- Stakers acquire team to earn more → users referred deposit more BINI → more locks
+- Higher levels = larger team = more aggregate locked BINI per refer-er
+- The system has a natural cap (R8) so it cannot run away
+
+See [Tokenomics: Staking & Referral Economics](/tokenomics/staking).
+
+## Risk considerations
+
+- **Multi-level marketing structure**: legality varies by jurisdiction. Verify you can participate in your country before signing up.
+- **Downline volatility**: if your team unstakes en-masse, your commissions drop and you may lose your level
+- **Threshold volatility**: USDT-pegged thresholds protect against BINI price moves but don't protect against USDT depegging (rare but not zero)
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Staking" icon="lock" href="/bini-token/staking">
+    160% APR packages — what referrers earn from
+  </Card>
+  <Card title="Tokenomics: Staking" icon="chart-pie" href="/tokenomics/staking">
+    Full economic context
+  </Card>
+  <Card title="Where to buy" icon="cart-shopping" href="/bini-token/where-to-buy">
+    Need BINI first to stake
+  </Card>
+  <Card title="Staking conditions" icon="external-link" href="https://binibit.com/en/staking/level-conditions">
+    Canonical thresholds and percentages
+  </Card>
+</CardGroup>

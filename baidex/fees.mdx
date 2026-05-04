@@ -1,0 +1,122 @@
+---
+title: "Fees"
+description: "1.00% swap fee split into LP, burn, and referrer (50 / 25 / 25 BPS)."
+---
+
+<Card title="Tokenomics view" icon="fire" href="/tokenomics/bini-sinks">
+  See Tokenomics → BINI Sinks for how the burn portion contributes to deflation.
+</Card>
+
+## The split
+
+Every swap on BaiDEX charges a **1.00% total fee** (100 basis points), split three ways:
+
+```
+TOTAL_FEE_BPS = 100  (1.00%)
+LP_REWARD_BPS = 50   (0.50%)
+BURN_BPS      = 25   (0.25%)
+REFERRER_BPS  = 25   (0.25%)
+```
+
+```
+Total swap fee:  1.00%  (100 BPS)
+├── 0.50%  LP providers       (50 BPS)
+├── 0.25%  Burned permanently (25 BPS) — deflationary
+└── 0.25%  Referrer / treasury (25 BPS)
+```
+
+| Slice | Receiver | Burns? |
+|---|---|---|
+| 0.50% (50 BPS) | LP providers in the pool | No |
+| 0.25% (25 BPS) | Burn address | **Yes** |
+| 0.25% (25 BPS) | Referrer (if any) or treasury | No |
+
+## How it works in practice
+
+When you swap on BaiDEX:
+
+1. Router intercepts the trade
+2. Computes fee = 1.00% of input amount
+3. Allocates fee to LPs, burn address, and referrer/treasury per the split
+4. Executes the underlying V3 swap with the remaining 99.00%
+
+LPs see the 0.50% portion as their realized fee. The 0.50% they "miss" vs Uniswap V3 is going to burn + referrer.
+
+## Burn slice impact
+
+The 0.25% burn is **permanent** — every swap removes BINI (or wBINI / USBI / Agent Token, depending on input) from circulation forever.
+
+For wBINI swaps, this is a direct BINI sink (sink #3 in [BINI Sinks](/tokenomics/bini-sinks)). For other input assets, the burn affects that asset's circulating supply.
+
+### Daily burn projections (wBINI)
+
+If wBINI/USBI volume is $V/day:
+
+```
+Daily wBINI burn (in $) = V × 0.0025
+
+Daily wBINI burn (in BINI at $0.12 ref) = V × 0.0025 / $0.12
+```
+
+| Daily volume (wBINI) | Daily burn ($) | Daily burn (BINI) |
+|---:|---:|---:|
+| $100K | $250 | 2,083 |
+| $1M | $2,500 | 20,833 |
+| $10M | $25,000 | 208,333 |
+| $100M | $250,000 | 2,083,333 |
+
+At $10M/day wBINI volume, that's ~76M BINI burned per year — comparable to the Year 4 emission rate.
+
+## Referrer slice
+
+The 0.25% referrer share goes to:
+
+- The user who referred the trader (if applicable), OR
+- The platform treasury (if no referrer)
+
+Referrer payouts are credited per-trade. The referral system itself is on-chain (referrer address is encoded in the swap call).
+
+## LP slice mechanics
+
+The 0.50% LP fee accrues to LPs proportional to their share of the in-range liquidity at the moment of the swap. Standard V3 semantics:
+
+- Fees accumulate per position
+- LPs collect fees by calling `collect()` on their position NFT
+- Out-of-range LPs earn nothing during periods their range is bypassed
+
+## Why 1.00% total?
+
+The 1.00% rate is calibrated for:
+
+- **Sustainability of burn**: 0.25% is enough to materially shrink supply at moderate volume
+- **Competitive LP returns**: 0.50% to LPs is comparable to Uniswap's 0.30% tier on volatile pairs (with the trade-off of higher slippage protection from agents)
+- **Functional referrer mechanic**: 0.25% gives referrers a non-trivial commission
+
+Lower total fees would reduce the burn rate. Higher total fees would deter swap volume.
+
+## Comparison
+
+| | Uniswap V3 | BaiDEX |
+|---|---|---|
+| Lowest tier | 0.05% | n/a |
+| Stable tier | 0.30% (most pools) | 1.00% |
+| Volatile tier | 1.00% | 1.00% (single tier) |
+| Where fee goes | 100% to LPs | 50 LP / 25 burn / 25 ref |
+| Burn? | No | Yes (0.25%) |
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="AMM mechanics" icon="layer-group" href="/baidex/amm">
+    Where the fee router fits
+  </Card>
+  <Card title="Tokenomics: BINI Sinks" icon="fire" href="/tokenomics/bini-sinks">
+    The burn portion
+  </Card>
+  <Card title="Pools" icon="droplet" href="/baidex/pools">
+    Where fees accrue
+  </Card>
+  <Card title="Tokenomics: Agent Token Sinks" icon="rocket" href="/tokenomics/agent-token-sinks">
+    How fees compound for Agent Token holders
+  </Card>
+</CardGroup>

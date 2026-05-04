@@ -1,0 +1,112 @@
+---
+title: "Contracts"
+description: "Smart contract addresses for BaiDEX core, fee router, Spawner, and registry."
+---
+
+<Note>
+  Production contract addresses on BiniChain mainnet will be published here. Until mainnet launch, the canonical deployment is on Base Sepolia (testnet).
+</Note>
+
+## Base Sepolia (testnet, current)
+
+```
+Network:   Base Sepolia
+Chain ID:  84532
+Deployed:  2026-04-22
+Verified:  Blockscout ✓
+```
+
+| Contract | Address | Purpose |
+|---|---|---|
+| **USBI** | `0xbeC9e1908Aed9252DE56D2B37f67790237AD19Ee` | Stablecoin (ERC-20, mintable/burnable) |
+| **wBINI** | `0x41Ce230a6Db85c677aa9750F797D98Fd527c705f` | Wrapped BINI (ERC-20, deposit/withdraw) |
+| **BaiDexFeeRouter** | `0x44eaB92a7aa8A9d8978cca7022d96B3E73957Ecd` | Custom fee proxy for V3 swaps |
+| **HiveSpawner** | `0x81aCd1F143a2E2901c550F1b40E25EBF5e6E96c5` | Agent Token factory (deploys SpawnedERC20) |
+| **HiveRegistry** | `0x543D356D975aAe434F3657dfF3fFF5009660B317` | Agent NFT registry (ERC-721 + ERC-8004) |
+
+### Standard V3 contracts
+
+The following Uniswap V3 contracts are deployed alongside, with addresses to be published in a follow-up PR (or on BiniChain mainnet when launched):
+
+- `UniswapV3Factory` — pool factory
+- `NonfungiblePositionManager` — LP position NFTs
+- `SwapRouter02` — primary swap router (use this for `exactInputSingle` etc.)
+- `Quoter` — off-chain quote helper
+- `TickLens` — tick query helper
+- `UniversalRouter` — multi-protocol router (if deployed)
+
+## BiniChain mainnet (future)
+
+When BiniChain mainnet launches, the canonical deploy will publish:
+
+- All addresses above (renamed without "BaiDex" prefix where applicable)
+- Bridge contracts (Bridge A, Bridge B)
+- Anchor pool address (the canonical wBINI/USBI pool)
+
+This page will be updated automatically from CI when the deploy happens.
+
+## Roles & access
+
+| Contract | Role | Granted to (testnet) |
+|---|---|---|
+| USBI | MINTER_ROLE | Deployer (will move to bridge contract on mainnet) |
+| USBI | BURNER_ROLE | Deployer |
+| HiveSpawner | DEFAULT_ADMIN_ROLE | Deployer |
+| HiveRegistry | DEFAULT_ADMIN_ROLE | Deployer |
+
+Mainnet roles will move to multisigs / governance contracts before launch.
+
+## Verification
+
+All contracts are verified on Blockscout. View source code:
+
+| Contract | Source |
+|---|---|
+| BaiDexFeeRouter | `contracts/BaiDexFeeRouter.sol` |
+| HiveSpawner | `contracts/HiveSpawner.sol` |
+| SpawnedERC20 (template) | `contracts/SpawnedERC20.sol` |
+| HiveRegistry | `contracts/HiveRegistry.sol` |
+| USBI | `contracts/USBI.sol` |
+| WBINI | `contracts/WBINI.sol` |
+
+Open-source repository: link will publish with mainnet.
+
+## Test results
+
+The Base Sepolia deploy passed **37/37 tests**:
+
+- 4 smoke tests (deploy verification, basic ops)
+- 18 extended tests (full contract interactions, fee math)
+- 15 V3 pool tests (pool creation, swap through FeeRouter, fee split verification)
+
+## Deployer
+
+```
+Address: 0x8CAD91D7b423Ac728eA49077AD7030a593377a04
+RPC:     https://sepolia.base.org (testnet) / https://rpc.binibit.com (mainnet)
+```
+
+The deployer key has rotation planned before mainnet — final mainnet deployer will be a multisig.
+
+## ABI access
+
+ABIs for all BaiDEX contracts are published in the @binibit/contracts npm package (when published) or fetchable from BiniChain explorer when verified.
+
+For now, ABIs are available on request from [api@binibit.com](mailto:api@binibit.com).
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="AMM mechanics" icon="layer-group" href="/baidex/amm">
+    What these contracts implement
+  </Card>
+  <Card title="Trading guide" icon="arrow-right-arrow-left" href="/baidex/trading-guide">
+    How to call SwapRouter02
+  </Card>
+  <Card title="AgentT Launchpad" icon="rocket" href="/agentt-launchpad/overview">
+    HiveSpawner is the Launchpad backend
+  </Card>
+  <Card title="Agent Hive" icon="bolt" href="/agent-hive/overview">
+    HiveRegistry holds Agent NFTs
+  </Card>
+</CardGroup>

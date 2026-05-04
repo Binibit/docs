@@ -35,6 +35,31 @@ Stages from Seed to Genesis:
 | **L21-L29** | Power user | Heavy DEX participation, deep sinks |
 | **L30** | Genesis | Max USBI entitlement (101K), max mining rate |
 
+```mermaid
+flowchart LR
+    L1[L1 · Start] --> L4[L2-L4<br/>Early game]
+    L4 -- L5: Bridge A unlocks --> L7[L5-L7<br/>Bridge era]
+    L7 -- L7: Bridge B unlocks --> L10[L8-L10<br/>Lessons maxed<br/>24K USBI]
+    L10 --> L14[L11-L14<br/>Sink era]
+    L14 --> L19[L15-L19<br/>DEX regular]
+    L19 -- L20: Voting unlocks --> L29[L21-L29<br/>Power user]
+    L29 --> L30[L30 · Genesis<br/>101K USBI · max rate]
+
+    classDef start fill:#fce7f3,stroke:#db2777,color:#831843
+    classDef early fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef bridge fill:#dbeafe,stroke:#3b82f6,color:#1e3a8a
+    classDef mid fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef power fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef max fill:#fef2f2,stroke:#ef4444,color:#7f1d1d
+
+    class L1 start
+    class L4 early
+    class L7 bridge
+    class L10,L14,L19 mid
+    class L29 power
+    class L30 max
+```
+
 ## XP thresholds (compact)
 
 | Level | XP required | USBI entitlement (no welcome grant) |

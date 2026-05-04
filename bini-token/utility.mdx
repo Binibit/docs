@@ -20,6 +20,47 @@ description: "Where BINI is used and where it flows back out (8 mechanisms)."
 | 7 | **Bridge gas** | Bridges A and B consume BINI for transaction execution | Sink |
 | 8 | **LP locking** | wBINI side of BaiDEX pools is locked while LP position is open | Lock |
 
+```mermaid
+flowchart LR
+    BINI((BINI<br/>1B fixed))
+
+    subgraph Permanent["Permanent burns"]
+        DEX[DEX trade burn<br/>0.25% per swap]
+        Lottery[Lottery burn<br/>20% per ticket]
+        Spawn[Spawn fee<br/>100% per Agent Token]
+    end
+
+    subgraph Locked["Locks · out of float"]
+        Staking[Staking<br/>30/90/180/360 days]
+        LP[LP locking<br/>wBINI in V3 pools]
+    end
+
+    subgraph Variable["Partial · variable"]
+        Gas[Gas<br/>per BiniChain tx]
+        Boost[Boost / promotion<br/>Launchpad visibility]
+        BridgeGas[Bridge gas<br/>Bridges A and B]
+    end
+
+    BINI --> DEX
+    BINI --> Lottery
+    BINI --> Spawn
+    BINI --> Staking
+    BINI --> LP
+    BINI --> Gas
+    BINI --> Boost
+    BINI --> BridgeGas
+
+    classDef burn fill:#fef2f2,stroke:#ef4444,color:#7f1d1d
+    classDef lock fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef other fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef token fill:#dcfce7,stroke:#16a34a,color:#14532d
+
+    class DEX,Lottery,Spawn burn
+    class Staking,LP lock
+    class Gas,Boost,BridgeGas other
+    class BINI token
+```
+
 ## Permanent burns (sinks 3, 4, 5)
 
 These three sinks send BINI to a burn address with no recovery path:

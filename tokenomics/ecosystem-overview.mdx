@@ -13,44 +13,51 @@ description: "How the Binibit products connect: token flows, bridges, agents."
 
 Binibit is **a centralized exchange + an L1 chain + a DEX + an agent layer + a Telegram mini-app**, sharing one economic model.
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                      BiniChain                          │
-│              EVM L1 · BINI native gas                   │
-│                                                         │
-│  ┌───────────┐  ┌────────────────┐  ┌───────────────┐  │
-│  │  BaiDEX   │  │ AgentT         │  │  Agent Hive   │  │
-│  │  V3 AMM   │◀─│ Launchpad      │─▶│  Queens (3)   │  │
-│  │  + agents │  │ Spawn AT →     │  │  Scouts (2)   │  │
-│  │           │  │ Worker created │  │  Workers (N)  │  │
-│  │  Pools:   │  │ Pool auto-list │  │  Swarm (live) │  │
-│  │  wBINI/   │  └────────────────┘  └───────────────┘  │
-│  │  USBI/AT  │                                          │
-│  └───────────┘                                          │
-│       ▲  ▲                                              │
-│       │  │                                              │
-│  wBINI│  │USBI ◀── Bridge A ── Crystals (off-chain)    │
-│  (1:1)│  │(ERC-20)   10,000:1                           │
-│  from │  │                                              │
-│  BINI │  │BINI ◀── Bridge B ── BINI off-chain           │
-│  native│  │(native)    1:1      (quest rewards)         │
-└─────────────────────────────────────────────────────────┘
-       │                              ▲
-       │ trade / withdraw             │ earn CRS
-       ▼                              │
-┌──────────────┐              ┌───────────────┐
-│ Exchanges    │              │   Bini App    │
-│              │              │   (TG mini)   │
-│ · Binibit    │              │               │
-│ · Azbit      │              │ · 30 levels   │
-│ · Blynex     │              │ · 30 lessons  │
-│              │              │ · mine CRS    │
-│ Staking:     │              │ · referrals   │
-│ · 160% APR   │              │ · lottery     │
-│ · R0-R8      │              │ · franchise   │
-└──────────────┘              └───────────────┘
-       │                              │
-       └──────────── USER ────────────┘
+```mermaid
+flowchart TB
+    subgraph BC["BiniChain — EVM L1 · BINI native gas"]
+        direction TB
+        BaiDEX["BaiDEX<br/>V3 AMM + agents<br/><br/>Pools: wBINI/USBI/AT"]
+        Launchpad["AgentT Launchpad<br/>Spawn Agent Token<br/>Worker created<br/>Pool auto-listed"]
+        Hive["Agent Hive<br/>Queens (3)<br/>Scouts (2)<br/>Workers (N)<br/>Swarm (live)"]
+
+        wBINI["wBINI<br/>(1:1 from BINI native)"]
+        USBI["USBI<br/>(ERC-20)"]
+        BINInative["BINI native<br/>(gas)"]
+
+        Launchpad -- spawns --> BaiDEX
+        Launchpad -- assigns Worker --> Hive
+
+        wBINI -- LP side --> BaiDEX
+        USBI -- LP side --> BaiDEX
+    end
+
+    CRS["Crystals (CRS)<br/>off-chain"]
+    BINIoff["BINI off-chain<br/>quest rewards"]
+    BiniApp["Bini App (TG mini)<br/>30 levels · 30 lessons<br/>mine CRS · referrals<br/>lottery · franchise"]
+    CEX["Exchanges<br/><br/>Binibit · Azbit · Blynex<br/><br/>Staking 160% APR · R0-R8"]
+    User((USER))
+
+    CRS -- "Bridge A · 10,000:1" --> USBI
+    BINIoff -- "Bridge B · 1:1" --> BINInative
+
+    BiniApp --> CRS
+    BiniApp --> BINIoff
+
+    User -- earns CRS --> BiniApp
+    User -- trade / withdraw --> CEX
+
+    CEX -- BINI --> BINInative
+
+    classDef chain fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef asset fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef product fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef user fill:#fce7f3,stroke:#db2777,color:#831843
+
+    class BaiDEX,Launchpad,Hive,wBINI,USBI,BINInative chain
+    class CRS,BINIoff asset
+    class BiniApp,CEX product
+    class User user
 ```
 
 ## Assets

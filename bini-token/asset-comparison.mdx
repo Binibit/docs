@@ -58,39 +58,29 @@ CRS does not leave the Bini App database — fully off-chain.
 
 ## Conversion paths
 
-```
-                   ┌─────────┐
-                   │   CRS   │
-                   └────┬────┘
-                        │
-                   Bridge A
-                   10,000 : 1
-                        │
-                        ▼
-                   ┌─────────┐
-                   │  USBI   │  ← used in BaiDEX pools
-                   └─────────┘
+```mermaid
+flowchart TB
+    CRS["CRS<br/>(off-chain points)"]
+    USBI["USBI<br/>(ERC-20)"]
+    BINIoff["BINI off-chain<br/>(quest rewards)"]
+    BINInative["BINI<br/>(BiniChain native)"]
+    wBINI["wBINI<br/>(ERC-20 wrap)"]
+    Pools["BaiDEX pools"]
 
-                   ┌─────────┐
-                   │  BINI   │ (off-chain rewards)
-                   │ off     │
-                   └────┬────┘
-                        │
-                   Bridge B
-                       1 : 1
-                        │
-                        ▼
-                   ┌─────────┐
-                   │  BINI   │ (BiniChain native)
-                   └────┬────┘
-                        │
-                       wrap
-                       1 : 1
-                        │
-                        ▼
-                   ┌─────────┐
-                   │  wBINI  │  ← used in BaiDEX pools
-                   └─────────┘
+    CRS -- "Bridge A · 10,000:1" --> USBI
+    BINIoff -- "Bridge B · 1:1" --> BINInative
+    BINInative -- "wrap · 1:1" --> wBINI
+
+    USBI --> Pools
+    wBINI --> Pools
+
+    classDef offchain fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef onchain fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef pool fill:#dcfce7,stroke:#16a34a,color:#14532d
+
+    class CRS,BINIoff offchain
+    class USBI,BINInative,wBINI onchain
+    class Pools pool
 ```
 
 ## Sandbox vs Mainnet

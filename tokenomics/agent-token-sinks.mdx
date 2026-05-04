@@ -60,14 +60,21 @@ See [BaiDEX Fees](/baidex/overview).
 
 The Launchpad creates a positive feedback loop:
 
-```
-User spawns Agent Token  →  burns BINI (spawn cost)
-                          →  Worker assigned, Pool listed
-                          →  Pool generates swaps
-                          →  more BINI burned per swap
-                          →  reduces BINI float
-                          →  raises BINI price (ceteris paribus)
-                          →  more attractive to spawn more tokens
+```mermaid
+flowchart LR
+    Spawn["User spawns Agent Token"] --> SpawnBurn["Burns BINI<br/>(spawn cost)"]
+    SpawnBurn --> Auto["Worker assigned<br/>Pool listed"]
+    Auto --> Swaps["Pool generates swaps"]
+    Swaps --> SwapBurn["More BINI burned per swap"]
+    SwapBurn --> Float["Reduces BINI float"]
+    Float --> Price["Raises BINI price<br/>(ceteris paribus)"]
+    Price --> Spawn
+
+    classDef burn fill:#fef2f2,stroke:#ef4444,color:#7f1d1d
+    classDef neutral fill:#f1f5f9,stroke:#64748b,color:#0f172a
+
+    class SpawnBurn,SwapBurn burn
+    class Spawn,Auto,Swaps,Float,Price neutral
 ```
 
 The combination of **per-spawn flat burn** + **per-trade volume-scaled burn** means both quantity and quality of Launchpad adoption translate into deflationary pressure.

@@ -1,0 +1,118 @@
+---
+title: "BINI Emission & Vesting"
+description: "1B fixed supply. 60% rewards over 4 years, then zero new emission."
+---
+
+BINI is a **fixed-supply** native token. **No mint after genesis.** All 1,000,000,000 BINI exist from day one and are released according to the schedule below.
+
+## Allocation
+
+| Pool | BINI | % | Unlock |
+|---|---:|---:|---|
+| **Rewards** | 600,000,000 | 60% | 4-year monthly emission |
+| **Team & Founders** | 150,000,000 | 15% | 1 year cliff + 3 years linear |
+| **Marketing** | 100,000,000 | 10% | 5% TGE + milestone-based |
+| **Ecosystem Reserve** | 100,000,000 | 10% | 6 month cliff + 48 months linear |
+| **DEX Liquidity** | 50,000,000 | 5% | 100% TGE |
+| **Total** | 1,000,000,000 | 100% | |
+
+## Rewards emission schedule
+
+The 600M Rewards pool releases over 4 years, decaying. After year 4, **no more emission**.
+
+| Year | Monthly emission | Annual | Cumulative |
+|---|---:|---:|---:|
+| 1 | 17,500,000 | 210,000,000 | 210M |
+| 2 | 15,000,000 | 180,000,000 | 390M |
+| 3 | 10,000,000 | 120,000,000 | 510M |
+| 4 | 7,500,000 | 90,000,000 | 600M |
+| 5+ | 0 | 0 | 600M (done) |
+
+Total Year 1 emission ≈ 21% of total supply. Year 4 is half of Year 1 — the curve is front-loaded to reward early adopters but tapers down to keep year-over-year inflation manageable.
+
+## Where Rewards pool goes
+
+The 600M Rewards pool feeds:
+
+- **Bini App** — claims, lessons, daily calendar, referrals
+- **Bridge B** — off-chain BINI rewards becoming on-chain
+- **Agent Hive** — Worker incentives, action-log gas reimbursement
+- **Lottery** — jackpots
+- **DEX LP incentives** — wBINI side seeding new pools
+
+The exact split between these is a per-month policy decision logged on-chain.
+
+## Vesting curves
+
+### Team & Founders (15% / 150M)
+
+```
+Cliff:    12 months from TGE (no unlock)
+Vesting:  36 months linear after cliff
+End:      Month 48
+```
+
+Designed to align team with long-term ecosystem health, not short-term price.
+
+### Marketing (10% / 100M)
+
+```
+TGE:        5% unlocked at TGE      (5,000,000 BINI)
+Milestones: Remaining 95M tied to listings, partnerships, growth KPIs
+```
+
+Marketing unlocks are **milestone-driven**, not time-driven. The team controls the trigger but each unlock is announced in advance.
+
+### Ecosystem Reserve (10% / 100M)
+
+```
+Cliff:    6 months from TGE
+Vesting:  48 months linear after cliff
+End:      Month 54
+```
+
+Funds future grants, bounties, partnerships, and unforeseen ecosystem needs.
+
+### DEX Liquidity (5% / 50M)
+
+```
+TGE: 100% unlocked
+```
+
+Used as the wBINI side of initial BaiDEX pools. The 50M cap × $0.12 reference price = $6M ceiling on wBINI-side pool TVL — see [wBINI Cap Rule](/tokenomics/wbini-cap).
+
+## What this means in practice
+
+- **No surprise dilution.** All future emission is on the schedule above.
+- **Long team alignment.** Team has 1 year cliff before any unlock.
+- **Marketing can scale with traction.** Milestone-based marketing keeps unlocks tied to outcomes.
+- **Hard ceiling.** After year 4, total circulating supply is capped at 1B.
+
+## Year-over-year inflation
+
+| Year | Year-start supply | Year-end supply | Inflation |
+|---|---:|---:|---:|
+| 1 | varies (depends on Marketing milestones) | + 210M Rewards + Team/Eco/Marketing unlocks | High |
+| 2 | + 180M Rewards | | Moderate |
+| 3 | + 120M Rewards | | Low |
+| 4 | + 90M Rewards | All emission complete | Low |
+| 5+ | No new BINI | | 0% |
+
+Year-1 inflation is the most aggressive — Year-1 holders take the brunt. After Year-4 the ecosystem is fully diluted and BINI is a true fixed-supply asset.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="BINI Sinks" icon="fire" href="/tokenomics/bini-sinks">
+    Where BINI flows back out (burns, fees, etc.)
+  </Card>
+  <Card title="BINI Token" icon="coins" href="/bini-token/overview">
+    Allocation, utility, where to buy
+  </Card>
+  <Card title="wBINI Cap Rule" icon="shield" href="/tokenomics/wbini-cap">
+    50M DEX liquidity → $240M implied MC ceiling
+  </Card>
+  <Card title="BINI Bridge" icon="bridge" href="/tokenomics/bini-bridge">
+    Off-chain BINI rewards → on-chain
+  </Card>
+</CardGroup>

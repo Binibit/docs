@@ -1,0 +1,112 @@
+---
+title: "BINI Sinks"
+description: "Eight mechanisms that remove BINI from circulation or lock it long-term."
+---
+
+The Binibit ecosystem has **eight BINI sinks** that consume, burn, or lock BINI. Combined with the [fixed 4-year emission schedule](/tokenomics/bini-emission), they keep the long-term supply curve sustainable.
+
+## The eight sinks
+
+| # | Sink | Mechanism | Permanent? |
+|---|---|---|---|
+| 1 | Gas | BiniChain transactions burn BINI as gas (or pay validators, depending on chain config) | Yes / partial |
+| 2 | Staking | BINI locked in staking packages on Binibit Exchange (160% APR, 30/90/180/360-day tiers) | Locked |
+| 3 | DEX trade burn | 0.25% of every BaiDEX swap is burned permanently | **Yes** |
+| 4 | Lottery burn | 20% of every BINI lottery ticket is burned permanently | **Yes** |
+| 5 | Spawn fee | Agent Token spawn cost is paid in BINI and burned | **Yes** |
+| 6 | Premium / boost | Token visibility boosts on AgentT Launchpad consume BINI | Yes / partial |
+| 7 | Bridge gas | Bridges A and B execute on BiniChain → consume BINI gas | Yes / partial |
+| 8 | LP locking | wBINI side of BaiDEX pools is locked while LP position is open | Locked |
+
+## Permanent burns
+
+Three sinks are explicitly permanent — BINI is sent to a burn address with no recovery:
+
+```
+BaiDEX swap burn:  0.25% × swap volume
+Lottery burn:      20% × ticket revenue
+Spawn fee burn:    100% × spawn cost (per Agent Token)
+```
+
+These three together create the deflationary pressure that offsets the emission schedule.
+
+## BaiDEX swap burn (sink #3)
+
+Every swap on BaiDEX charges a **1.00% total fee**, split:
+
+```
+Total fee:   1.00%  (100 BPS)
+├── 0.50%   LP providers   (50 BPS)
+├── 0.25%   Burned         (25 BPS) — permanent burn
+└── 0.25%   Referrer       (25 BPS) — or treasury if no referrer
+```
+
+The 0.25% burn applies to **every swap**, regardless of pool type or token traded. As DEX volume grows, burn rate scales linearly with volume.
+
+See [BaiDEX → Fees](/baidex/overview).
+
+## Lottery burn (sink #4)
+
+The Bini App lottery distributes ticket revenue:
+
+```
+Ticket bought with BINI:
+├── 60%  Jackpot (winners)
+├── 20%  Burned permanently
+├── 10%  Referral commissions
+└── 10%  Platform operations
+```
+
+Lottery launches in Phase 2 of the Bini App rollout.
+
+See [Bini App / Lottery](/bini-app/overview).
+
+## Spawn fee burn (sink #5)
+
+Every Agent Token spawned via AgentT Launchpad pays a **fixed BINI fee**, fully burned. The exact spawn cost is being finalized by the team.
+
+This sink scales with Launchpad adoption — more Agent Tokens spawned means more BINI burned.
+
+See [AgentT Launchpad](/agentt-launchpad/overview).
+
+## Locked vs burned
+
+| Type | What happens to BINI |
+|---|---|
+| **Burned** | Sent to burn address. Gone forever. Reduces circulating supply permanently. |
+| **Locked** | Held in a contract (staking, LP). Cannot trade or move. Returns to circulation when withdrawn. |
+
+Locked BINI reduces effective float (sell pressure) but does not reduce total supply. Burned BINI does both.
+
+## Long-term supply trajectory
+
+Combining emission and sinks:
+
+```
+Year 1-4:   +210M, +180M, +120M, +90M  (emission)
+Year 1-∞:   -X% per year                (cumulative burns)
+Year 5+:    0 emission, only burns
+```
+
+After year 4, the supply curve is **monotonically decreasing**. The exact rate depends on DEX volume, lottery activity, and Launchpad spawn count — all of which scale with usage.
+
+## Anti-farming protections
+
+Sinks pair with [Bridge B Level 7 gate](/tokenomics/bini-bridge) and monthly claim caps to prevent over-extraction from the rewards pool. The combination — **gated source + multiple sinks** — is what makes the long-term economy work.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="BINI Emission" icon="chart-line" href="/tokenomics/bini-emission">
+    The supply side: 4-year emission schedule
+  </Card>
+  <Card title="BaiDEX Fees" icon="percent" href="/baidex/overview">
+    Where the 0.25% burn comes from
+  </Card>
+  <Card title="Bini App Lottery" icon="ticket" href="/bini-app/overview">
+    Where the 20% lottery burn comes from
+  </Card>
+  <Card title="Agent Token Sinks" icon="rocket" href="/tokenomics/agent-token-sinks">
+    Spawn cost and boost fees
+  </Card>
+</CardGroup>

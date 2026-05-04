@@ -119,9 +119,43 @@
         "tab": "Tokenomics",
         "groups": [
           {
-            "group": "Tokenomics",
+            "group": "Overview",
             "pages": [
-              "tokenomics/ecosystem-overview"
+              "tokenomics/ecosystem-overview",
+              "tokenomics/asset-model"
+            ]
+          },
+          {
+            "group": "Progression",
+            "pages": [
+              "tokenomics/user-levels",
+              "tokenomics/xp-formula",
+              "tokenomics/usbi-formula",
+              "tokenomics/lessons"
+            ]
+          },
+          {
+            "group": "Bridges",
+            "pages": [
+              "tokenomics/usbi-bridge",
+              "tokenomics/bini-bridge"
+            ]
+          },
+          {
+            "group": "Token mechanics",
+            "pages": [
+              "tokenomics/bini-emission",
+              "tokenomics/bini-sinks",
+              "tokenomics/wbini-cap",
+              "tokenomics/agent-token-sinks",
+              "tokenomics/staking"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "tokenomics/simulation",
+              "tokenomics/glossary"
             ]
           }
         ]

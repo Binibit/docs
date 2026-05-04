@@ -1,0 +1,78 @@
+---
+title: "Lessons"
+description: "30 lessons × 10 levels = 300 upgrade actions. Cost and bonus formulas."
+---
+
+Lessons are the **income engine** of the Bini App. Each lesson upgrade increases your CRS-per-hour mining rate.
+
+## Structure
+
+```
+30 lessons × 10 levels = 300 upgrade actions
+```
+
+Maxing all 30 lessons to L10 costs exactly **230,000,000 CRS** and brings you to **Level 10 / 24,000 USBI** (including welcome grant).
+
+Maxing all lessons does **not** max your user profile — see [User Levels](/tokenomics/user-levels) for the full XP curve.
+
+## Cost formula
+
+```
+lesson_upgrade_cost = baseCost × 1.217595 × 2^(lessonLevel - 1)
+```
+
+`baseCost` is per-lesson and varies. `1.217595` is the global multiplier chosen so the sum of all 300 upgrades equals 230M CRS exactly.
+
+## Bonus formula
+
+```
+lesson_bonus_per_hour = baseBonus × lessonLevel
+```
+
+Each level of a lesson adds `baseBonus` CRS/hour. So a lesson at L10 produces 10× the per-hour bonus of the same lesson at L1.
+
+Total mining rate at all-lessons-L10 = **184,650 CRS/hour bonus** on top of the base 10,000 CRS/hour.
+
+## Aggregate milestones
+
+| Lesson milestone | Cumulative CRS cost | Total bonus/hour | Reward per 4h claim | 2 claims/day | Total USBI (incl. welcome) |
+|---|---:|---:|---:|---:|---:|
+| All lessons L1 | 224,829 | 18,465 | 113,860 | 227,720 | 1,022 |
+| All lessons L3 | 1,573,803 | 55,395 | 261,580 | 523,160 | 1,157 |
+| All lessons L5 | 6,969,697 | 92,325 | 409,300 | 818,600 | 1,696 |
+| All lessons L7 | 28,553,275 | 129,255 | 557,020 | 1,114,040 | 3,855 |
+| All lessons L10 | 230,000,000 | 184,650 | 778,600 | 1,557,200 | 24,000 |
+
+## How to read the table
+
+- **Cumulative CRS cost** — total CRS spent to reach this state from L1
+- **Total bonus/hour** — extra CRS/hour from all lessons combined (added to base 10K/hour)
+- **Reward per 4h claim** — `4 × (10,000 + bonus_per_hour)` — what one full claim returns
+- **2 claims/day** — total daily mining if you claim twice
+- **Total USBI** — your entitlement (welcome grant + `floor(XP/10K)`)
+
+## Validation
+
+| Check | Value | How |
+|---|---:|---|
+| Lesson cost multiplier | 1.217595 | `230M / (184,650 × 1,023)` |
+| All-lessons-L10 cost | 230,000,000 | Target = 230M CRS |
+| Max lesson bonus/hour | 184,650 | `18,465 × 10` |
+| Max 4h claim | 778,600 | `4 × (10,000 + 184,650)` |
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="XP Formula" icon="function" href="/tokenomics/xp-formula">
+    1 CRS spent on lesson = 1 XP
+  </Card>
+  <Card title="USBI Formula" icon="function" href="/tokenomics/usbi-formula">
+    XP → USBI entitlement
+  </Card>
+  <Card title="User Levels" icon="ranking-star" href="/tokenomics/user-levels">
+    All-lessons-L10 puts you at L10
+  </Card>
+  <Card title="Bini App: Lessons" icon="graduation-cap" href="/bini-app/overview">
+    The 30 lessons in the app
+  </Card>
+</CardGroup>

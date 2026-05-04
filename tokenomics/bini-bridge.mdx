@@ -1,0 +1,76 @@
+---
+title: "BINI Bridge (Bridge B)"
+description: "Move BINI from off-chain rewards to BINI native on BiniChain at 1:1, gated at Level 7."
+---
+
+**Bridge B** converts off-chain BINI (earned via Bini App quests, lottery winnings, or other rewards) into BINI native on BiniChain at a 1:1 ratio.
+
+## Conversion rate
+
+```
+1 BINI off-chain  =  1 BINI native
+```
+
+Fixed 1:1, no fee on the bridge itself.
+
+## Level gate
+
+Bridge B unlocks at **Level 7** (105,000,000 XP).
+
+The Level 7 gate is two levels higher than Bridge A (USBI bridge at L5) because BINI is real-value. The extra gating reduces sybil and farm-account risk against the rewards pool.
+
+## How it differs from Bridge A
+
+| | Bridge A (USBI) | Bridge B (BINI) |
+|---|---|---|
+| Source asset | CRS (off-chain points) | BINI (off-chain rewards) |
+| Target asset | USBI (ERC-20) | BINI native (gas) |
+| Ratio | 10,000 : 1 | 1 : 1 |
+| Real value? | Sandbox $ | Real $ |
+| Level gate | 5 | 7 |
+| Tied to entitlement | Yes (USBI cap) | No (limited by earned BINI) |
+| Counts as XP? | Yes (CRS spend) | Bridge action itself does not generate XP |
+
+## Once on-chain
+
+Native BINI on BiniChain can:
+
+- Pay gas for any BiniChain transaction
+- Wrap into wBINI for [BaiDEX](/baidex/overview) liquidity provision
+- Be staked on Binibit Exchange (160% APR — see [BINI Token / Staking](/bini-token/overview))
+- Pay [Agent Token spawn cost](/agentt-launchpad/overview) on AgentT Launchpad
+- Buy lottery tickets in the Bini App
+- Be sent to other addresses
+
+## Anti-sybil
+
+The Level 7 gate plus monthly claim caps (subject to product confirmation) bound how much BINI flows out of the rewards pool through Bridge B.
+
+The rewards pool itself is bounded by the [BINI emission schedule](/tokenomics/bini-emission) — 600M BINI over 4 years, then zero.
+
+## Sandbox vs Mainnet
+
+In the sandbox phase, off-chain BINI represents accrued rewards. Mainnet rules tighten:
+
+- Stronger anti-sybil (KYC, IP analysis, behavioral signals)
+- Possibly different gating logic (e.g. activity-based not just level-based)
+- Real BINI farming via on-chain staking and LP incentives
+
+See [Sandbox vs Mainnet rules](/tokenomics/ecosystem-overview).
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="USBI Bridge" icon="bridge" href="/tokenomics/usbi-bridge">
+    Bridge A: CRS → USBI
+  </Card>
+  <Card title="BINI Emission" icon="chart-line" href="/tokenomics/bini-emission">
+    Where bridge-out BINI comes from
+  </Card>
+  <Card title="BINI Sinks" icon="fire" href="/tokenomics/bini-sinks">
+    Where on-chain BINI flows back out
+  </Card>
+  <Card title="BINI Token" icon="coins" href="/bini-token/overview">
+    Full token mechanics
+  </Card>
+</CardGroup>

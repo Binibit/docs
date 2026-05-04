@@ -1,0 +1,71 @@
+---
+title: "XP Formula"
+description: "Total XP equals total CRS spent, capped at 1B for the level system."
+---
+
+XP is the central progression metric. It feeds the [user level curve](/tokenomics/user-levels) and the [USBI entitlement formula](/tokenomics/usbi-formula).
+
+## Core formula
+
+```
+total_xp = total_crs_spent
+```
+
+Every Crystal (CRS) you spend in the Bini App produces exactly **one XP**. There is no multiplier, no loss, no exception.
+
+## Cap
+
+```
+max_xp = 1,000,000,000  (capped at Level 30)
+```
+
+Once you have spent 1B CRS, you are at Level 30 (Genesis) and your XP no longer counts for level progression. The cap exists so the level system has a clear endpoint and the maximum USBI entitlement is defined.
+
+## What counts as CRS spend
+
+Every action that consumes CRS gives XP:
+
+| Action | Gives XP |
+|---|---|
+| Lesson upgrade | Yes |
+| USBI bridge (Bridge A) | Yes — 10,000 CRS spent = 10,000 XP earned |
+| Skins | Yes |
+| Lottery ticket (CRS-priced) | Yes |
+| Agent Token spawn (CRS portion) | Yes |
+| Token boost / promotion | Yes |
+| Other CRS sinks | Yes |
+
+Earning CRS (mining, claims, daily calendar, referrals) does **not** earn XP. Only spending does.
+
+## Why "spend" not "earn"
+
+The model rewards **engagement and risk-taking**, not passive accumulation. Hoarding CRS doesn't level you up. You must commit your CRS to a sink for XP to flow.
+
+This also means there's no incentive to farm-and-hold — the optimal strategy is consistent spending into productive sinks (lessons first, bridges and other sinks later).
+
+## Formula in code
+
+For implementers:
+
+```javascript
+function totalXp(totalCrsSpent) {
+  return Math.min(totalCrsSpent, 1_000_000_000);
+}
+```
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="USBI Formula" icon="function" href="/tokenomics/usbi-formula">
+    XP → USBI entitlement
+  </Card>
+  <Card title="User Levels" icon="ranking-star" href="/tokenomics/user-levels">
+    XP thresholds for each of the 30 levels
+  </Card>
+  <Card title="Lessons" icon="graduation-cap" href="/tokenomics/lessons">
+    Lesson costs (largest XP source for new users)
+  </Card>
+  <Card title="Bini App: Claim" icon="mobile" href="/bini-app/overview">
+    Where users earn the CRS they later spend
+  </Card>
+</CardGroup>

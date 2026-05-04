@@ -1,0 +1,95 @@
+---
+title: "Staking & Referral Economics"
+description: "160% APR packages on Binibit Exchange + nine-level referral system R0–R8."
+---
+
+BINI holders can stake on **Binibit Exchange** to earn yield while building a multi-level referral team. The combination is a primary BINI sink (locks BINI long-term) and a primary user-acquisition flywheel.
+
+## Staking packages
+
+Available at [binibit.com/en/staking](https://binibit.com/en/staking/level-conditions).
+
+| Tier | Duration | APR | Notes |
+|---|---|---:|---|
+| Tier 1 | 30 days | 160% | Shortest lock, lowest amount required |
+| Tier 2 | 90 days | 160% | |
+| Tier 3 | 180 days | 160% | |
+| Tier 4 | 360 days | 160% | Longest lock |
+
+The 160% APR is **base rate**. Bonus / Spot split varies by duration — longer locks return a higher proportion of Spot BINI (immediately tradable) versus Bonus BINI (subject to additional conditions).
+
+Daily accrual. Withdrawal at maturity.
+
+## Referral levels — R0 to R8
+
+Stakers automatically participate in a **9-level referral system** (R0 through R8). Your level depends on:
+
+- Your own staked BINI (in USDT-equivalent at current price)
+- Number of qualifying direct referrals
+- Cumulative team volume (sum of team's staked BINI)
+
+Higher levels unlock larger commission percentages on team staking rewards.
+
+| Level | Self-stake | Direct referrals | Team volume | Commission rate |
+|---|---|---|---|---|
+| R0 | Any active stake | 0 | 0 | Base |
+| R1 | Threshold | + | + | + |
+| R2 | Threshold | + | + | + |
+| R3 | Threshold | + | + | + |
+| R4 | Threshold | + | + | + |
+| R5 | Threshold | + | + | + |
+| R6 | Threshold | + | + | + |
+| R7 | Threshold | + | + | + |
+| R8 | Threshold | + | + | Maximum |
+
+Exact thresholds and percentages: see [binibit.com/en/staking/level-conditions](https://binibit.com/en/staking/level-conditions). They are the canonical source — this docs page is a roadmap, not a quote.
+
+## Level-difference formula
+
+When a downline earns staking rewards, your commission depends on the **level difference** between you and the downline:
+
+```
+Same or higher level than you:  base commission (e.g. 15%)
+Lower level than you:           higher commission per level gap
+```
+
+This rewards being one or more tiers above your direct team.
+
+The exact base rate and per-tier increment are defined on the staking conditions page.
+
+## Dynamic level threshold
+
+Staking thresholds are set in **USDT terms**, not BINI terms. As BINI price moves, the BINI required to maintain a given level moves inversely:
+
+```
+required_bini = required_usdt / current_bini_price
+```
+
+If BINI rises, you need less BINI to maintain your level. If BINI falls, you need more. This protects the level system against price volatility.
+
+## Why these mechanics matter (tokenomics view)
+
+| Mechanic | BINI tokenomics impact |
+|---|---|
+| Locked staking principal | Reduces effective float during stake duration (sink #2 in [BINI Sinks](/tokenomics/bini-sinks)) |
+| 160% APR rewards | Paid from the Rewards pool emission — see [BINI Emission](/tokenomics/bini-emission) |
+| Bonus BINI proportion | Often subject to vesting / reduced liquidity, lowers immediate sell pressure |
+| Multi-level referrals | User acquisition without paid marketing spend |
+| USDT-pegged level thresholds | Stable level meaning even with BINI price volatility |
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="BINI Sinks" icon="fire" href="/tokenomics/bini-sinks">
+    Staking is sink #2 — locked BINI
+  </Card>
+  <Card title="BINI Emission" icon="chart-line" href="/tokenomics/bini-emission">
+    Where staking rewards come from
+  </Card>
+  <Card title="BINI Token" icon="coins" href="/bini-token/overview">
+    Token utility, where to buy
+  </Card>
+  <Card title="Staking page" icon="lock" href="https://binibit.com/en/staking/level-conditions">
+    Canonical staking conditions
+  </Card>
+</CardGroup>

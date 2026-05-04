@@ -1,0 +1,96 @@
+---
+title: "Asset Model"
+description: "BINI, wBINI, USBI, and CRS — the four assets in the Binibit ecosystem."
+---
+
+The Binibit ecosystem uses **four assets**, each with a distinct role and value type. Understanding which asset is real, which is virtual, and how they convert is the foundation of everything else.
+
+## The four assets
+
+| Asset | Type | Real value? | Where used |
+|---|---|---|---|
+| **BINI** | Native chain token | **Yes** ($0.12 reference) | Gas on BiniChain, staking on Binibit Exchange, lottery, spawn fees |
+| **wBINI** | ERC-20 wrap of BINI | Yes (1:1 with BINI) | BaiDEX pools |
+| **USBI** | ERC-20 stablecoin (testnet $) | Sandbox (1 USBI = $1 simulation unit) | BaiDEX pools, USBI bridge entitlement |
+| **CRS (Crystals)** | Off-chain game points | **No** (virtual) | Bini App: lessons, claims, sinks, bridge to USBI |
+
+## Conversion summary
+
+```
+CRS  ──── Bridge A (10,000 : 1) ────▶  USBI
+BINI ──── wrap (1 : 1) ─────────────▶  wBINI
+BINI ──── Bridge B (1 : 1) ─────────▶  BINI native (BiniChain)
+```
+
+## What each asset is for
+
+### BINI — the real money
+
+BINI is the only asset with external market value. Total fixed supply 1,000,000,000.
+
+It is the **gas token** on BiniChain, the **trading reference** on Binibit Exchange (BINI/USDT pair), and the **fee currency** for spawn (Launchpad), lottery tickets, and DEX referrer rewards.
+
+Public listings:
+
+- [Binibit Exchange (BINI/USDT)](https://binibit.com/en/exchange?symbol=BINI_USDT)
+- [Azbit (BINI/USDT)](https://azbit.com/exchange/BINI_USDT)
+- [Blynex (BINI/USDT)](https://blynex.com/spot/BINI_USDT)
+
+See [BINI Token](/bini-token/overview) for full token mechanics.
+
+### wBINI — BINI for the DEX
+
+wBINI is a 1:1 wrapped representation of BINI as an ERC-20, used as the BaiDEX trading asset. Every wBINI is backed by one BINI in the wrap contract.
+
+When liquidity providers seed wBINI/USBI or wBINI/Agent Token pools, they deposit wBINI. Wrap and unwrap happen via BaiDEX UI.
+
+See [BaiDEX](/baidex/overview).
+
+### USBI — the sandbox stablecoin
+
+USBI is an ERC-20 stablecoin **inside the Binibit sandbox economy**. 1 USBI = $1 simulation unit.
+
+USBI is **not** an externally redeemable stablecoin. It does not peg to the US dollar via reserves. It is the unit of liquidity and entitlement inside Binibit during the sandbox phase.
+
+Users earn USBI entitlement through XP — see [USBI Formula](/tokenomics/usbi-formula) and [USBI Bridge](/tokenomics/usbi-bridge).
+
+### CRS (Crystals) — the off-chain game currency
+
+CRS is the in-app currency of the **Bini App**. Earned by mining (background claim every 4 hours), referrals, lessons, and tasks. Fully off-chain — does not touch BiniChain.
+
+Spend CRS on:
+
+- Lesson upgrades (boost mining rate)
+- Bridge A → convert to USBI
+- Skins, lottery, promotion (Phase 2)
+
+CRS spent = XP earned. See [XP Formula](/tokenomics/xp-formula).
+
+## Asset comparison
+
+| | BINI | wBINI | USBI | CRS |
+|---|---|---|---|---|
+| **Real market value** | Yes | Yes | No | No |
+| **External listings** | Yes | No | No | No |
+| **On BiniChain** | Native | ERC-20 | ERC-20 | — |
+| **In Bini App** | Bridge B reward | — | Bridge A reward | Mining + bridges |
+| **In BaiDEX pools** | wBINI form | Yes | Yes | — |
+| **Used for staking** | Yes (Binibit Exchange) | No | No | No |
+| **Used for gas** | Yes (BiniChain) | No | No | No |
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="BINI Token" icon="coins" href="/bini-token/overview">
+    Allocation, emission, vesting, sinks
+  </Card>
+  <Card title="USBI Formula" icon="function" href="/tokenomics/usbi-formula">
+    How users accrue USBI from XP
+  </Card>
+  <Card title="USBI Bridge" icon="bridge" href="/tokenomics/usbi-bridge">
+    Bridge A: CRS → USBI at 10,000:1
+  </Card>
+  <Card title="BaiDEX" icon="layer-group" href="/baidex/overview">
+    Where wBINI and USBI provide liquidity
+  </Card>
+</CardGroup>

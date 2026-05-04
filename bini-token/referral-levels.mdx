@@ -27,6 +27,42 @@ Stakers automatically participate in a 9-level referral system, **R0 through R8*
 | R7 | Top tier |
 | R8 | Maximum tier |
 
+```mermaid
+flowchart TB
+    R0["R0 · Entry<br/>Any active stake"]
+    R1["R1 · Active builder"]
+    R2["R2 · Active builder"]
+    R3["R3 · Mid-tier"]
+    R4["R4 · Mid-tier"]
+    R5["R5 · Senior"]
+    R6["R6 · Senior"]
+    R7["R7 · Top tier"]
+    R8["R8 · Maximum<br/>Highest commission"]
+
+    R0 -- "self-stake +<br/>refs +<br/>team volume" --> R1
+    R1 --> R2
+    R2 --> R3
+    R3 --> R4
+    R4 --> R5
+    R5 --> R6
+    R6 --> R7
+    R7 --> R8
+
+    classDef entry fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef builder fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef mid fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef senior fill:#dbeafe,stroke:#3b82f6,color:#1e3a8a
+    classDef top fill:#fce7f3,stroke:#db2777,color:#831843
+    classDef max fill:#fef2f2,stroke:#ef4444,color:#7f1d1d
+
+    class R0 entry
+    class R1,R2 builder
+    class R3,R4 mid
+    class R5,R6 senior
+    class R7 top
+    class R8 max
+```
+
 Specific thresholds and percentages: see [staking conditions](https://binibit.com/en/staking/level-conditions). Live values may change with BINI price (see [Dynamic threshold](#dynamic-threshold) below).
 
 ## How commission works

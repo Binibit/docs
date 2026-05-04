@@ -7,6 +7,44 @@ description: "Centralized exchange, EVM L1, agent-managed DEX, launchpad, hive, 
 
 Binibit is a centralized exchange, an EVM Layer 1 chain (**BiniChain**), an agent-managed DEX (**BaiDEX**), an agent hierarchy (**Agent Hive**), an Agent Token launchpad (**AgentT Launchpad**), a Telegram mini-app (**Bini App**), and a native token (**BINI**) — all sharing one economic model.
 
+```mermaid
+flowchart TB
+    User((USER))
+
+    subgraph BC["BiniChain · EVM L1 · BINI native gas"]
+        BaiDEX["BaiDEX<br/>Agent-managed AMM"]
+        Launchpad["AgentT Launchpad<br/>Spawn Agent Tokens"]
+        Hive["Agent Hive<br/>Queens · Scouts · Workers"]
+    end
+
+    BiniApp["Bini App (TG mini)<br/>Mine CRS · Lessons · Bridges"]
+    Exchange["Binibit Exchange<br/>BINI/USDT · Staking 160%"]
+    Token["BINI Token<br/>1B fixed supply"]
+    Tokenomics["Tokenomics<br/>BINI · wBINI · USBI · CRS"]
+
+    User --> BiniApp
+    User --> Exchange
+    User --> BaiDEX
+
+    BiniApp -- bridges --> BaiDEX
+    BaiDEX -- swaps --> Exchange
+    Token -- gas --> BC
+    Tokenomics -.- BC
+    Tokenomics -.- BiniApp
+    Tokenomics -.- Token
+    Launchpad --> Hive
+
+    classDef chain fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef product fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef hub fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef user fill:#fce7f3,stroke:#db2777,color:#831843
+
+    class BaiDEX,Launchpad,Hive chain
+    class BiniApp,Exchange,Token product
+    class Tokenomics hub
+    class User user
+```
+
 Pick a product to dive into.
 
 ## Products
@@ -49,20 +87,22 @@ Fetch the latest ticker for `ETH_BTC` from the Spot Market API:
 curl "https://public-api.binibit.com/api/tickers?currencyPairCode=ETH_BTC"
 ```
 
-## What's live now
+## What's documented
 
-| Product | Documentation status |
+All v1 products and reference materials are live. Specific TBD values (chain ID, spawn cost, welcome grant) are clearly marked on the relevant pages.
+
+| Product | Status |
 |---|---|
-| Exchange + Spot Market API | ✅ Published (v1.1.0) |
-| BiniChain | 🚧 In progress (v2.0) |
-| BaiDEX | 🚧 In progress (v2.0) |
-| AgentT Launchpad | 🚧 In progress (v2.0) |
-| Agent Hive | 🚧 In progress (v2.0) |
-| Bini App | 🚧 In progress (v2.0) |
-| BINI Token | 🚧 In progress (v2.0) |
-| Tokenomics | 🚧 In progress (v2.0) |
+| Exchange + Spot Market API | ✅ Live (v1.0) |
+| BiniChain | ✅ Live (v1.0) |
+| BaiDEX | ✅ Live (v1.0) |
+| AgentT Launchpad | ✅ Live (v1.0) |
+| Agent Hive | ✅ Live (v1.0) |
+| Bini App | ✅ Live (v1.0) |
+| BINI Token | ✅ Live (v1.0) |
+| Tokenomics | ✅ Live (v1.0) |
 
-The non-Exchange products have placeholder pages today. Full content publishes during the v2.0 documentation rollout — see the [Changelog](/changelog).
+See the [Changelog](/changelog) for the latest updates and the v2.0 trading-API roadmap.
 
 ## Highlights
 

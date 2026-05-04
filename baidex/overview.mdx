@@ -66,6 +66,56 @@ Total swap fee:  1.00% (100 BPS)
 
 See [Fees](/baidex/fees) for the full breakdown.
 
+## Architecture
+
+```mermaid
+flowchart TB
+    User((Trader / LP))
+
+    FeeRouter["BaiDexFeeRouter<br/>1.00% split: 50/25/25 BPS"]
+
+    subgraph Pools["V3 Pools"]
+        Anchor["wBINI / USBI<br/>(anchor)"]
+        Growth["USBI / Agent Token<br/>(growth)"]
+        Premium["wBINI / Agent Token<br/>(premium)"]
+    end
+
+    subgraph Agents["Agent Layer (Hive)"]
+        Worker["Agent Worker<br/>per pool"]
+        Scout["Agent Scouts<br/>cross-pool signals"]
+        Queen["Agent Queens<br/>strategy"]
+    end
+
+    LP["LP providers<br/>0.50%"]
+    Burn["Burn address<br/>0.25% — deflationary"]
+    Ref["Referrer / treasury<br/>0.25%"]
+
+    User -- swap --> FeeRouter
+    FeeRouter --> LP
+    FeeRouter --> Burn
+    FeeRouter --> Ref
+    FeeRouter --> Anchor
+    FeeRouter --> Growth
+    FeeRouter --> Premium
+
+    Worker -- monitors --> Growth
+    Worker -- monitors --> Premium
+    Scout -- signals --> Worker
+    Queen -- strategy --> Scout
+
+    classDef pool fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef hive fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef burn fill:#fef2f2,stroke:#ef4444,color:#7f1d1d
+    classDef user fill:#fce7f3,stroke:#db2777,color:#831843
+    classDef router fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+
+    class Anchor,Growth,Premium pool
+    class Worker,Scout,Queen hive
+    class Burn burn
+    class User user
+    class FeeRouter router
+```
+
 ## How it differs from Uniswap V3
 
 | | Uniswap V3 | BaiDEX |

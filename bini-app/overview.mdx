@@ -27,18 +27,35 @@ It is the user-facing on-ramp to the entire ecosystem.
 
 ## How it works (the loop)
 
-```
-1.  User receives welcome grant on signup
-2.  User mines CRS in the background (10K/hour base + lesson bonuses)
-3.  User claims CRS every 4 hours
-4.  User receives daily calendar CRS (30-day cycle)
-5.  User spends CRS on lesson upgrades
-6.  Lesson upgrades increase CRS/hour mining rate
-7.  CRS spend creates XP (1:1)
-8.  XP increases USBI entitlement (floor(XP / 10K))
-9.  User claims / bridges USBI via Bridge A
-10. USBI flows into BaiDEX as LP or for trading
-11. More CRS spend moves the user toward Level 30
+```mermaid
+flowchart TB
+    Start((Sign up)) --> Welcome[Welcome grant<br/>credited]
+    Welcome --> Mine[Background mining<br/>10K CRS/hour + bonuses]
+    Mine --> Claim[Claim every 4h]
+    Mine --> Calendar[Daily calendar<br/>30-day cycle]
+    Claim --> Balance[CRS balance]
+    Calendar --> Balance
+    Balance --> Spend{Spend CRS}
+    Spend -- lessons --> Lesson[Lesson upgrade<br/>↑ CRS/hour rate]
+    Spend -- Bridge A --> BridgeA[CRS → USBI<br/>10,000:1]
+    Spend -- sinks --> Sinks[Skins · lottery ·<br/>spawn · boost]
+    Lesson --> XP[XP +1 per CRS spent]
+    BridgeA --> XP
+    Sinks --> XP
+    XP --> Entitlement[USBI entitlement<br/>floor XP/10K]
+    XP --> Level[User level<br/>1 → 30]
+    Entitlement --> DEX[Use USBI<br/>on BaiDEX]
+    Lesson -.- Mine
+
+    classDef start fill:#fce7f3,stroke:#db2777,color:#831843
+    classDef earn fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef spend fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef result fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+
+    class Start start
+    class Welcome,Mine,Claim,Calendar,Balance earn
+    class Spend,Lesson,BridgeA,Sinks spend
+    class XP,Entitlement,Level,DEX result
 ```
 
 ## The eight pages

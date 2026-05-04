@@ -28,6 +28,45 @@ BiniChain hosts:
 - **Bridge contracts** — Bridge A (CRS↔USBI) and Bridge B (BINI off↔native)
 - **Action log contracts** — on-chain transparency for the Hive
 
+```mermaid
+flowchart TB
+    subgraph BC["BiniChain · EVM L1"]
+        direction TB
+        BaiDEX["BaiDEX<br/>V3 AMM + agents"]
+        Launchpad["AgentT Launchpad<br/>Spawner contract"]
+        Hive["Agent Hive<br/>Registry + Action Log"]
+        Bridges["Bridges<br/>A: CRS↔USBI · B: BINI off↔native"]
+        Tokens["Tokens<br/>BINI native · wBINI · USBI · Agent Tokens"]
+    end
+
+    Validators["Validators<br/>(BINI staked, block production)"]
+    RPC["RPC<br/>rpc.binibit.com"]
+    Explorer["Explorer<br/>scan.binibit.com"]
+    External((External users<br/>+ apps))
+
+    External -- swap/LP --> BaiDEX
+    External -- spawn --> Launchpad
+    External -- bridge --> Bridges
+    External -- query --> RPC
+    External -- view --> Explorer
+
+    Validators -- secure --> BC
+    BC -- exposes --> RPC
+    BC -- exposes --> Explorer
+
+    Launchpad -- creates pool on --> BaiDEX
+    Launchpad -- registers --> Hive
+    Hive -- manages --> BaiDEX
+
+    classDef chain fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef infra fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef external fill:#fce7f3,stroke:#db2777,color:#831843
+
+    class BaiDEX,Launchpad,Hive,Bridges,Tokens chain
+    class Validators,RPC,Explorer infra
+    class External external
+```
+
 ## Inside the docs
 
 <CardGroup cols={2}>

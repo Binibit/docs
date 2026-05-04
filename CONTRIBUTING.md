@@ -45,7 +45,7 @@ For new pages, restructured navigation, or substantial rewrites:
 
 This repository documents the **public market data API**. Out of scope:
 
-- Account / KYC / fiat onboarding flows — see [binibit.com/help](https://binibit.com).
+- Account / KYC / fiat onboarding flows — see [binibit.com/help](https://binibit.com/?i=7r2c8t).
 - Trading API (HMAC, WebSocket) — planned for v2, not yet documented here.
 - Internal dashboards or admin endpoints.
 

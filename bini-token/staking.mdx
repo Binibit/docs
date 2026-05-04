@@ -1,0 +1,105 @@
+---
+title: "Staking"
+description: "160% APR on Binibit Exchange across four duration tiers."
+---
+
+<Card title="Tokenomics view" icon="chart-pie" href="/tokenomics/staking">
+  See Tokenomics → Staking & Referral Economics for tokenomics-level analysis.
+</Card>
+
+## Quick links
+
+- [Staking page](https://binibit.com/en/staking/level-conditions) on Binibit Exchange (canonical, has live values)
+- [Staking conditions / referral levels](https://binibit.com/en/staking/level-conditions)
+- [BINI/USDT trading pair](https://binibit.com/en/exchange?symbol=BINI_USDT) for buying BINI to stake
+
+## Staking packages
+
+Four lock duration tiers, **160% APR** on each:
+
+| Tier | Lock duration | APR | Bonus / Spot split |
+|---|---|---:|---|
+| Tier 1 | 30 days | 160% | More Bonus, less Spot |
+| Tier 2 | 90 days | 160% | Balanced |
+| Tier 3 | 180 days | 160% | More Spot, less Bonus |
+| Tier 4 | 360 days | 160% | Maximum Spot proportion |
+
+The 160% APR is **base rate**. Longer locks return a higher proportion of **Spot BINI** (immediately tradable) versus **Bonus BINI** (subject to additional vesting / conditions).
+
+Daily accrual. Withdrawal at maturity.
+
+## Bonus vs Spot BINI
+
+| | Spot BINI | Bonus BINI |
+|---|---|---|
+| Tradable immediately on receipt | Yes | No (vesting / conditions) |
+| Counts toward referral level | Yes | Yes |
+| Sell pressure on receipt | Yes | Lower |
+
+Longer locks → more Spot BINI → user has higher freedom but also higher immediate sell pressure. Shorter locks → more Bonus BINI → less freedom, but better for token-price stability.
+
+## Compounding
+
+Once a stake matures, the user can immediately re-stake the principal plus rewards. Continuous re-staking compounds at the 160% APR, multiplied by the reinvestment cadence.
+
+## Minimum stake
+
+Each tier has a minimum BINI amount. Specific values are on the [staking page](https://binibit.com/en/staking/level-conditions) — they may change with BINI price, since the underlying threshold is in **USDT terms**.
+
+```
+required_bini_minimum = required_usdt_minimum / current_bini_price
+```
+
+## How it ties into referrals
+
+Staking is what unlocks the **R0 through R8** referral system on Binibit Exchange. Your level is determined by:
+
+- Your own staked BINI (USDT-equivalent)
+- Number of qualifying direct referrals
+- Cumulative team volume
+
+Higher levels unlock larger commission rates on team staking rewards. See [Referral levels](/bini-token/referral-levels).
+
+## Tokenomics impact
+
+Staking is **sink #2** in the BINI sink list — locked BINI is unavailable for spot trading until the lock matures. This:
+
+- Reduces effective float during the lock
+- Stabilizes price by removing tradable supply
+- Generates compounding ecosystem engagement (stake-then-refer)
+
+See [BINI Sinks](/tokenomics/bini-sinks).
+
+## Risk considerations
+
+Standard staking risks apply:
+
+- **Smart contract risk** — staking contract is audited but cannot be guaranteed bug-free
+- **Lock-up risk** — funds are illiquid for the duration
+- **APR change risk** — the 160% rate is honored for stakes initiated under it, but future stakes may use different rates
+- **Token price risk** — APR is in BINI terms; BINI USD value can fluctuate
+
+Stake only what you can afford to lock for the duration.
+
+## Where to stake
+
+[Binibit Exchange — Staking](https://binibit.com/en/staking/level-conditions)
+
+Read the staking conditions page carefully before staking. It is the canonical source for current values.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Referral levels" icon="diagram-project" href="/bini-token/referral-levels">
+    R0 through R8
+  </Card>
+  <Card title="Where to buy BINI" icon="cart-shopping" href="/bini-token/where-to-buy">
+    To stake, you need BINI first
+  </Card>
+  <Card title="Tokenomics: Staking" icon="chart-pie" href="/tokenomics/staking">
+    Tokenomics-level view
+  </Card>
+  <Card title="BINI Sinks" icon="fire" href="/tokenomics/bini-sinks">
+    Staking is sink #2
+  </Card>
+</CardGroup>

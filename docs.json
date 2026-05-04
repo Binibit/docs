@@ -108,9 +108,27 @@
         "tab": "BINI Token",
         "groups": [
           {
-            "group": "BINI Token",
+            "group": "Overview",
             "pages": [
-              "bini-token/overview"
+              "bini-token/overview",
+              "bini-token/allocation",
+              "bini-token/emission"
+            ]
+          },
+          {
+            "group": "Use cases",
+            "pages": [
+              "bini-token/utility",
+              "bini-token/staking",
+              "bini-token/referral-levels"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "bini-token/where-to-buy",
+              "bini-token/contracts",
+              "bini-token/asset-comparison"
             ]
           }
         ]

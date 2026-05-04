@@ -1,0 +1,91 @@
+---
+title: "Contract Addresses"
+description: "BINI on Ethereum (ERC-20) and BiniChain (native). Verified addresses and explorer links."
+---
+
+## Live contract
+
+### Ethereum ERC-20 (current)
+
+```
+Address:   0x445d03f499f1c150615957bb87588fb465fc91cc
+Network:   Ethereum mainnet (chainId 1)
+Standard:  ERC-20
+Decimals:  18
+Symbol:    BINI
+```
+
+| Resource | Link |
+|---|---|
+| Etherscan | [etherscan.io/token/0x445d03f499f1c150615957bb87588fb465fc91cc](https://etherscan.io/token/0x445d03f499f1c150615957bb87588fb465fc91cc) |
+| Holder list | [etherscan.io holders page](https://etherscan.io/token/0x445d03f499f1c150615957bb87588fb465fc91cc#balances) |
+| CoinGecko | [coingecko.com/en/coins/binibit](https://www.coingecko.com/en/coins/binibit) |
+
+### BiniChain (native, mainnet)
+
+```
+Type:        Native chain token (not ERC-20)
+Network:     BiniChain mainnet
+RPC:         https://rpc.binibit.com
+Explorer:    https://scan.binibit.com
+Symbol:      BINI
+Use:         Native gas + ecosystem fees
+```
+
+The BiniChain mainnet rollout for native BINI is in the [roadmap](/changelog).
+
+## wBINI (wrapped BINI on BaiDEX)
+
+```
+Type:        ERC-20 wrap of BINI
+Network:     BiniChain
+Standard:    ERC-20 (with deposit/withdraw to wrap/unwrap)
+Backing:     1 wBINI = 1 BINI native
+Use:         BaiDEX pool LP
+```
+
+wBINI lets BINI participate as one side of a Uniswap V3-style pool. Wrap and unwrap via the BaiDEX UI or directly via the wBINI contract.
+
+Address: see [BaiDEX → Contract Addresses](/baidex/overview) (publishes with PR-5).
+
+## How to verify a BINI address
+
+1. Search the contract address on a block explorer (Etherscan for Ethereum)
+2. Confirm token name = "Binibit" and symbol = "BINI"
+3. Confirm the contract is **verified** (source code published)
+4. Cross-check the address on at least one aggregator page (CoinGecko, CryptoRank, etc.)
+
+If you encounter an address that **claims to be BINI but does not match** the canonical address above, it is **not** the official token. Report scams to support@binibit.com.
+
+## Cross-chain mechanism
+
+The link between Ethereum ERC-20 BINI and BiniChain native BINI is the **bridge** — see [BiniChain → Bridges](/binichain/overview) when published.
+
+The bridge maintains the **1:1 peg** between the two representations. Total supply across both chains never exceeds 1,000,000,000 BINI.
+
+## Contract upgrades
+
+The Ethereum ERC-20 contract is **non-upgradable**. The BiniChain native protocol is upgradable through validator governance, but the BINI supply rules and emission schedule are constants enforced at the protocol level.
+
+Major upgrades will be:
+
+- Pre-announced 30 days in advance
+- Validated by an audit before deployment
+- Logged on-chain
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Where to buy" icon="cart-shopping" href="/bini-token/where-to-buy">
+    Listed CEX venues
+  </Card>
+  <Card title="BiniChain" icon="link" href="/binichain/overview">
+    Where native BINI lives
+  </Card>
+  <Card title="BaiDEX" icon="layer-group" href="/baidex/overview">
+    Where wBINI is used
+  </Card>
+  <Card title="Allocation" icon="chart-pie" href="/bini-token/allocation">
+    1B fixed supply
+  </Card>
+</CardGroup>

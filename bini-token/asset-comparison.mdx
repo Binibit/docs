@@ -1,0 +1,131 @@
+---
+title: "Asset Comparison"
+description: "BINI vs wBINI vs USBI vs CRS — what each is and when to use which."
+---
+
+<Card title="Tokenomics view" icon="chart-pie" href="/tokenomics/asset-model">
+  Tokenomics → Asset Model has the full breakdown of all four assets and their conversions.
+</Card>
+
+## At a glance
+
+| | **BINI** | **wBINI** | **USBI** | **CRS** |
+|---|---|---|---|---|
+| **Type** | Native chain token | ERC-20 wrap | ERC-20 stablecoin (sandbox) | Off-chain points |
+| **Real value?** | Yes ($0.12 ref) | Yes (1:1 BINI) | Sandbox ($1 sim unit) | No (virtual) |
+| **Total supply** | 1B fixed | Backed by BINI | Bounded by user XP | Unbounded |
+| **Where it lives** | BiniChain native | BiniChain ERC-20 | BiniChain ERC-20 | Bini App database |
+| **External listings** | CEX (3 venues) | None | None | None |
+| **Used as gas** | Yes | No | No | No |
+| **Used in BaiDEX** | Wrap to wBINI first | Yes | Yes | No |
+| **Used in Bini App** | Bridge B reward | No | Bridge A target | Mining + sinks |
+| **Earned by users** | Bridge B from off-chain | Wrap from BINI | Bridge A from CRS | Mining, claims, refs |
+| **Convertible?** | wBINI ↔ BINI 1:1 · Bridge B ↔ off-chain BINI | wBINI → BINI unwrap | None (sandbox) | → USBI 10,000:1 |
+
+## When to hold each
+
+### BINI
+You want BINI when:
+- Staking on Binibit Exchange (160% APR)
+- Paying gas on BiniChain
+- Buying lottery tickets in Bini App (Phase 2)
+- Spawning Agent Tokens on AgentT Launchpad
+- Holding for long-term ecosystem appreciation
+
+### wBINI
+You want wBINI when:
+- Providing liquidity on BaiDEX
+- Trading via BaiDEX swaps
+- Participating in wBINI/USBI or wBINI/Agent Token pools
+
+Wrap from BINI 1:1, unwrap back any time.
+
+### USBI
+You want USBI when:
+- Providing liquidity on BaiDEX (USBI side)
+- Trading on USBI/Agent Token pools
+- Earning yield from sandbox-economy LP
+
+USBI is **bounded by your XP entitlement** in the Bini App. You cannot acquire USBI outside the entitlement system.
+
+### CRS
+You earn CRS by playing the Bini App. CRS is what you spend on:
+- Lesson upgrades (income engine)
+- Bridge A → USBI (DEX entry)
+- Skins, lottery (CRS-priced versions), boosts
+
+CRS does not leave the Bini App database — fully off-chain.
+
+## Conversion paths
+
+```
+                   ┌─────────┐
+                   │   CRS   │
+                   └────┬────┘
+                        │
+                   Bridge A
+                   10,000 : 1
+                        │
+                        ▼
+                   ┌─────────┐
+                   │  USBI   │  ← used in BaiDEX pools
+                   └─────────┘
+
+                   ┌─────────┐
+                   │  BINI   │ (off-chain rewards)
+                   │ off     │
+                   └────┬────┘
+                        │
+                   Bridge B
+                       1 : 1
+                        │
+                        ▼
+                   ┌─────────┐
+                   │  BINI   │ (BiniChain native)
+                   └────┬────┘
+                        │
+                       wrap
+                       1 : 1
+                        │
+                        ▼
+                   ┌─────────┐
+                   │  wBINI  │  ← used in BaiDEX pools
+                   └─────────┘
+```
+
+## Sandbox vs Mainnet
+
+| Phase | BINI | wBINI | USBI | CRS |
+|---|---|---|---|---|
+| **Sandbox** | Real | Real | Sandbox $ | Virtual |
+| **Mainnet** | Real | Real | Replaced or stabilized | Virtual (off-chain only) |
+
+The sandbox→mainnet transition primarily affects USBI, which today is a bounded-supply sandbox stablecoin and may evolve into something different at mainnet (audited stablecoin, replaced asset, etc.). The exact transition is on the [roadmap](/changelog).
+
+## Which to learn first
+
+Pick by goal:
+
+| Goal | Start with |
+|---|---|
+| I want to invest in the token | [BINI](/bini-token/overview) |
+| I want to provide DEX liquidity | [wBINI](/baidex/overview) (wrap BINI) |
+| I want to play the app | [CRS](/bini-app/overview) |
+| I want to use the DEX | [USBI](/tokenomics/usbi-bridge) (bridge from CRS) |
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Asset Model" icon="sitemap" href="/tokenomics/asset-model">
+    Full Tokenomics breakdown
+  </Card>
+  <Card title="USBI Bridge" icon="bridge" href="/tokenomics/usbi-bridge">
+    CRS → USBI
+  </Card>
+  <Card title="BINI Bridge" icon="bridge" href="/tokenomics/bini-bridge">
+    Off-chain BINI → native BINI
+  </Card>
+  <Card title="BaiDEX" icon="layer-group" href="/baidex/overview">
+    Where wBINI and USBI provide liquidity
+  </Card>
+</CardGroup>

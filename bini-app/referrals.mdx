@@ -1,0 +1,107 @@
+---
+title: "Referrals (3-level CRS)"
+description: "Earn CRS from your team's mining: 20% / 10% / 5% across three levels."
+---
+
+<Note>
+  The Bini App has a **3-level CRS referral** system documented here. It is **separate** from the [Binibit Exchange R0–R8 staking referrals](/bini-token/referral-levels), which work on staking rewards rather than CRS mining.
+
+  Don't confuse the two — same brand, different mechanics, different reward currency.
+</Note>
+
+## Headline
+
+| Level | Cut of team's base mining |
+|---|---:|
+| L1 (direct) | 20% |
+| L2 (their referrals) | 10% |
+| L3 (their referrals' referrals) | 5% |
+
+You earn CRS as your team mines. The percentages apply to **base mining only** (10K CRS/hour × 24h × user count, before lesson bonuses).
+
+## How it works
+
+1. You invite a user via your unique referral link (in Profile menu)
+2. They sign up through your link → become your Level-1 referral
+3. They mine CRS in their app → you earn 20% of their base mining as CRS
+4. If they invite others → those become your Level-2 referrals (you earn 10%)
+5. And so on for Level-3
+
+Active referral rule: a referral counts toward your earnings only if they are **actively mining** (claiming regularly).
+
+## Active referral rate
+
+Per the canonical economy model, **20% of invited users become active referrals**.
+
+- If you invite 100 people, expect ~20 active referrals
+- Active = claiming on the regular cadence
+
+The 80% inactive rate is built into the simulation — it's not a problem with the system, just realistic engagement loss.
+
+## Daily cap
+
+To prevent sybil farming, the **maximum referral CRS** you can earn per day is:
+
+```
+Referral CRS/day cap = 500,000 CRS
+```
+
+This kicks in around **250 active referrals at 2 claims/day**. Beyond that, more referrals don't add CRS to your daily total (they still count for level/social purposes).
+
+## Concrete examples
+
+How referrals accelerate your progression:
+
+| Active refs | Daily referral CRS | Days to all-lessons-L10 (vs solo 109) |
+|---:|---:|---:|
+| 0 (solo) | 0 | 109 |
+| 10 | 160,000 | 99 |
+| 20 | 320,000 | 90 |
+| 100 (capped at 500K) | 500,000 | 88 |
+| 250+ (capped) | 500,000 | 88 |
+
+Beyond ~100 active refs, the cap dampens further benefit. The system rewards quality of referrals up to a point, then plateaus.
+
+See [Tokenomics → Simulation](/tokenomics/simulation) for full projections.
+
+## What you cannot earn from referrals
+
+Referrals only share **base mining**. They do **not** give you a cut of:
+
+- Their lesson-bonus mining
+- Their daily calendar rewards
+- Their bridge transactions
+- Their lottery winnings
+- Their staking rewards (those are R0-R8 — different system)
+
+This separation keeps the math simple and prevents abuse.
+
+## Strategy
+
+- **Quality over quantity.** A few active refs > many inactive
+- **Help refs onboard.** Active rate is the multiplier. Helping 5 friends become regulars beats spam-inviting 100
+- **Hit the cap.** Once you reach ~250 active refs (at 500K CRS/day), the system gives no marginal benefit on referral CRS
+- **Refer and stake separately.** Bini App referrals (here) don't impact Binibit Exchange referrals (R0-R8). They are independent systems
+
+## Tokenomics impact
+
+Referral CRS comes from the Rewards pool emission, allocated to the Bini App's mining mechanic. The 500K/day cap × Total active referrers × 365 days bounds the maximum referral payout per year.
+
+The cap also prevents the worst-case "100K invited accounts farming forever" scenario.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Claim & mining" icon="pickaxe" href="/bini-app/claim-mining">
+    Where base mining comes from
+  </Card>
+  <Card title="Tokenomics: Simulation" icon="chart-line" href="/tokenomics/simulation">
+    Day-to-L30 with vs without referrals
+  </Card>
+  <Card title="Franchise" icon="building" href="/bini-app/franchise">
+    Different progression: status tiers
+  </Card>
+  <Card title="Exchange R0-R8" icon="diagram-project" href="/bini-token/referral-levels">
+    The other referral system (staking rewards)
+  </Card>
+</CardGroup>

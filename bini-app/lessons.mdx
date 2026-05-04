@@ -1,0 +1,104 @@
+---
+title: "30 Lessons (Upgrade Cards)"
+description: "The income engine: 30 lessons, 10 levels each, each upgrade boosts CRS/hour mining rate."
+---
+
+<Card title="Tokenomics view" icon="chart-pie" href="/tokenomics/lessons">
+  See Tokenomics → Lessons for the cost and bonus formulas, milestones, and validation math.
+</Card>
+
+## Structure
+
+```
+30 lessons × 10 levels = 300 upgrade actions
+```
+
+Each lesson is a topic. Each level of a lesson costs more CRS and adds more CRS/hour to your mining rate. Maxing a lesson means taking it to L10.
+
+Maxing **all 30 lessons to L10** costs **230,000,000 CRS** total and brings you to **Level 10 / 24,000 USBI** (with welcome grant).
+
+## What a lesson card looks like
+
+A lesson card has four parts:
+
+| Part | Purpose |
+|---|---|
+| **Question** | The educational hook. "What's an order book?" |
+| **Answer** | One-paragraph explanation |
+| **Facts** | Three or four memorable bullets |
+| **Infographic** | Visual aid (image or animation) |
+| **Upgrade** | The CRS-spend button at the bottom |
+
+Reading the card teaches you something. Pressing Upgrade boosts your mining.
+
+## Cost formula
+
+```
+lesson_upgrade_cost = baseCost × 1.217595 × 2^(lessonLevel - 1)
+```
+
+Each subsequent level **doubles** in cost. The `1.217595` global multiplier is calibrated so the sum of all 300 upgrades equals 230M CRS exactly.
+
+## Bonus formula
+
+```
+lesson_bonus_per_hour = baseBonus × lessonLevel
+```
+
+A lesson at L10 produces 10× the per-hour bonus of the same lesson at L1.
+
+## Aggregate milestones
+
+| Milestone | Cumulative cost | Total bonus/hr | 4h claim | 2 claims/day | Total USBI |
+|---|---:|---:|---:|---:|---:|
+| All lessons L1 | 224,829 CRS | 18,465 | 113,860 | 227,720 | 1,022 |
+| All lessons L3 | 1,573,803 CRS | 55,395 | 261,580 | 523,160 | 1,157 |
+| All lessons L5 | 6,969,697 CRS | 92,325 | 409,300 | 818,600 | 1,696 |
+| All lessons L7 | 28,553,275 CRS | 129,255 | 557,020 | 1,114,040 | 3,855 |
+| All lessons L10 | 230,000,000 CRS | 184,650 | 778,600 | 1,557,200 | 24,000 |
+
+## Strategy — order of upgrades
+
+There is no single "right" order, but two general approaches work:
+
+### Round-robin
+Take all 30 lessons to L1, then all to L2, then all to L3, etc. This produces the smoothest mining-rate growth.
+
+### Domain-first
+Pick a topic you find most relevant to your trading style and max it before moving on. This produces faster early gains in one area but uneven mining-rate growth.
+
+The math is symmetric — you reach all-L10 at the same cost either way. The choice is about pacing, not optimization.
+
+## What lessons are about
+
+The 30 lessons span trading, exchanges, DeFi, BiniChain, BaiDEX, agents, security, and tokenomics topics. The MiniLessons v4.0 spec defines the exact list. Examples:
+
+- "What's an order book?"
+- "How does an AMM differ from an order book?"
+- "What is a liquidity pool?"
+- "What's a launchpad?"
+- "How do agent-managed pools work?"
+- "What are token sinks?"
+
+A user who maxes all 30 lessons has read 30 short crypto explainers as a side effect of upgrading their mining.
+
+## Spending CRS on lessons creates XP
+
+Every CRS spent on a lesson upgrade counts toward [XP](/tokenomics/xp-formula). Maxing all lessons gives you 230M XP — see [User Levels](/tokenomics/user-levels) to translate that into a level.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Lesson formulas" icon="function" href="/tokenomics/lessons">
+    Cost & bonus math
+  </Card>
+  <Card title="Claim & mining" icon="pickaxe" href="/bini-app/claim-mining">
+    What lesson bonuses boost
+  </Card>
+  <Card title="User Levels" icon="ranking-star" href="/tokenomics/user-levels">
+    Level 10 = all lessons L10
+  </Card>
+  <Card title="USBI Bridge" icon="bridge" href="/bini-app/usbi-bridge">
+    What XP unlocks
+  </Card>
+</CardGroup>

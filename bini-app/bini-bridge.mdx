@@ -1,0 +1,110 @@
+---
+title: "BINI Bridge (Bridge B)"
+description: "Convert off-chain BINI rewards to native BINI on BiniChain at 1:1, unlocked at Level 7."
+---
+
+<Card title="Tokenomics view" icon="bridge" href="/tokenomics/bini-bridge">
+  See Tokenomics → BINI Bridge for the supply impact and anti-sybil rules.
+</Card>
+
+## What it does
+
+Bridge B converts off-chain BINI (from Bini App quest rewards, lottery winnings, special grants) into native BINI on BiniChain at 1:1.
+
+```
+1 BINI off-chain  =  1 BINI native
+```
+
+Fixed 1:1, no fee on the bridge itself.
+
+## Unlock
+
+Bridge B unlocks at **Level 7** (105,000,000 cumulative XP).
+
+The L7 gate is two levels higher than [Bridge A](/bini-app/usbi-bridge) (L5) because BINI is a real-value asset. The extra gating reduces sybil and farm-account risk.
+
+## How to use it
+
+1. Open the Bini App
+2. Navigate to Bridges → BINI Bridge
+3. Choose how much off-chain BINI to bridge
+4. Confirm — your off-chain balance decreases, native BINI is sent to your BiniChain address
+5. View on [scan.binibit.com](https://scan.binibit.com) or in your wallet
+
+## Caps
+
+Subject to product confirmation, monthly caps may apply (e.g., max bridge amount per month). The exact policy is set by team and announced in-app.
+
+## Gas cost
+
+The bridge action is a BiniChain transaction → costs gas in **native BINI**.
+
+For your **first bridge**, you'll have no native BINI to pay gas. The Bini App handles this via:
+
+- Auto-relay (the protocol covers gas for the first bridge), or
+- A small native BINI subsidy on signup, or
+- Buying BINI from Binibit Exchange and bridging from Ethereum first
+
+The exact mechanism is set by the team — check the Bini App UI for the current method.
+
+## What native BINI is for
+
+Once you have native BINI on BiniChain, you can:
+
+| Use | Where |
+|---|---|
+| Pay gas for any BiniChain transaction | Native chain |
+| Wrap to wBINI for liquidity provision | [BaiDEX](/baidex/overview) |
+| Buy lottery tickets | [Lottery](/bini-app/lottery) (Phase 2) |
+| Pay [Agent Token spawn cost](/agentt-launchpad/overview) | AgentT Launchpad |
+| Send to other addresses | Standard transfer |
+| Withdraw to ERC-20 BINI on Ethereum | Reverse bridge |
+
+## Bridge B vs Bridge A
+
+| | Bridge A (USBI) | Bridge B (BINI) |
+|---|---|---|
+| Source asset | CRS off-chain | BINI off-chain |
+| Target asset | USBI ERC-20 | BINI native |
+| Ratio | 10,000 : 1 | 1 : 1 |
+| Real value? | Sandbox $ | Real $ |
+| Level gate | L5 | L7 |
+| Tied to entitlement | Yes (USBI cap) | No (limited by earned BINI) |
+| Source of off-chain asset | Mining + bridges-as-XP-cycle | Quest rewards, lottery wins, grants |
+
+## Anti-sybil
+
+The combination of:
+
+- Level 7 gate (engagement requirement)
+- Monthly caps (subject to product confirmation)
+- Source-side anti-sybil (Bini App backend tracks signal quality)
+
+means farming the rewards pool through Bridge B is bounded.
+
+## Sandbox vs Mainnet
+
+In sandbox, off-chain BINI represents accrued ecosystem rewards. Mainnet may tighten:
+
+- Stronger anti-sybil (KYC / IP / behavioral)
+- Different gating logic (activity-based, not just level-based)
+- Real BINI farming via on-chain staking and LP incentives
+
+See [Tokenomics → Sandbox vs Mainnet](/tokenomics/ecosystem-overview).
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Tokenomics: BINI Bridge" icon="bridge" href="/tokenomics/bini-bridge">
+    Full mechanic and supply impact
+  </Card>
+  <Card title="USBI Bridge" icon="bridge" href="/bini-app/usbi-bridge">
+    Bridge A: CRS → USBI
+  </Card>
+  <Card title="BINI Token" icon="coins" href="/bini-token/overview">
+    What native BINI is for
+  </Card>
+  <Card title="BaiDEX" icon="layer-group" href="/baidex/overview">
+    Wrap to wBINI for liquidity
+  </Card>
+</CardGroup>

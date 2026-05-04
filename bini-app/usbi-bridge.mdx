@@ -85,6 +85,31 @@ The maximum lifetime USBI you can bridge equals your maximum entitlement at Leve
 
 This is independent of how much CRS you spend after Level 30 — XP caps at 1B, so entitlement caps at 100K USBI.
 
+## Cross-product flow
+
+```mermaid
+flowchart LR
+    Mine[Bini App<br/>mine CRS] --> Spend[Spend CRS<br/>on lessons / sinks]
+    Spend --> XP[XP +1 per CRS]
+    XP -- "÷ 10,000" --> Entitle[USBI entitlement]
+    Welcome[Welcome grant<br/>1,000 USBI] --> Entitle
+    Mine -- "L5 reached" --> Bridge[Bridge A · this page<br/>burn CRS, mint USBI]
+    Entitle -- "headroom" --> Bridge
+    Bridge --> OnChain[USBI on BiniChain]
+    OnChain --> LP[BaiDEX LP<br/>or trading]
+    OnChain --> Hold[Hold in wallet]
+
+    classDef app fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef calc fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef chain fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef use fill:#fce7f3,stroke:#db2777,color:#831843
+
+    class Mine,Spend,Welcome app
+    class XP,Entitle calc
+    class Bridge,OnChain chain
+    class LP,Hold use
+```
+
 ## Related
 
 <CardGroup cols={2}>
@@ -99,5 +124,11 @@ This is independent of how much CRS you spend after Level 30 — XP caps at 1B, 
   </Card>
   <Card title="BaiDEX" icon="layer-group" href="/baidex/overview">
     Where USBI provides liquidity
+  </Card>
+  <Card title="BaiDEX Liquidity" icon="water" href="/baidex/liquidity">
+    Provide LP with bridged USBI
+  </Card>
+  <Card title="BiniChain Bridges" icon="link" href="/binichain/bridges">
+    All three bridges in the system
   </Card>
 </CardGroup>

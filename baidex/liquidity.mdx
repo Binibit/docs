@@ -3,6 +3,68 @@ title: "Liquidity"
 description: "How LPs provide liquidity, USBI side scaling, and wBINI cap interaction."
 ---
 
+<Card title="See the central economic model" icon="chart-pie" href="/tokenomics/ecosystem-overview">
+  Tokenomics → Ecosystem Overview shows where DEX liquidity fits into BINI / wBINI / USBI / CRS flows.
+</Card>
+
+## Liquidity flows at a glance
+
+```mermaid
+flowchart TB
+    subgraph Sources["Capital sources"]
+        BridgeA["Bridge A<br/>CRS → USBI<br/>10,000:1 · L5+"]
+        BridgeB["Bridge B<br/>off-chain BINI → native<br/>1:1 · L7+"]
+        CEX["Binibit / Azbit / Blynex<br/>buy ERC-20 BINI<br/>+ chain bridge"]
+        Wrap["Wrap BINI → wBINI<br/>1:1 · BaiDEX UI"]
+        Spawn["AgentT Launchpad<br/>Spawn Agent Token"]
+    end
+
+    USBIonchain["USBI (on-chain)"]
+    wBINI["wBINI (ERC-20)"]
+    AT["Agent Token (ERC-20)"]
+
+    subgraph Pools["BaiDEX V3 pools"]
+        Anchor["wBINI / USBI<br/>(anchor · capped \$12M)"]
+        Growth["USBI / Agent Token<br/>(growth pools)"]
+        Premium["wBINI / Agent Token<br/>(premium pools)"]
+    end
+
+    subgraph AgentLayer["Agent Hive layer"]
+        Worker["Worker assigned<br/>per Agent Pool"]
+        Scout["Scouts watch<br/>cross-pool signals"]
+        Queen["Queens shape<br/>strategy"]
+    end
+
+    BridgeA --> USBIonchain
+    BridgeB --> Wrap
+    CEX --> Wrap
+    Wrap --> wBINI
+    Spawn --> AT
+
+    USBIonchain --> Anchor
+    wBINI --> Anchor
+    USBIonchain --> Growth
+    AT --> Growth
+    wBINI --> Premium
+    AT --> Premium
+
+    Spawn -.- Worker
+    Worker -- monitors --> Growth
+    Worker -- monitors --> Premium
+    Scout -- signals --> Worker
+    Queen -- strategy --> Scout
+
+    classDef source fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef asset fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef pool fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef hive fill:#fce7f3,stroke:#db2777,color:#831843
+
+    class BridgeA,BridgeB,CEX,Wrap,Spawn source
+    class USBIonchain,wBINI,AT asset
+    class Anchor,Growth,Premium pool
+    class Worker,Scout,Queen hive
+```
+
 ## Becoming an LP
 
 Standard Uniswap V3 mechanics:
@@ -122,6 +184,20 @@ Standard V3:
 - Burn position NFT after fully decreasing
 - Pay BiniChain gas in BINI for the transaction
 
+## Cross-product flow summary
+
+| Step | Where | Page |
+|---|---|---|
+| Earn CRS | Bini App | [Claim & mining](/bini-app/claim-mining) |
+| Spend CRS → XP | Tokenomics | [XP formula](/tokenomics/xp-formula) |
+| XP → USBI entitlement | Tokenomics | [USBI formula](/tokenomics/usbi-formula) |
+| Bridge CRS → USBI | Bini App / BiniChain | [Bridge A](/bini-app/usbi-bridge) |
+| Bridge BINI off → native | Bini App / BiniChain | [Bridge B](/bini-app/bini-bridge) |
+| Wrap native → wBINI | BaiDEX | wrap on BaiDEX UI |
+| Provide LP | BaiDEX | this page |
+| Worker manages pool | Agent Hive | [Workers](/agent-hive/workers) |
+| Scout / Queen oversight | Agent Hive | [Hierarchy](/agent-hive/hierarchy) |
+
 ## Related
 
 <CardGroup cols={2}>
@@ -136,5 +212,11 @@ Standard V3:
   </Card>
   <Card title="BINI Bridge" icon="bridge" href="/bini-app/bini-bridge">
     Where native BINI for wrapping comes from
+  </Card>
+  <Card title="Agent Workers" icon="user-gear" href="/agent-hive/workers">
+    Workers managing your pool
+  </Card>
+  <Card title="Agent Token Sinks" icon="rocket" href="/tokenomics/agent-token-sinks">
+    How spawn fees and trade burns affect liquidity
   </Card>
 </CardGroup>

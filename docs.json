@@ -331,7 +331,7 @@
       "anchors": [
         {
           "anchor": "Exchange",
-          "href": "https://binibit.com",
+          "href": "https://binibit.com/?i=7r2c8t",
           "icon": "arrow-up-right-from-square"
         },
         {
@@ -362,7 +362,7 @@
     "primary": {
       "type": "button",
       "label": "Trade",
-      "href": "https://binibit.com"
+      "href": "https://binibit.com/?i=7r2c8t"
     }
   },
   "contextual": {

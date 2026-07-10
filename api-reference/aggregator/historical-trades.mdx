@@ -27,11 +27,11 @@ Convention — `type` reflects the **taker side**:
   - omitted — return both
 </ParamField>
 
-<ParamField query="limit" type="integer" default="200">
-  Maximum number of trades **per side** to return.
+<ParamField query="limit" type="integer">
+  Maximum **total** number of trades to return across both sides combined. The buy/sell split reflects the actual taker mix of the most recent trades (e.g. `limit=100` may return 51 buy + 49 sell).
 
-  - Allowed values: `0`, `100`, `200`, `500`
-  - `0` returns the maximum available history
+  - `limit=0` — or omitting the parameter — returns the maximum available history
+  - Any positive integer is accepted; there is no fixed set of allowed values
 </ParamField>
 
 <ParamField query="start_time" type="integer">
@@ -144,5 +144,5 @@ trades = requests.get(
 
 | Code | Cause |
 |---|---|
-| `400 INVALID_PARAM` | `ticker_id` missing, or `limit`/`type` invalid, or `start_time > end_time`. |
+| `400 INVALID_PARAM` | `ticker_id` missing, or `type` not one of `buy`/`sell`, or `start_time > end_time`. |
 | `404 NOT_FOUND` | The ticker_id is not a valid trading pair. |

@@ -14,12 +14,12 @@ Returns the current order book for a single pair, split into `bids` and `asks` a
   Pair identifier in `{base}_{target}` format, e.g. `TRX_USDT`. See [ticker_id format](/reference/ticker-id-format).
 </ParamField>
 
-<ParamField query="depth" type="integer" default="100">
-  Total order count across both sides.
+<ParamField query="depth" type="integer">
+  Total order count across both sides. The response returns up to `floor(depth / 2)` levels on each side.
 
-  - Allowed values: `0`, `100`, `200`, `500`
   - `depth=100` returns up to 50 bids and 50 asks
-  - `depth=0` returns full order book depth
+  - `depth=0` — or omitting the parameter — returns the full order book
+  - Any positive integer is accepted; there is no fixed set of allowed values
 </ParamField>
 
 ## Response
@@ -114,5 +114,5 @@ console.log(`Spread: ${spread} (${spreadPct.toFixed(2)}%)`);
 
 | Code | Cause |
 |---|---|
-| `400 INVALID_PARAM` | `ticker_id` is missing or `depth` is not in `{0, 100, 200, 500}`. |
+| `400 INVALID_PARAM` | `ticker_id` is missing or malformed. |
 | `404 NOT_FOUND` | The ticker_id is not a valid trading pair. |

@@ -5,10 +5,10 @@ description: "Cryptoassets listed on Binibit and their metadata."
 
 ## Live list
 
-The authoritative list is the [`/asset`](/api-reference/asset) endpoint:
+The authoritative list is the [`/api/currencies`](/api-reference/market-data/currencies) endpoint:
 
 ```bash
-curl https://internal-api.binibit.com/api/marketdata/getcoingecko/asset | jq 'keys'
+curl https://public-api.binibit.com/api/currencies | jq
 ```
 
 ## Snapshot
@@ -48,7 +48,7 @@ curl https://internal-api.binibit.com/api/marketdata/getcoingecko/asset | jq 'ke
 | ZRO | LayerZero | ✅ | ✅ |
 
 <Note>
-  Deposit and withdrawal status can change in real time. Always verify with `/asset` before initiating a transfer.
+  Deposit and withdrawal status can change in real time. Always verify current status before initiating a transfer.
 </Note>
 
 ## Listing requests

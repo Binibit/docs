@@ -1,0 +1,104 @@
+---
+title: "GET /pairs"
+description: "Directory of every active spot trading pair on Binibit."
+api: "GET https://internal-api.binibit.com/api/marketdata/getcoingecko/pairs"
+---
+
+## Description
+
+Returns the full catalog of trading pairs Binibit offers, including base/quote metadata. Use it to discover which markets exist before calling [`/tickers`](/api-reference/aggregator/tickers), [`/orderbook`](/api-reference/aggregator/orderbook), or [`/historical_trades`](/api-reference/aggregator/historical-trades).
+
+Unlike `/tickers`, this endpoint lists **every** configured pair, including those with zero 24-hour volume.
+
+## Parameters
+
+This endpoint takes no query parameters.
+
+## Response
+
+An object with a top-level `market_pairs` array. Each element describes one pair.
+
+<ResponseField name="market_pairs" type="array" required>
+  Array of market pair objects.
+</ResponseField>
+
+### Market pair object schema
+
+<ResponseField name="market_pair" type="string" required>
+  Human-readable pair label in `{base}/{quote}` format, e.g. `BTC/USDT`.
+</ResponseField>
+
+<ResponseField name="category" type="string" required>
+  Market category. Currently always `spot`.
+</ResponseField>
+
+<ResponseField name="base" type="object" required>
+  Base asset descriptor with `symbol` (e.g. `BTC`) and `type` (e.g. `cryptocurrency`).
+</ResponseField>
+
+<ResponseField name="quote" type="object" required>
+  Quote asset descriptor with `symbol` (e.g. `USDT`) and `type` (e.g. `cryptocurrency`).
+</ResponseField>
+
+## Example request
+
+<CodeGroup>
+
+```bash curl
+curl https://internal-api.binibit.com/api/marketdata/getcoingecko/pairs
+```
+
+```javascript Node
+const res = await fetch(
+  "https://internal-api.binibit.com/api/marketdata/getcoingecko/pairs"
+);
+const { market_pairs } = await res.json();
+```
+
+```python Python
+import requests
+market_pairs = requests.get(
+    "https://internal-api.binibit.com/api/marketdata/getcoingecko/pairs"
+).json()["market_pairs"]
+```
+
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "market_pairs": [
+    {
+      "market_pair": "BTC/USDT",
+      "category": "spot",
+      "base": { "symbol": "BTC", "type": "cryptocurrency" },
+      "quote": { "symbol": "USDT", "type": "cryptocurrency" }
+    },
+    {
+      "market_pair": "ETH/BTC",
+      "category": "spot",
+      "base": { "symbol": "ETH", "type": "cryptocurrency" },
+      "quote": { "symbol": "BTC", "type": "cryptocurrency" }
+    }
+  ]
+}
+```
+
+## Notes
+
+<Note>
+  - The pair label uses a `/` separator (`BTC/USDT`). Other endpoints identify pairs with `ticker_id` using an `_` separator (`BTC_USDT`). See [ticker_id format](/reference/ticker-id-format).
+  - `/pairs` lists all configured markets; `/tickers` returns only pairs with live 24-hour volume.
+</Note>
+
+## Related
+
+<Columns cols={2}>
+  <Card title="Ticker statistics" icon="chart-line" href="/api-reference/aggregator/tickers">
+    24-hour price and volume for active pairs.
+  </Card>
+  <Card title="Order book" icon="layer-group" href="/api-reference/aggregator/orderbook">
+    Bid/ask depth for a specific pair.
+  </Card>
+</Columns>

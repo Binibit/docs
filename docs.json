@@ -318,10 +318,10 @@
           {
             "group": "Aggregator Compatibility",
             "pages": [
+              "api-reference/aggregator/pairs",
               "api-reference/aggregator/tickers",
               "api-reference/aggregator/orderbook",
-              "api-reference/aggregator/historical-trades",
-              "api-reference/aggregator/asset"
+              "api-reference/aggregator/historical-trades"
             ]
           }
         ]
@@ -341,7 +341,7 @@
         },
         {
           "anchor": "Staking",
-          "href": "https://binibit.com/en/staking/level-conditions",
+          "href": "https://binibit.com/en/staking",
           "icon": "lock"
         },
         {

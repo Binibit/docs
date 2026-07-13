@@ -16,9 +16,9 @@ This endpoint takes no query parameters.
 
 ## Response
 
-An object with a top-level `market_pairs` array. Each element describes one pair.
+An object with a `data.market_pairs` array. Each element describes one pair.
 
-<ResponseField name="market_pairs" type="array" required>
+<ResponseField name="data.market_pairs" type="array" required>
   Array of market pair objects.
 </ResponseField>
 
@@ -52,14 +52,15 @@ curl https://internal-api.binibit.com/api/marketdata/getcoingecko/pairs
 const res = await fetch(
   "https://internal-api.binibit.com/api/marketdata/getcoingecko/pairs"
 );
-const { market_pairs } = await res.json();
+const { data } = await res.json();
+const { market_pairs } = data;
 ```
 
 ```python Python
 import requests
 market_pairs = requests.get(
     "https://internal-api.binibit.com/api/marketdata/getcoingecko/pairs"
-).json()["market_pairs"]
+).json()["data"]["market_pairs"]
 ```
 
 </CodeGroup>
@@ -68,20 +69,22 @@ market_pairs = requests.get(
 
 ```json
 {
-  "market_pairs": [
-    {
-      "market_pair": "BTC/USDT",
-      "category": "spot",
-      "base": { "symbol": "BTC", "type": "cryptocurrency" },
-      "quote": { "symbol": "USDT", "type": "cryptocurrency" }
-    },
-    {
-      "market_pair": "ETH/BTC",
-      "category": "spot",
-      "base": { "symbol": "ETH", "type": "cryptocurrency" },
-      "quote": { "symbol": "BTC", "type": "cryptocurrency" }
-    }
-  ]
+  "data": {
+    "market_pairs": [
+      {
+        "market_pair": "BTC/USDT",
+        "category": "spot",
+        "base": { "symbol": "BTC", "type": "cryptocurrency" },
+        "quote": { "symbol": "USDT", "type": "cryptocurrency" }
+      },
+      {
+        "market_pair": "ETH/BTC",
+        "category": "spot",
+        "base": { "symbol": "ETH", "type": "cryptocurrency" },
+        "quote": { "symbol": "BTC", "type": "cryptocurrency" }
+      }
+    ]
+  }
 }
 ```
 

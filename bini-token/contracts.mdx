@@ -1,14 +1,21 @@
 ---
 title: "Contract Addresses"
-description: "BINI on Ethereum (ERC-20) and BiniChain (native). Verified addresses and explorer links."
+description: "BINI V2 on Ethereum (ERC-20), legacy BINI V1, and BiniChain native references."
 ---
+
+<Warning>
+  Binibit is migrating BINI from the legacy V1 contract to BINI V2 on Ethereum.
+  The holder migration is coordinated through the Binibit platform. Treat the V2
+  contract below as the canonical Ethereum ERC-20 contract and the V1 contract
+  as a legacy reference.
+</Warning>
 
 ## Live contract
 
-### Ethereum ERC-20 (current)
+### Ethereum ERC-20 (current BINI V2)
 
 ```
-Address:   0x445d03f499f1c150615957bb87588fb465fc91cc
+Address:   0x5a76a2830859c321a50937a22fde571fbf4810f3
 Network:   Ethereum mainnet (chainId 1)
 Standard:  ERC-20
 Decimals:  18
@@ -17,9 +24,47 @@ Symbol:    BINI
 
 | Resource | Link |
 |---|---|
-| Etherscan | [etherscan.io/token/0x445d03f499f1c150615957bb87588fb465fc91cc](https://etherscan.io/token/0x445d03f499f1c150615957bb87588fb465fc91cc) |
-| Holder list | [etherscan.io holders page](https://etherscan.io/token/0x445d03f499f1c150615957bb87588fb465fc91cc#balances) |
+| Etherscan | [etherscan.io/token/0x5a76a2830859c321a50937a22fde571fbf4810f3](https://etherscan.io/token/0x5a76a2830859c321a50937a22fde571fbf4810f3) |
+| Holder list | [etherscan.io holders page](https://etherscan.io/token/0x5a76a2830859c321a50937a22fde571fbf4810f3#balances) |
+| CoinMarketCap | [coinmarketcap.com/currencies/binibit](https://coinmarketcap.com/currencies/binibit/) |
 | CoinGecko | [coingecko.com/en/coins/binibit](https://www.coingecko.com/en/coins/binibit) |
+
+## Legacy contract
+
+### Ethereum ERC-20 (legacy BINI V1)
+
+```
+Address:   0x445d03F499f1C150615957bb87588fb465FC91cC
+Network:   Ethereum mainnet (chainId 1)
+Standard:  ERC-20
+Decimals:  18
+Symbol:    BINI
+Status:    Legacy contract
+```
+
+| Resource | Link |
+|---|---|
+| Etherscan | [etherscan.io/token/0x445d03F499f1C150615957bb87588fb465FC91cC](https://etherscan.io/token/0x445d03F499f1C150615957bb87588fb465FC91cC) |
+| Historical holder list | [etherscan.io holders page](https://etherscan.io/token/0x445d03F499f1C150615957bb87588fb465FC91cC#balances) |
+
+V1 remains listed here for historical verification and migration reconciliation.
+It is not the current canonical Ethereum BINI contract.
+
+## Migration notice
+
+Binibit is migrating BINI from V1 to V2 on Ethereum.
+BINI V2 introduces a safer governance architecture, fixed supply, multisig Safe
+custody, and transparent token distribution across dedicated pools according to
+the public tokenomics and whitepaper.
+
+The Binibit team has updated the contract and explorer information in its
+CoinMarketCap Self-Reporting Dashboard.
+CoinMarketCap should verify the new V2 contract, mark V1 as the legacy contract,
+and display a migration notice on the BINI page.
+During the review period, aggregator pages may still display legacy V1 contract
+data.
+
+See [BINI migration](/bini-token/migration) for the current holder notice.
 
 ### BiniChain (native, mainnet)
 
@@ -55,7 +100,9 @@ Address: see [BaiDEX → Contract Addresses](/baidex/overview) (publishes with P
 3. Confirm the contract is **verified** (source code published)
 4. Cross-check the address on at least one aggregator page (CoinGecko, CryptoRank, etc.)
 
-If you encounter an address that **claims to be BINI but does not match** the canonical address above, it is **not** the official token. Report scams to support@binibit.com.
+If you encounter an address that **claims to be current Ethereum BINI but does
+not match** the canonical V2 address above, it is **not** the current official
+token. Report scams to support@binibit.com.
 
 ## Cross-chain mechanism
 
@@ -63,11 +110,14 @@ The link between Ethereum ERC-20 BINI and BiniChain native BINI is the **bridge*
 
 The bridge maintains the **1:1 peg** between the two representations. Total supply across both chains never exceeds 1,000,000,000 BINI.
 
-## Contract upgrades
+## Governance and upgrades
 
-The Ethereum ERC-20 contract is **non-upgradable**. The BiniChain native protocol is upgradable through validator governance, but the BINI supply rules and emission schedule are constants enforced at the protocol level.
+The BINI V2 control plane uses dedicated roles and multisig Safe custody for
+production operations. The BiniChain native protocol is upgradable through
+validator governance, but the BINI supply rules and emission schedule are
+constants enforced at the protocol level.
 
-Major upgrades will be:
+Major token or protocol changes will be:
 
 - Pre-announced 30 days in advance
 - Validated by an audit before deployment

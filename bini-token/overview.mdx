@@ -7,6 +7,12 @@ description: "Native ecosystem token: gas, staking, sinks, rewards. 1B fixed sup
   Tokenomics → Ecosystem Overview is the central hub for how BINI fits into the wider system.
 </Card>
 
+<Warning>
+  BINI is migrating from the legacy V1 Ethereum contract to BINI V2. The current
+  Ethereum ERC-20 contract is `0x5a76a2830859c321a50937a22fde571fbf4810f3`.
+  See [BINI V2 Migration](/bini-token/migration).
+</Warning>
+
 ## What is BINI
 
 BINI is the native token of the Binibit ecosystem. It is:
@@ -25,7 +31,8 @@ BINI is the native token of the Binibit ecosystem. It is:
 | Reference price | $0.12 |
 | Allocation | 60% Rewards / 15% Team / 10% Marketing / 10% Ecosystem / 5% DEX Liquidity |
 | Emission | 4-year monthly from Rewards pool, then zero |
-| Token contract (Ethereum ERC-20) | [`0x445d03f499f1c150615957bb87588fb465fc91cc`](https://etherscan.io/token/0x445d03f499f1c150615957bb87588fb465fc91cc) |
+| Token contract (Ethereum ERC-20, BINI V2) | [`0x5a76a2830859c321a50937a22fde571fbf4810f3`](https://etherscan.io/token/0x5a76a2830859c321a50937a22fde571fbf4810f3) |
+| Legacy contract (Ethereum ERC-20, BINI V1) | [`0x445d03F499f1C150615957bb87588fb465FC91cC`](https://etherscan.io/token/0x445d03F499f1C150615957bb87588fb465FC91cC) |
 | Native on BiniChain | Mainnet rollout |
 
 ## Where to buy
@@ -38,11 +45,12 @@ BINI is the native token of the Binibit ecosystem. It is:
 
 Aggregator listings:
 
+- [CoinMarketCap](https://coinmarketcap.com/currencies/binibit/)
 - [CoinGecko](https://www.coingecko.com/en/coins/binibit)
 - [CryptoRank](https://cryptorank.io/price/binibit-token)
 - [Arkham Intel](https://intel.arkm.com/explorer/token/binibit)
 - [DropStab](https://dropstab.com/coins/binibit)
-- [Etherscan](https://etherscan.io/token/0x445d03f499f1c150615957bb87588fb465fc91cc)
+- [Etherscan](https://etherscan.io/token/0x5a76a2830859c321a50937a22fde571fbf4810f3)
 
 ## Inside the docs
 
@@ -64,6 +72,9 @@ Aggregator listings:
   </Card>
   <Card title="Where to buy" icon="cart-shopping" href="/bini-token/where-to-buy">
     Listed venues
+  </Card>
+  <Card title="BINI V2 Migration" icon="right-left" href="/bini-token/migration">
+    Current V2 contract and legacy V1 reference
   </Card>
   <Card title="Contract addresses" icon="address-card" href="/bini-token/contracts">
     Ethereum ERC-20 + future BiniChain native

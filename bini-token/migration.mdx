@@ -1,0 +1,59 @@
+---
+title: "BINI V2 Migration"
+description: "Notice for the migration from legacy BINI V1 to the new BINI V2 Ethereum contract."
+---
+
+<Warning>
+  Binibit is migrating BINI from the legacy V1 contract to BINI V2 on Ethereum.
+  The holder migration is coordinated through the Binibit platform.
+</Warning>
+
+## Migration summary
+
+Binibit is moving BINI from the legacy V1 ERC-20 contract to a new BINI V2
+contract on Ethereum.
+
+| Contract | Status | Address |
+|---|---|---|
+| BINI V2 | Current Ethereum ERC-20 contract | [`0x5a76a2830859c321a50937a22fde571fbf4810f3`](https://etherscan.io/token/0x5a76a2830859c321a50937a22fde571fbf4810f3) |
+| BINI V1 | Legacy Ethereum ERC-20 contract | [`0x445d03F499f1C150615957bb87588fb465FC91cC`](https://etherscan.io/token/0x445d03F499f1C150615957bb87588fb465FC91cC) |
+
+## What changes in BINI V2
+
+BINI V2 introduces:
+
+- A safer governance architecture
+- Fixed supply
+- Multisig Safe custody
+- Transparent token distribution across dedicated pools
+- Alignment with the public tokenomics and whitepaper
+
+## Holder migration
+
+The holder migration is coordinated through the Binibit platform.
+Use official Binibit channels and the published contract addresses above when
+checking balances, deposits, withdrawals, or aggregator data.
+
+Do not treat the V1 contract as the current Ethereum BINI token.
+V1 remains visible for historical balances, explorer references, and migration
+reconciliation.
+
+## Aggregator notice
+
+The Binibit team has updated the contract and explorer information in its
+CoinMarketCap Self-Reporting Dashboard.
+CoinMarketCap should verify the new V2 contract, mark V1 as the legacy contract,
+and add a migration notice to the [BINI page](https://coinmarketcap.com/currencies/binibit/).
+During the review period, aggregator pages may still display legacy V1 contract
+data.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Contract addresses" icon="address-card" href="/bini-token/contracts">
+    Current V2 and legacy V1 Ethereum contracts
+  </Card>
+  <Card title="Allocation & vesting" icon="chart-pie" href="/bini-token/allocation">
+    Public BINI tokenomics and distribution pools
+  </Card>
+</CardGroup>

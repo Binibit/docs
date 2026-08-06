@@ -288,6 +288,7 @@
             "pages": [
               "bini-token/where-to-buy",
               "bini-token/contracts",
+              "bini-token/migration",
               "bini-token/asset-comparison"
             ]
           }

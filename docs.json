@@ -42,6 +42,7 @@
             "group": "Resources",
             "pages": [
               "verification",
+              "proof-of-reserves",
               "changelog",
               "faq",
               "support"
